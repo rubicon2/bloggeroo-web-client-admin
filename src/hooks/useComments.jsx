@@ -1,30 +1,39 @@
+import useAuthFetch from './useAuthFetch';
 import { useState, useEffect } from 'react';
 
 export default function useComments(query = '') {
-  const [comments, setComments] = useState([]);
+  const [comments, setComments] = useState(null);
+  const [error, setError] = useState(null);
+
+  const { response, fetchError } = useAuthFetch(
+    `${import.meta.env.VITE_SERVER_URL}/admin/comments?${query}`,
+  );
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_SERVER_URL}/comments?${query}`,
-        );
-        const json = await response.json();
+    if (fetchError) {
+      setError(fetchError);
+    } else {
+      response?.json().then((json) => {
         switch (json.status) {
           case 'success': {
             setComments(json.data.comments);
+            setError(null);
+            break;
+          }
+          case 'fail': {
+            setComments(null);
+            setError(json.data.message);
             break;
           }
           case 'error': {
-            throw new Error(json.message);
+            setComments(null);
+            setError(json.message);
+            break;
           }
         }
-      } catch (error) {
-        console.log(error);
-      }
+      });
     }
-    fetchData();
-  }, [query]);
+  }, [response, fetchError]);
 
-  return comments;
+  return { comments, error };
 }
