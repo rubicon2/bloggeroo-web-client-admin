@@ -1,5 +1,20 @@
 import { useLoaderData, Link } from 'react-router';
 
+export function commentLoader(accessToken) {
+  return async ({ params }) => {
+    const response = await fetch(
+      `${import.meta.env.VITE_SERVER_URL}/admin/comments/${params.commentId}`,
+      {
+        headers: {
+          Authorization: accessToken ? 'Bearer ' + accessToken : '',
+        },
+      },
+    );
+    const json = await response.json();
+    return json;
+  };
+}
+
 export default function Comment() {
   const json = useLoaderData();
   const comment = json.data.comment;

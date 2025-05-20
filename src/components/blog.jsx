@@ -1,6 +1,21 @@
 import { useLoaderData } from 'react-router';
 import useComments from '../hooks/useComments';
 
+export function blogLoader(accessToken) {
+  return async ({ params }) => {
+    const response = await fetch(
+      `${import.meta.env.VITE_SERVER_URL}/admin/blogs/${params.blogId}`,
+      {
+        headers: {
+          Authorization: accessToken ? 'Bearer ' + accessToken : '',
+        },
+      },
+    );
+    const json = await response.json();
+    return json;
+  };
+}
+
 export default function Blog() {
   const json = useLoaderData();
   const { blog, error } = json.data;
