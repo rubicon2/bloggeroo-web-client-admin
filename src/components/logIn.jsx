@@ -5,10 +5,12 @@ import { useNavigate } from 'react-router';
 export default function LogIn() {
   const dispatch = useContext(UserDispatchContext);
   const [validationErrors, setValidationErrors] = useState(null);
+  const [isFetching, setIsFetching] = useState(false);
   const navigate = useNavigate();
 
   async function attemptLogIn(event) {
     event.preventDefault();
+    setIsFetching(true);
     try {
       const response = await fetch(
         `${import.meta.env.VITE_SERVER_URL}/admin/account/log-in`,
@@ -59,6 +61,7 @@ export default function LogIn() {
         array: [error.message],
       });
     }
+    setIsFetching(false);
   }
 
   return (
@@ -77,7 +80,9 @@ export default function LogIn() {
             {validationErrors?.password ? validationErrors.password : ''}
           </small>
         </label>
-        <button type="submit">Log In</button>
+        <button type="submit" disabled={isFetching}>
+          Log In
+        </button>
       </form>
       {validationErrors && (
         <ul>
