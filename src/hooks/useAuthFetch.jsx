@@ -1,8 +1,9 @@
-import useSessionStorage from './useSessionStorage';
-import { useState, useEffect } from 'react';
+import { UserDispatchContext, UserStateContext } from '../contexts/UserContext';
+import { useState, useEffect, useContext } from 'react';
 
 export default function useAuthFetch(url) {
-  const [access, setAccess] = useSessionStorage('access', null);
+  const state = useContext(UserStateContext);
+  const dispatch = useContext(UserDispatchContext);
   const [response, setResponse] = useState(null);
   const [fetchError, setFetchError] = useState(null);
 
@@ -13,7 +14,9 @@ export default function useAuthFetch(url) {
         // Doesn't fail even if access has expired? But it must do... but the accessResponse code doesn't get triggered.
         const fetchResponse = await fetch(url, {
           headers: {
-            Authorization: access ? 'Bearer ' + access : '',
+            Authorization: state.accessToken
+              ? 'Bearer ' + state.accessToken
+              : '',
           },
         });
 
@@ -32,7 +35,10 @@ export default function useAuthFetch(url) {
             const json = await accessResponse.json();
             // Setting new access code will re-run this useEffect callback,
             // so the original fetch will run again with the new access token.
-            setAccess(json.data.access);
+            dispatch({
+              type: 'refreshed_access_token',
+              accessToken: json.data.access,
+            });
           }
         }
 
@@ -46,7 +52,7 @@ export default function useAuthFetch(url) {
     }
 
     authFetch();
-  }, [url, access, setAccess]);
+  }, [url, state, dispatch]);
 
   return { response, fetchError };
 }
