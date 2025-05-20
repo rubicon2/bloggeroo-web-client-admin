@@ -4,9 +4,11 @@ import { useState, useContext } from 'react';
 export default function LogOutButton() {
   const dispatch = useContext(UserDispatchContext);
   const [error, setError] = useState(null);
+  const [isFetching, setIsFetching] = useState(false);
 
   async function logOut(event) {
     event.preventDefault();
+    setIsFetching(true);
     // Send to server.
     try {
       // Tell server this user has logged out and give refresh token so it can be added to revoke list.
@@ -28,11 +30,14 @@ export default function LogOutButton() {
     } catch (error) {
       setError(error.message);
     }
+    setIsFetching(false);
   }
 
   return (
     <form onSubmit={logOut}>
-      <button type="submit">Log Out</button>
+      <button type="submit" disabled={isFetching}>
+        Log Out
+      </button>
       {error && <small>{error}</small>}
     </form>
   );
