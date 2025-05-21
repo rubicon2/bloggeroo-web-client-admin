@@ -1,4 +1,4 @@
-import { useLoaderData, Link } from 'react-router';
+import { useLoaderData, useRouteError, Link } from 'react-router';
 
 export function userLoader(accessToken) {
   return async ({ params }) => {
@@ -11,20 +11,36 @@ export function userLoader(accessToken) {
       },
     );
     const json = await response.json();
-    return json;
+    switch (json.status) {
+      case 'success': {
+        return json;
+      }
+      case 'fail': {
+        throw new Error(json.data.message);
+      }
+      case 'error': {
+        throw new Error(json.message);
+      }
+    }
   };
 }
 
 export default function User() {
+  const error = useRouteError();
   const json = useLoaderData();
   const user = json.data.user;
   return (
     <>
-      <h2>
-        {user.email} - {user.name}
-      </h2>
-      <div>Banned - {'' + user.isBanned}</div>
-      <div>Admin - {'' + user.isAdmin}</div>
+      {user && (
+        <>
+          <h2>
+            {user.email} - {user.name}
+          </h2>
+          <div>Banned - {'' + user.isBanned}</div>
+          <div>Admin - {'' + user.isAdmin}</div>
+        </>
+      )}
+      {error && <p>{error}</p>}
     </>
   );
 }

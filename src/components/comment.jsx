@@ -1,4 +1,4 @@
-import { useLoaderData, Link } from 'react-router';
+import { useLoaderData, useRouteError, Link } from 'react-router';
 
 export function commentLoader(accessToken) {
   return async ({ params }) => {
@@ -11,25 +11,41 @@ export function commentLoader(accessToken) {
       },
     );
     const json = await response.json();
-    return json;
+    switch (json.status) {
+      case 'success': {
+        return json;
+      }
+      case 'fail': {
+        throw new Error(json.data.message);
+      }
+      case 'error': {
+        throw new Error(json.message);
+      }
+    }
   };
 }
 
 export default function Comment() {
+  const error = useRouteError();
   const json = useLoaderData();
   const comment = json.data.comment;
   return (
     <>
-      <h2>By {comment.owner.name}</h2>
-      <small>At {comment.createdAt}</small>
-      <p>{comment.text}</p>
-      {comment.parentCommentId && (
-        <small>
-          <Link to={`/comments/${comment.parentCommentId}`}>
-            In response to this comment
-          </Link>
-        </small>
+      {comment && (
+        <>
+          <h2>By {comment.owner.name}</h2>
+          <small>At {comment.createdAt}</small>
+          <p>{comment.text}</p>
+          {comment.parentCommentId && (
+            <small>
+              <Link to={`/comments/${comment.parentCommentId}`}>
+                In response to this comment
+              </Link>
+            </small>
+          )}
+        </>
       )}
+      {error && <p>{error}</p>}
     </>
   );
 }

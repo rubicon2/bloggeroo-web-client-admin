@@ -1,7 +1,11 @@
-import { useLoaderData } from 'react-router';
+import { useLoaderData, useRouteError } from 'react-router';
 import useComments from '../hooks/useComments';
 
 export function blogLoader(accessToken) {
+  // If blogLoader tries to load a non-existent blog, accessToken is always null?
+  // This was because I was testing by typing garbo into the address bar for the blogId.
+  // That seems to cause the entire app to re-initialise, and the reducer uses the initialValue of { accessToken: null }.
+  // If I navigate to a bad link inside the app by making the Links incorrect, then it works as expected.
   return async ({ params }) => {
     const response = await fetch(
       `${import.meta.env.VITE_SERVER_URL}/admin/blogs/${params.blogId}`,
@@ -12,13 +16,24 @@ export function blogLoader(accessToken) {
       },
     );
     const json = await response.json();
-    return json;
+    switch (json.status) {
+      case 'success': {
+        return json;
+      }
+      case 'fail': {
+        throw new Error(json.data.message);
+      }
+      case 'error': {
+        throw new Error(json.message);
+      }
+    }
   };
 }
 
 export default function Blog() {
+  const error = useRouteError();
   const json = useLoaderData();
-  const { blog, error } = json.data;
+  const { blog } = json.data;
 
   // Fetch comments in a separate fetch so query can change order, filter out certain ones, etc.
   // Split out into a separate component later.
