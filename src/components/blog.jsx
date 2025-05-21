@@ -23,7 +23,7 @@ export default function Blog() {
   // Fetch comments in a separate fetch so query can change order, filter out certain ones, etc.
   // Split out into a separate component later.
   const { comments } = useComments(
-    `blogId=${blog.id}&orderBy=createdAt&sortOrder=desc`,
+    `blogId=${blog?.id}&orderBy=createdAt&sortOrder=desc`,
   );
 
   return (
