@@ -37,6 +37,6 @@ export default async function authFetch(url, access, options = {}) {
     // Return result, and new access code if there is one, so the state can be updated.
     return { response: dataResponse, access: newAccess };
   } catch (error) {
-    return { fetchError: error.message };
+    return { fetchError: error };
   }
 }
