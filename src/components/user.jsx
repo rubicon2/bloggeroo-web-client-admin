@@ -1,4 +1,5 @@
-import { useLoaderData, useRouteError, Link } from 'react-router';
+import DeleteButton from './deleteButton';
+import { useLoaderData, useRouteError } from 'react-router';
 
 export function userLoader(accessToken) {
   return async ({ params }) => {
@@ -38,6 +39,12 @@ export default function User() {
           </h2>
           <div>Banned - {'' + user.isBanned}</div>
           <div>Admin - {'' + user.isAdmin}</div>
+          <DeleteButton
+            url={`${import.meta.env.VITE_SERVER_URL}/admin/users/${user.id}`}
+            successRedirect={'/users'}
+          >
+            Delete
+          </DeleteButton>
         </>
       )}
       {error && <p>{error}</p>}

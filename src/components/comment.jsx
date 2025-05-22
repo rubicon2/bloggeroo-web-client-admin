@@ -1,3 +1,4 @@
+import DeleteButton from './deleteButton';
 import { useLoaderData, useRouteError, Link } from 'react-router';
 
 export function commentLoader(accessToken) {
@@ -43,6 +44,12 @@ export default function Comment() {
               </Link>
             </small>
           )}
+          <DeleteButton
+            url={`${import.meta.env.VITE_SERVER_URL}/admin/comments/${comment.id}`}
+            successRedirect={'/comments'}
+          >
+            Delete
+          </DeleteButton>
         </>
       )}
       {error && <p>{error}</p>}

@@ -1,5 +1,6 @@
-import { useLoaderData, useRouteError } from 'react-router';
+import DeleteButton from './deleteButton';
 import useComments from '../hooks/useComments';
+import { useLoaderData, useRouteError } from 'react-router';
 
 export function blogLoader(accessToken) {
   // If blogLoader tries to load a non-existent blog, accessToken is always null?
@@ -46,6 +47,11 @@ export default function Blog() {
       {blog && (
         <>
           <h2>{blog.title}</h2>
+          <DeleteButton
+            url={`${import.meta.env.VITE_SERVER_URL}/admin/blogs/${blog.id}`}
+          >
+            Delete
+          </DeleteButton>
           <small>By {blog.owner.name}</small>
           <p>{blog.body}</p>
           <h3>Comments</h3>
