@@ -1,8 +1,9 @@
-import { useContext, useState } from 'react';
 import DeleteButton from './deleteButton';
-import { useLoaderData, useNavigate, useRouteError } from 'react-router';
-import authFetch from '../ext/authFetch';
 import { UserDispatchContext, UserStateContext } from '../contexts/UserContext';
+import authFetch from '../ext/authFetch';
+
+import { useContext, useState } from 'react';
+import { Link, useLoaderData, useNavigate, useRouteError } from 'react-router';
 
 export function userLoader(accessToken) {
   return async ({ params }) => {
@@ -162,6 +163,34 @@ export default function User() {
         </>
       )}
       {error && <p>{error}</p>}
+      <h3>Blogs</h3>
+      {user.blogs?.length > 0 ? (
+        <ul>
+          {user.blogs.map((blog) => (
+            <Link to={`/blogs/${blog.id}`}>
+              <li>{blog.title}</li>
+            </Link>
+          ))}
+        </ul>
+      ) : (
+        <p>This user has not made any blogs.</p>
+      )}
+      <h3>Comments</h3>
+      {user.comments?.length > 0 ? (
+        <ul>
+          {user.comments.map((comment) => (
+            <Link to={`/comments/${comment.id}`}>
+              <li>
+                <Link to={`/blogs/${comment.blogId}`}>For this blog</Link>
+                <div>{comment.createdAt}</div>
+                <div>{comment.text}</div>
+              </li>
+            </Link>
+          ))}
+        </ul>
+      ) : (
+        <p>This user has not made any comments.</p>
+      )}
     </>
   );
 }
