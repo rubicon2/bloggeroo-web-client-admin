@@ -1,8 +1,9 @@
-import { useContext, useState } from 'react';
 import DeleteButton from './deleteButton';
-import { useLoaderData, useRouteError, Link, useNavigate } from 'react-router';
-import authFetch from '../ext/authFetch';
 import { UserDispatchContext, UserStateContext } from '../contexts/UserContext';
+import authFetch from '../ext/authFetch';
+
+import { useContext, useState } from 'react';
+import { useLoaderData, useRouteError, Link, useNavigate } from 'react-router';
 
 export function commentLoader(accessToken) {
   return async ({ params }) => {
@@ -63,8 +64,8 @@ export default function Comment() {
     if (access)
       dispatch({ type: 'refreshed_access_token', accessToken: access });
     if (newFetchError) setError(newFetchError);
-    if (response?.ok) {
-      const responseJson = await response.json();
+    else {
+      const responseJson = await response?.json();
       switch (responseJson.status) {
         case 'success': {
           navigate('/comments');

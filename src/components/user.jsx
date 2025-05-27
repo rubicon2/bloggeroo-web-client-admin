@@ -82,23 +82,24 @@ export default function User() {
     if (access)
       dispatch({ type: 'refreshed_access_token', accessToken: access });
     if (authFetchError) setError(authFetchError);
-
-    const responseJson = await response.json();
-    switch (responseJson.status) {
-      case 'success': {
-        navigate('/users');
-        break;
-      }
-      case 'fail': {
-        if (responseJson.data.validationErrors)
-          setValidationErrors(responseJson.data.validationErrors);
-        if (responseJson.data.message)
-          setError(new Error(responseJson.data.message));
-        break;
-      }
-      case 'error': {
-        setError(new Error(responseJson.message));
-        break;
+    else {
+      const responseJson = await response?.json();
+      switch (responseJson.status) {
+        case 'success': {
+          navigate('/users');
+          break;
+        }
+        case 'fail': {
+          if (responseJson.data.validationErrors)
+            setValidationErrors(responseJson.data.validationErrors);
+          if (responseJson.data.message)
+            setError(new Error(responseJson.data.message));
+          break;
+        }
+        case 'error': {
+          setError(new Error(responseJson.message));
+          break;
+        }
       }
     }
     setIsFetching(false);
