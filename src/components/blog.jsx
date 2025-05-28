@@ -5,6 +5,7 @@ import authFetch from '../ext/authFetch';
 
 import { useContext, useState } from 'react';
 import { useLoaderData, useNavigate, useRouteError } from 'react-router';
+import BlogForm from './blogForm';
 
 export function blogLoader(accessToken) {
   // If blogLoader tries to load a non-existent blog, accessToken is always null?
@@ -43,13 +44,9 @@ export default function Blog() {
   const { accessToken } = useContext(UserStateContext);
   const dispatch = useContext(UserDispatchContext);
 
-  const [title, setTitle] = useState(blog.title);
-  const [body, setBody] = useState(blog.body);
   const [isFetching, setIsFetching] = useState(false);
   const [validationErrors, setValidationErrors] = useState(null);
   const [error, setError] = useState(useRouteError());
-
-  const haveFieldsChanged = title !== blog.title || body !== blog.body;
 
   // Fetch comments in a separate fetch so query can change order, filter out certain ones, etc.
   // Split out into a separate component later.
@@ -66,12 +63,9 @@ export default function Blog() {
       {
         method: 'put',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: JSON.stringify({
-          title,
-          body,
-        }),
+        body: new URLSearchParams(new FormData(event.target)),
       },
     );
     if (access)
@@ -103,40 +97,20 @@ export default function Blog() {
     <>
       {blog && (
         <>
-          <label>
-            Title:
-            <input
-              type="text"
-              name="title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
-            <small>{validationErrors?.title}</small>
-          </label>
+          <h2>{blog.title}</h2>
           <small>By {blog.owner.name}</small>
           <DeleteButton
             url={`${import.meta.env.VITE_SERVER_URL}/admin/blogs/${blog.id}`}
           >
             Delete
           </DeleteButton>
-          <label>
-            Body:
-            <textarea
-              name="body"
-              cols="60"
-              rows="10"
-              value={body}
-              onChange={(e) => setBody(e.target.value)}
-            />
-            <small>{validationErrors?.body}</small>
-          </label>
-          <button
-            type="button"
-            disabled={isFetching || !haveFieldsChanged}
-            onClick={saveChanges}
-          >
-            Save Changes
-          </button>
+          <BlogForm
+            buttonText={'Save changes'}
+            initialValues={blog}
+            isFetching={isFetching}
+            validationErrors={validationErrors}
+            onSubmit={saveChanges}
+          />
           <h3>Comments</h3>
           {comments?.length > 0 ? (
             <ul>
