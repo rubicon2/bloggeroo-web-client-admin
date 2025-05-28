@@ -1,6 +1,7 @@
 import Root from './components/root';
 import Blogs from './components/blogs';
 import Blog, { blogLoader } from './components/blog';
+import NewBlog from './components/newBlog';
 import Error from './components/error';
 import Comments from './components/comments';
 import Comment, { commentLoader } from './components/comment';
@@ -32,6 +33,10 @@ export default function AppRouter() {
               {
                 path: 'blogs',
                 Component: Blogs,
+              },
+              {
+                path: 'blogs/new',
+                Component: NewBlog,
               },
               {
                 path: 'blogs/:blogId',
