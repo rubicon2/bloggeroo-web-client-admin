@@ -1,10 +1,13 @@
 import BlogForm from './blogForm';
-import CommentsList from './commentsList';
-import DeleteButton from './deleteButton';
-import CommentForm from './commentForm';
-import useComments from '../hooks/useComments';
-import authFetch from '../ext/authFetch';
-import { UserDispatchContext, UserStateContext } from '../contexts/UserContext';
+import CommentsList from '../commentsList';
+import DeleteButton from '../deleteButton';
+import CommentForm from '../commentForm';
+import useComments from '../../hooks/useComments';
+import authFetch from '../../ext/authFetch';
+import {
+  UserDispatchContext,
+  UserStateContext,
+} from '../../contexts/UserContext';
 
 import { useContext, useState } from 'react';
 import { useLoaderData, useNavigate, useRouteError } from 'react-router';

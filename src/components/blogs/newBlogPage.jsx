@@ -1,6 +1,9 @@
 import BlogForm from './blogForm';
-import { UserStateContext, UserDispatchContext } from '../contexts/UserContext';
-import authFetch from '../ext/authFetch';
+import {
+  UserStateContext,
+  UserDispatchContext,
+} from '../../contexts/UserContext';
+import authFetch from '../../ext/authFetch';
 import { useNavigate } from 'react-router';
 import { useState, useContext } from 'react';
 

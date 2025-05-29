@@ -1,4 +1,4 @@
-import useBlogs from '../hooks/useBlogs';
+import useBlogs from '../../hooks/useBlogs';
 import { useState } from 'react';
 import { Link } from 'react-router';
 

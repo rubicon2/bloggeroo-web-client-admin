@@ -1,7 +1,7 @@
 import Root from './components/root';
-import BlogsPage from './components/blogsPage';
-import BlogPage, { blogLoader } from './components/blogPage';
-import NewBlogPage from './components/newBlogPage';
+import BlogsPage from './components/blogs/blogsPage';
+import BlogPage, { blogLoader } from './components/blogs/blogPage';
+import NewBlogPage from './components/blogs/newBlogPage';
 import ErrorPage from './components/errorPage';
 import CommentsPage from './components/commentsPage';
 import CommentPage, { commentLoader } from './components/commentPage';
