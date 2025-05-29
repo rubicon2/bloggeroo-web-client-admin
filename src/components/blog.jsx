@@ -1,12 +1,13 @@
 import BlogForm from './blogForm';
 import CommentsList from './commentsList';
 import DeleteButton from './deleteButton';
+import CommentForm from './commentForm';
 import useComments from '../hooks/useComments';
 import authFetch from '../ext/authFetch';
 import { UserDispatchContext, UserStateContext } from '../contexts/UserContext';
 
 import { useContext, useState } from 'react';
-import { useLoaderData, useNavigate, useRouteError, Link } from 'react-router';
+import { useLoaderData, useNavigate, useRouteError } from 'react-router';
 
 export function blogLoader(accessToken) {
   // If blogLoader tries to load a non-existent blog, accessToken is always null?
@@ -46,8 +47,10 @@ export default function Blog() {
   const dispatch = useContext(UserDispatchContext);
 
   const [isFetching, setIsFetching] = useState(false);
-  const [validationErrors, setValidationErrors] = useState(null);
+  const [blogValidationErrors, setBlogValidationErrors] = useState(null);
+  const [commentValidationErrors, setCommentValidationErrors] = useState(null);
   const [error, setError] = useState(useRouteError());
+  const [isCreatingComment, setIsCreatingComment] = useState(false);
 
   // Fetch comments in a separate fetch so query can change order, filter out certain ones, etc.
   // Split out into a separate component later.
@@ -81,7 +84,48 @@ export default function Blog() {
         }
         case 'fail': {
           if (responseJson.data.validationErrors)
-            setValidationErrors(responseJson.data.validationErrors);
+            setBlogValidationErrors(responseJson.data.validationErrors);
+          if (responseJson.data.message) setError(responseJson.data.message);
+          break;
+        }
+        case 'error': {
+          setError(responseJson.message);
+          break;
+        }
+      }
+    }
+    setIsFetching(false);
+  }
+
+  async function createComment(event) {
+    event.preventDefault();
+    setIsFetching(true);
+    const { response, access, fetchError } = await authFetch(
+      `${import.meta.env.VITE_SERVER_URL}/admin/comments?blogId=${blog.id}`,
+      accessToken,
+      {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams(new FormData(event.target)),
+      },
+    );
+    if (access)
+      dispatch({ type: 'refreshed_access_token', accessToken: access });
+    if (fetchError) setError(fetchError);
+    else {
+      const responseJson = await response.json();
+      switch (responseJson.status) {
+        case 'success': {
+          // Refresh the page with the new comment.
+          setIsCreatingComment(false);
+          navigate(`/blogs/${blog.id}`);
+          break;
+        }
+        case 'fail': {
+          if (responseJson.data.validationErrors)
+            setCommentValidationErrors(responseJson.data.validationErrors);
           if (responseJson.data.message) setError(responseJson.data.message);
           break;
         }
@@ -109,13 +153,28 @@ export default function Blog() {
             buttonText={'Save changes'}
             initialValues={blog}
             isFetching={isFetching}
-            validationErrors={validationErrors}
+            validationErrors={blogValidationErrors}
             onSubmit={saveChanges}
           />
           <h3>Comments {comments?.length > 0 ? `(${comments.length})` : ''}</h3>
-          <Link to={`/comments/new?blogId=${blog.id}`}>
-            <button type="button">Add comment</button>
-          </Link>
+          {isCreatingComment ? (
+            <>
+              <CommentForm
+                buttonText="Submit"
+                initialValues={{ text: '' }}
+                isFetching={isFetching}
+                validationErrors={commentValidationErrors}
+                onSubmit={createComment}
+              />
+              <button type="button" onClick={() => setIsCreatingComment(false)}>
+                Cancel
+              </button>
+            </>
+          ) : (
+            <button type="button" onClick={() => setIsCreatingComment(true)}>
+              Add comment
+            </button>
+          )}
           <CommentsList comments={comments} />
         </>
       )}
