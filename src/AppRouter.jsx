@@ -4,11 +4,11 @@ import BlogPage, { blogLoader } from './components/blogs/blogPage';
 import NewBlogPage from './components/blogs/newBlogPage';
 import ErrorPage from './components/errorPage';
 import CommentsPage from './components/comments/commentsPage';
-import CommentPage, { commentLoader } from './components/commentPage';
+import CommentPage, { commentLoader } from './components/comments/commentPage';
 import LogInPage from './components/logInPage';
-import UsersPage from './components/usersPage';
-import UserPage, { userLoader } from './components/userPage';
-import NewUserPage from './components/newUserPage';
+import UsersPage from './components/users/usersPage';
+import UserPage, { userLoader } from './components/users/userPage';
+import NewUserPage from './components/users/newUserPage';
 
 import { UserStateContext } from './contexts/UserContext';
 import { useContext, useMemo } from 'react';

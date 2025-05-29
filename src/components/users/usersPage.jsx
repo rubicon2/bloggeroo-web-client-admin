@@ -1,4 +1,4 @@
-import useUsers from '../hooks/useUsers';
+import useUsers from '../../hooks/useUsers';
 import { useState } from 'react';
 import { Link } from 'react-router';
 
