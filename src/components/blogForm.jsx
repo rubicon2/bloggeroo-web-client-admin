@@ -19,7 +19,7 @@ export default function BlogForm({
   );
 
   const haveFieldsChanged =
-    initialValues.title !== title || initialValues.body || body;
+    initialValues.title !== title || initialValues.body !== body;
   return (
     <form onSubmit={onSubmit}>
       <label>

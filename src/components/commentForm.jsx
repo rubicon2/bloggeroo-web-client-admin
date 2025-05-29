@@ -8,6 +8,7 @@ export default function CommentForm({
   onSubmit,
 }) {
   const [text, setText] = useState(initialValues.text);
+  const haveFieldsChanged = initialValues.text !== text;
 
   return (
     <form onSubmit={onSubmit}>
@@ -20,7 +21,7 @@ export default function CommentForm({
         onChange={(e) => setText(e.target.value)}
       />
       <small>{validationErrors?.text}</small>
-      <button type="submit" disabled={isFetching}>
+      <button type="submit" disabled={isFetching || !haveFieldsChanged}>
         {buttonText}
       </button>
       {validationErrors?.blogId && <p>Error: {validationErrors.blogId}</p>}
