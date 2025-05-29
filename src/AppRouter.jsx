@@ -1,14 +1,18 @@
 import Root from './components/root';
 import BlogsPage from './components/blogs/blogsPage';
-import BlogPage, { blogLoader } from './components/blogs/blogPage';
+import BlogPage from './components/blogs/blogPage';
 import NewBlogPage from './components/blogs/newBlogPage';
 import ErrorPage from './components/errorPage';
 import CommentsPage from './components/comments/commentsPage';
-import CommentPage, { commentLoader } from './components/comments/commentPage';
+import CommentPage from './components/comments/commentPage';
 import LogInPage from './components/logInPage';
 import UsersPage from './components/users/usersPage';
-import UserPage, { userLoader } from './components/users/userPage';
+import UserPage from './components/users/userPage';
 import NewUserPage from './components/users/newUserPage';
+
+import blogLoader from './loaders/blogLoader';
+import commentLoader from './loaders/commentLoader';
+import userLoader from './loaders/userLoader';
 
 import { UserStateContext } from './contexts/UserContext';
 import { useContext, useMemo } from 'react';
