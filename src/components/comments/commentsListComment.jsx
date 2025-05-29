@@ -1,9 +1,6 @@
 import CommentForm from './commentForm';
 import DeleteButton from '../deleteButton';
-import {
-  UserDispatchContext,
-  UserStateContext,
-} from '../../contexts/UserContext';
+import { AccessContext } from '../../contexts/AppContexts';
 import authFetch from '../../ext/authFetch';
 import { Link } from 'react-router';
 import { useContext, useState } from 'react';
@@ -13,9 +10,7 @@ export default function CommentsListComment({
   isActiveComment,
   setActiveComment,
 }) {
-  const { accessToken } = useContext(UserStateContext);
-  const dispatch = useContext(UserDispatchContext);
-
+  const accessRef = useContext(AccessContext);
   const [error, setError] = useState(null);
   const [validationErrors, setValidationErrors] = useState(null);
   const [isFetching, setIsFetching] = useState(false);
@@ -23,16 +18,14 @@ export default function CommentsListComment({
   async function createReply(event) {
     event.preventDefault();
     setIsFetching(true);
-    const { response, access, fetchError } = await authFetch(
+    const { response, fetchError } = await authFetch(
       `${import.meta.env.VITE_SERVER_URL}/comments?blogId=${comment.blogId}&parentCommentId=${comment.id}`,
-      accessToken,
+      accessRef,
       {
         method: 'post',
         body: new URLSearchParams(new FormData(event.target)),
       },
     );
-    if (access)
-      dispatch({ type: 'refreshed_access_token', accessToken: access });
     if (fetchError) setError(fetchError);
     const json = await response?.json();
     switch (json?.status) {

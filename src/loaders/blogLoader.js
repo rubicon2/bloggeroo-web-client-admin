@@ -1,4 +1,4 @@
-export default function blogLoader(accessToken) {
+export default function blogLoader(accessRef) {
   // If blogLoader tries to load a non-existent blog, accessToken is always null?
   // This was because I was testing by typing garbo into the address bar for the blogId.
   // That seems to cause the entire app to re-initialise, and the reducer uses the initialValue of { accessToken: null }.
@@ -8,7 +8,7 @@ export default function blogLoader(accessToken) {
       `${import.meta.env.VITE_SERVER_URL}/admin/blogs/${params.blogId}`,
       {
         headers: {
-          Authorization: accessToken ? 'Bearer ' + accessToken : '',
+          Authorization: accessRef.current ? 'Bearer ' + accessRef.current : '',
         },
       },
     );

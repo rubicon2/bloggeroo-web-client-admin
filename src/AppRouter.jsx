@@ -14,12 +14,19 @@ import blogLoader from './loaders/blogLoader';
 import commentLoader from './loaders/commentLoader';
 import userLoader from './loaders/userLoader';
 
-import { UserStateContext } from './contexts/UserContext';
+import { AccessContext } from './contexts/AppContexts';
+
 import { useContext, useMemo } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router';
 
+// This re-generates the browser router every time the state (i.e. access token) changes. Not great.
+// But the only way I could find to get the access token into the loader was by currying the access token
+// into generated loader functions. So when the access token changes, the loader functios need to be re-generated.
+// I assume there is a better way to deal with having an access token in memory/state and getting it to the loader?
+// Or maybe storing the access token in state is just a bad idea. Maybe ref is better? Will not trigger re-renders.
+// Then ref obj could be passed to loaders, which could then just access the current version of the object.
 export default function AppRouter() {
-  const state = useContext(UserStateContext);
+  const accessRef = useContext(AccessContext);
 
   const router = useMemo(() => {
     return createBrowserRouter([
@@ -46,7 +53,7 @@ export default function AppRouter() {
               {
                 path: 'blogs/:blogId',
                 Component: BlogPage,
-                loader: blogLoader(state.accessToken),
+                loader: blogLoader(accessRef),
               },
               {
                 path: 'comments',
@@ -55,7 +62,7 @@ export default function AppRouter() {
               {
                 path: 'comments/:commentId',
                 Component: CommentPage,
-                loader: commentLoader(state.accessToken),
+                loader: commentLoader(accessRef),
               },
               {
                 path: 'users',
@@ -68,7 +75,7 @@ export default function AppRouter() {
               {
                 path: 'users/:userId',
                 Component: UserPage,
-                loader: userLoader(state.accessToken),
+                loader: userLoader(accessRef),
               },
               {
                 path: 'log-in',
@@ -79,7 +86,7 @@ export default function AppRouter() {
         ],
       },
     ]);
-  }, [state]);
+  }, [accessRef]);
 
   return <RouterProvider router={router} />;
 }

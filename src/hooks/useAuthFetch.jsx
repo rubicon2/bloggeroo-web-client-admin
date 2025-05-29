@@ -1,26 +1,20 @@
-import { UserDispatchContext, UserStateContext } from '../contexts/UserContext';
-import { useState, useEffect, useContext } from 'react';
 import authFetch from '../ext/authFetch';
+import { AccessContext } from '../contexts/AppContexts';
+import { useState, useEffect, useContext } from 'react';
 
 export default function useAuthFetch(url) {
-  const { accessToken } = useContext(UserStateContext);
-  const dispatch = useContext(UserDispatchContext);
+  const accessRef = useContext(AccessContext);
   const [response, setResponse] = useState(null);
   const [fetchError, setFetchError] = useState(null);
 
   useEffect(() => {
     async function fetchData() {
-      const { response, access, fetchError } = await authFetch(
-        url,
-        accessToken,
-      );
+      const { response, fetchError } = await authFetch(url, accessRef);
       setResponse(response);
       setFetchError(fetchError);
-      if (access)
-        dispatch({ type: 'refreshed_access_token', accessToken: access });
     }
     fetchData();
-  }, [url, accessToken, dispatch]);
+  }, [url, accessRef]);
 
   return { response, fetchError };
 }

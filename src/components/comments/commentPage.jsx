@@ -1,9 +1,6 @@
 import CommentForm from './commentForm';
 import DeleteButton from '../deleteButton';
-import {
-  UserDispatchContext,
-  UserStateContext,
-} from '../../contexts/UserContext';
+import { AccessContext } from '../../contexts/AppContexts';
 import authFetch from '../../ext/authFetch';
 import { useContext, useState } from 'react';
 import { useLoaderData, useRouteError, Link, useNavigate } from 'react-router';
@@ -13,8 +10,7 @@ export default function CommentPage() {
   const comment = json.data.comment;
   const navigate = useNavigate();
 
-  const state = useContext(UserStateContext);
-  const dispatch = useContext(UserDispatchContext);
+  const accessRef = useContext(AccessContext);
 
   const [error, setError] = useState(useRouteError());
   const [validationErrors, setValidationErrors] = useState(null);
@@ -23,13 +19,9 @@ export default function CommentPage() {
   async function updateComment(event) {
     event.preventDefault();
     setIsFetching(true);
-    const {
-      response,
-      access,
-      fetchError: newFetchError,
-    } = await authFetch(
+    const { response, fetchError: newFetchError } = await authFetch(
       `${import.meta.env.VITE_SERVER_URL}/admin/comments/${comment.id}`,
-      state.accessToken,
+      accessRef,
       {
         method: 'put',
         headers: {
@@ -38,8 +30,6 @@ export default function CommentPage() {
         body: new URLSearchParams(new FormData(event.target)),
       },
     );
-    if (access)
-      dispatch({ type: 'refreshed_access_token', accessToken: access });
     if (newFetchError) setError(newFetchError);
     else {
       const responseJson = await response?.json();

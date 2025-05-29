@@ -1,10 +1,10 @@
-export default function commentLoader(accessToken) {
+export default function commentLoader(accessRef) {
   return async ({ params }) => {
     const response = await fetch(
       `${import.meta.env.VITE_SERVER_URL}/admin/comments/${params.commentId}`,
       {
         headers: {
-          Authorization: accessToken ? 'Bearer ' + accessToken : '',
+          Authorization: accessRef.current ? 'Bearer ' + accessRef.current : '',
         },
       },
     );

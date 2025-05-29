@@ -1,12 +1,10 @@
 import LogOutButton from './logOutButton';
-import { UserStateContext } from '../contexts/UserContext';
+import { UserContext } from '../contexts/AppContexts';
 import { useContext } from 'react';
 import { Link } from 'react-router';
 
 export default function NavBar() {
-  const state = useContext(UserStateContext);
-  const isLoggedIn = state.accessToken !== null;
-
+  const { isLoggedIn } = useContext(UserContext);
   return (
     <nav>
       <ul>

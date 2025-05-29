@@ -1,18 +1,19 @@
 import AppRouter from './AppRouter';
-import userReducer, { initialState } from './reducers/userReducer';
-import { UserStateContext, UserDispatchContext } from './contexts/UserContext';
-
-import { useReducer } from 'react';
+import { AccessContext, UserContext } from './contexts/AppContexts';
+import { useRef, useState } from 'react';
 import './App.css';
 
 function App() {
-  const [state, dispatch] = useReducer(userReducer, initialState);
+  const accessRef = useRef(null);
+  // Passing the function down in the context and calling does not trigger re-render.
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // Re-render occurs when user logs out, but current page still shown - does not update to reflect logged out state.
   return (
-    <UserStateContext value={state}>
-      <UserDispatchContext value={dispatch}>
+    <AccessContext value={accessRef}>
+      <UserContext value={{ isLoggedIn, setIsLoggedIn }}>
         <AppRouter />
-      </UserDispatchContext>
-    </UserStateContext>
+      </UserContext>
+    </AccessContext>
   );
 }
 

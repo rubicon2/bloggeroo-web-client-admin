@@ -1,8 +1,5 @@
 import DeleteButton from '../deleteButton';
-import {
-  UserDispatchContext,
-  UserStateContext,
-} from '../../contexts/UserContext';
+import { AccessContext } from '../../contexts/AppContexts';
 import authFetch from '../../ext/authFetch';
 
 import { useContext, useState } from 'react';
@@ -13,8 +10,7 @@ export default function UserPage() {
   const user = json.data.user;
   const navigate = useNavigate();
 
-  const { accessToken } = useContext(UserStateContext);
-  const dispatch = useContext(UserDispatchContext);
+  const accessRef = useContext(AccessContext);
 
   const [name, setName] = useState(user.name);
   const [email, setEmail] = useState(user.email);
@@ -36,13 +32,9 @@ export default function UserPage() {
   async function saveChanges(event) {
     event.preventDefault();
     setIsFetching(true);
-    const {
-      response,
-      access,
-      fetchError: authFetchError,
-    } = await authFetch(
+    const { response, fetchError } = await authFetch(
       `${import.meta.env.VITE_SERVER_URL}/admin/users/${user.id}`,
-      accessToken,
+      accessRef,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -57,9 +49,7 @@ export default function UserPage() {
       },
     );
 
-    if (access)
-      dispatch({ type: 'refreshed_access_token', accessToken: access });
-    if (authFetchError) setError(authFetchError);
+    if (fetchError) setError(fetchError);
     else {
       const responseJson = await response?.json();
       switch (responseJson.status) {

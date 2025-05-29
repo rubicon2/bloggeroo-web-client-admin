@@ -1,15 +1,11 @@
 import BlogForm from './blogForm';
-import {
-  UserStateContext,
-  UserDispatchContext,
-} from '../../contexts/UserContext';
+import { AccessContext } from '../../contexts/AppContexts';
 import authFetch from '../../ext/authFetch';
 import { useNavigate } from 'react-router';
 import { useState, useContext } from 'react';
 
 export default function NewBlogPage() {
-  const { accessToken } = useContext(UserStateContext);
-  const dispatch = useContext(UserDispatchContext);
+  const accessRef = useContext(AccessContext);
   const navigate = useNavigate();
   const [isFetching, setIsFetching] = useState(false);
   const [validationErrors, setValidationErrors] = useState(null);
@@ -19,9 +15,9 @@ export default function NewBlogPage() {
     event.preventDefault();
     setIsFetching(true);
     // User id is decoded from jwt on server side that is sent as part of access code. Don't need to decode on here!!!
-    const { response, access, fetchError } = await authFetch(
+    const { response, fetchError } = await authFetch(
       `${import.meta.env.VITE_SERVER_URL}/admin/blogs`,
-      accessToken,
+      accessRef,
       {
         method: 'post',
         headers: {
@@ -30,8 +26,6 @@ export default function NewBlogPage() {
         body: new URLSearchParams(new FormData(event.target)),
       },
     );
-    if (access)
-      dispatch({ type: 'refreshed_access_token', accessToken: access });
     if (fetchError) setError(fetchError);
     else {
       const responseJson = await response?.json();

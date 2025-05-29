@@ -4,21 +4,17 @@ import CommentsList from '../comments/commentsList';
 import CommentForm from '../comments/commentForm';
 import useComments from '../../hooks/useComments';
 import authFetch from '../../ext/authFetch';
-import {
-  UserDispatchContext,
-  UserStateContext,
-} from '../../contexts/UserContext';
 
 import { useContext, useState } from 'react';
 import { useLoaderData, useNavigate, useRouteError } from 'react-router';
+import { AccessContext } from '../../contexts/AppContexts';
 
 export default function BlogPage() {
   const json = useLoaderData();
   const { blog } = json.data;
   const navigate = useNavigate();
 
-  const { accessToken } = useContext(UserStateContext);
-  const dispatch = useContext(UserDispatchContext);
+  const accessRef = useContext(AccessContext);
 
   const [isFetching, setIsFetching] = useState(false);
   const [blogValidationErrors, setBlogValidationErrors] = useState(null);
@@ -35,9 +31,9 @@ export default function BlogPage() {
   async function saveChanges(event) {
     event.preventDefault();
     setIsFetching(true);
-    const { response, access, fetchError } = await authFetch(
+    const { response, fetchError } = await authFetch(
       `${import.meta.env.VITE_SERVER_URL}/admin/blogs/${blog.id}`,
-      accessToken,
+      accessRef,
       {
         method: 'put',
         headers: {
@@ -46,8 +42,6 @@ export default function BlogPage() {
         body: new URLSearchParams(new FormData(event.target)),
       },
     );
-    if (access)
-      dispatch({ type: 'refreshed_access_token', accessToken: access });
     if (fetchError) setError(fetchError);
     else {
       const responseJson = await response.json();
@@ -75,9 +69,9 @@ export default function BlogPage() {
   async function createComment(event) {
     event.preventDefault();
     setIsFetching(true);
-    const { response, access, fetchError } = await authFetch(
+    const { response, fetchError } = await authFetch(
       `${import.meta.env.VITE_SERVER_URL}/admin/comments?blogId=${blog.id}`,
-      accessToken,
+      accessRef,
       {
         method: 'post',
         headers: {
@@ -86,8 +80,6 @@ export default function BlogPage() {
         body: new URLSearchParams(new FormData(event.target)),
       },
     );
-    if (access)
-      dispatch({ type: 'refreshed_access_token', accessToken: access });
     if (fetchError) setError(fetchError);
     else {
       const responseJson = await response.json();

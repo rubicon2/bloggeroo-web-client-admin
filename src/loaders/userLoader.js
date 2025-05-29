@@ -1,10 +1,10 @@
-export default function userLoader(accessToken) {
+export default function userLoader(accessRef) {
   return async ({ params }) => {
     const response = await fetch(
       `${import.meta.env.VITE_SERVER_URL}/admin/users/${params.userId}`,
       {
         headers: {
-          Authorization: accessToken ? 'Bearer ' + accessToken : '',
+          Authorization: accessRef.current ? 'Bearer ' + accessRef.current : '',
         },
       },
     );

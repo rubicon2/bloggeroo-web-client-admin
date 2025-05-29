@@ -1,9 +1,10 @@
-import { UserDispatchContext } from '../contexts/UserContext';
+import { AccessContext, UserContext } from '../contexts/AppContexts';
 import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router';
 
 export default function LogInPage() {
-  const dispatch = useContext(UserDispatchContext);
+  const accessRef = useContext(AccessContext);
+  const { setIsLoggedIn } = useContext(UserContext);
   const [validationErrors, setValidationErrors] = useState(null);
   const [isFetching, setIsFetching] = useState(false);
   const navigate = useNavigate();
@@ -31,10 +32,8 @@ export default function LogInPage() {
         case 'success': {
           // Refresh token will be sent over in http response httpOnly cookie header.
           // Save access token.
-          dispatch({
-            type: 'logged_in',
-            accessToken: json.data.access,
-          });
+          accessRef.current = json.data.access;
+          setIsLoggedIn(true);
           setValidationErrors(null);
           // Redirect to home page.
           navigate('/');

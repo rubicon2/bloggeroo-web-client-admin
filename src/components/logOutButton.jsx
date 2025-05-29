@@ -1,8 +1,9 @@
-import { UserDispatchContext } from '../contexts/UserContext';
+import { AccessContext, UserContext } from '../contexts/AppContexts';
 import { useState, useContext } from 'react';
 
 export default function LogOutButton() {
-  const dispatch = useContext(UserDispatchContext);
+  const accessRef = useContext(AccessContext);
+  const { setIsLoggedIn } = useContext(UserContext);
   const [error, setError] = useState(null);
   const [isFetching, setIsFetching] = useState(false);
 
@@ -23,9 +24,8 @@ export default function LogOutButton() {
       );
 
       if (response.ok) {
-        dispatch({
-          type: 'logged_out',
-        });
+        accessRef.current = null;
+        setIsLoggedIn(false);
       }
     } catch (error) {
       setError(error.message);
