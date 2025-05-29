@@ -1,11 +1,11 @@
-import DeleteButton from './deleteButton';
-import { UserDispatchContext, UserStateContext } from '../contexts/UserContext';
+import BlogForm from './blogForm';
+import CommentsList from './commentsList';
 import useComments from '../hooks/useComments';
 import authFetch from '../ext/authFetch';
+import { UserDispatchContext, UserStateContext } from '../contexts/UserContext';
 
 import { useContext, useState } from 'react';
-import { useLoaderData, useNavigate, useRouteError } from 'react-router';
-import BlogForm from './blogForm';
+import { useLoaderData, useNavigate, useRouteError, Link } from 'react-router';
 
 export function blogLoader(accessToken) {
   // If blogLoader tries to load a non-existent blog, accessToken is always null?
@@ -111,16 +111,11 @@ export default function Blog() {
             validationErrors={validationErrors}
             onSubmit={saveChanges}
           />
-          <h3>Comments</h3>
-          {comments?.length > 0 ? (
-            <ul>
-              {comments.map((comment) => (
-                <div key={comment.id}>{comment.text}</div>
-              ))}
-            </ul>
-          ) : (
-            <p>There are no comments.</p>
-          )}
+          <h3>Comments {comments?.length > 0 ? `(${comments.length})` : ''}</h3>
+          <Link to={`/comments/new?blogId=${blog.id}`}>
+            <button type="button">Add comment</button>
+          </Link>
+          <CommentsList comments={comments} />
         </>
       )}
       {error && <p>{error.message}</p>}

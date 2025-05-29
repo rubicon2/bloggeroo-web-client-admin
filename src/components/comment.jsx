@@ -1,7 +1,7 @@
+import CommentForm from './commentForm';
 import DeleteButton from './deleteButton';
 import { UserDispatchContext, UserStateContext } from '../contexts/UserContext';
 import authFetch from '../ext/authFetch';
-
 import { useContext, useState } from 'react';
 import { useLoaderData, useRouteError, Link, useNavigate } from 'react-router';
 
@@ -38,7 +38,6 @@ export default function Comment() {
   const state = useContext(UserStateContext);
   const dispatch = useContext(UserDispatchContext);
 
-  const [text, setText] = useState(comment.text);
   const [error, setError] = useState(useRouteError());
   const [validationErrors, setValidationErrors] = useState(null);
   const [isFetching, setIsFetching] = useState(false);
@@ -90,23 +89,16 @@ export default function Comment() {
   return (
     <>
       {comment && (
-        <>
+        <div key={comment.id}>
           <h2>By {comment.owner.name}</h2>
           <small>At {comment.createdAt}</small>
-          <form onSubmit={updateComment}>
-            <textarea
-              name="text"
-              id="text"
-              cols="60"
-              rows="10"
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-            />
-            <small>{validationErrors?.text}</small>
-            <button type="submit" disabled={isFetching}>
-              Save
-            </button>
-          </form>
+          <CommentForm
+            buttonText={'Save'}
+            initialValues={{ text: comment.text }}
+            isFetching={isFetching}
+            validationErrors={validationErrors}
+            onSubmit={updateComment}
+          />
           {comment.parentCommentId && (
             <small>
               <Link to={`/comments/${comment.parentCommentId}`}>
@@ -120,7 +112,7 @@ export default function Comment() {
           >
             Delete
           </DeleteButton>
-        </>
+        </div>
       )}
       {error && <p>{error.message}</p>}
     </>
