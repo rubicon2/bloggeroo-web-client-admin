@@ -1,6 +1,9 @@
-import DeleteButton from './deleteButton';
-import { UserDispatchContext, UserStateContext } from '../contexts/UserContext';
-import authFetch from '../ext/authFetch';
+import DeleteButton from '../deleteButton';
+import {
+  UserDispatchContext,
+  UserStateContext,
+} from '../../contexts/UserContext';
+import authFetch from '../../ext/authFetch';
 
 import { useContext, useState } from 'react';
 import { Link, useLoaderData, useNavigate, useRouteError } from 'react-router';
