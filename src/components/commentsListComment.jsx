@@ -2,7 +2,7 @@ import CommentForm from './commentForm';
 import DeleteButton from './deleteButton';
 import { UserDispatchContext, UserStateContext } from '../contexts/UserContext';
 import authFetch from '../ext/authFetch';
-import { useParams, Link } from 'react-router';
+import { Link } from 'react-router';
 import { useContext, useState } from 'react';
 
 export default function CommentsListComment({
@@ -12,7 +12,6 @@ export default function CommentsListComment({
 }) {
   const { accessToken } = useContext(UserStateContext);
   const dispatch = useContext(UserDispatchContext);
-  const { blogId } = useParams();
 
   const [error, setError] = useState(null);
   const [validationErrors, setValidationErrors] = useState(null);
@@ -22,7 +21,7 @@ export default function CommentsListComment({
     event.preventDefault();
     setIsFetching(true);
     const { response, access, fetchError } = await authFetch(
-      `${import.meta.env.VITE_SERVER_URL}/comments?blogId=${blogId}&parentCommentId=${comment.id}`,
+      `${import.meta.env.VITE_SERVER_URL}/comments?blogId=${comment.blogId}&parentCommentId=${comment.id}`,
       accessToken,
       {
         method: 'post',
