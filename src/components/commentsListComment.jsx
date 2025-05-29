@@ -75,25 +75,32 @@ export default function CommentsListComment({
           </button>
         </>
       ) : (
-        <div>
-          <button type="button" onClick={() => setActiveComment(comment)}>
-            Reply
-          </button>
-        </div>
+        <>
+          {comment.parentCommentId && (
+            <div>
+              <small>
+                <Link to={`/comments/${comment.parentCommentId}`}>
+                  In response to this comment
+                </Link>
+              </small>
+            </div>
+          )}
+          <div>
+            <Link to={`/comments/${comment.id}`}>
+              <button type="button">Edit</button>
+            </Link>
+            <DeleteButton
+              url={`${import.meta.env.VITE_SERVER_URL}/admin/comments/${comment.id}`}
+              successRedirect={'/comments'}
+            >
+              Delete
+            </DeleteButton>
+            <button type="button" onClick={() => setActiveComment(comment)}>
+              Reply
+            </button>
+          </div>
+        </>
       )}
-      {comment.parentCommentId && (
-        <small>
-          <Link to={`/comments/${comment.parentCommentId}`}>
-            In response to this comment
-          </Link>
-        </small>
-      )}
-      <DeleteButton
-        url={`${import.meta.env.VITE_SERVER_URL}/admin/comments/${comment.id}`}
-        successRedirect={'/comments'}
-      >
-        Delete
-      </DeleteButton>
       {error && <p>{error.message}</p>}
     </>
   );
