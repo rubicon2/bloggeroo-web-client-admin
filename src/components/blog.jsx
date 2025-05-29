@@ -1,5 +1,6 @@
 import BlogForm from './blogForm';
 import CommentsList from './commentsList';
+import DeleteButton from './deleteButton';
 import useComments from '../hooks/useComments';
 import authFetch from '../ext/authFetch';
 import { UserDispatchContext, UserStateContext } from '../contexts/UserContext';
