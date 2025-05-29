@@ -2,7 +2,7 @@ import CommentsList from './commentsList';
 import useComments from '../hooks/useComments';
 import { useState } from 'react';
 
-export default function Comments() {
+export default function CommentsPage() {
   const [query, setQuery] = useState('');
   const { comments, error } = useComments(query);
   return (

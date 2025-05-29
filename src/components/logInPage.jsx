@@ -2,7 +2,7 @@ import { UserDispatchContext } from '../contexts/UserContext';
 import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router';
 
-export default function LogIn() {
+export default function LogInPage() {
   const dispatch = useContext(UserDispatchContext);
   const [validationErrors, setValidationErrors] = useState(null);
   const [isFetching, setIsFetching] = useState(false);

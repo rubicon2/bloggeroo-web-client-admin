@@ -30,7 +30,7 @@ export function commentLoader(accessToken) {
   };
 }
 
-export default function Comment() {
+export default function CommentPage() {
   const json = useLoaderData();
   const comment = json.data.comment;
   const navigate = useNavigate();

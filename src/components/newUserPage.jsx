@@ -4,7 +4,7 @@ import authFetch from '../ext/authFetch';
 import { useNavigate } from 'react-router';
 import { useContext, useState } from 'react';
 
-export default function NewUser() {
+export default function NewUserPage() {
   const { accessToken } = useContext(UserStateContext);
   const dispatch = useContext(UserDispatchContext);
   const navigate = useNavigate();

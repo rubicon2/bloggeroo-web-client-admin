@@ -1,14 +1,14 @@
 import Root from './components/root';
-import Blogs from './components/blogs';
-import Blog, { blogLoader } from './components/blog';
-import NewBlog from './components/newBlog';
-import Error from './components/error';
-import Comments from './components/comments';
-import Comment, { commentLoader } from './components/comment';
-import LogIn from './components/logIn';
-import Users from './components/users';
-import User, { userLoader } from './components/user';
-import NewUser from './components/newUser';
+import BlogsPage from './components/blogsPage';
+import BlogPage, { blogLoader } from './components/blogPage';
+import NewBlogPage from './components/newBlogPage';
+import ErrorPage from './components/errorPage';
+import CommentsPage from './components/commentsPage';
+import CommentPage, { commentLoader } from './components/commentPage';
+import LogInPage from './components/logInPage';
+import UsersPage from './components/usersPage';
+import UserPage, { userLoader } from './components/userPage';
+import NewUserPage from './components/newUserPage';
 
 import { UserStateContext } from './contexts/UserContext';
 import { useContext, useMemo } from 'react';
@@ -22,53 +22,53 @@ export default function AppRouter() {
       {
         path: '/',
         Component: Root,
-        ErrorBoundary: Error,
+        ErrorBoundary: ErrorPage,
         children: [
           {
-            ErrorBoundary: Error,
+            ErrorBoundary: ErrorPage,
             children: [
               {
                 index: true,
-                Component: Blogs,
+                Component: BlogsPage,
               },
               {
                 path: 'blogs',
-                Component: Blogs,
+                Component: BlogsPage,
               },
               {
                 path: 'blogs/new',
-                Component: NewBlog,
+                Component: NewBlogPage,
               },
               {
                 path: 'blogs/:blogId',
-                Component: Blog,
+                Component: BlogPage,
                 loader: blogLoader(state.accessToken),
               },
               {
                 path: 'comments',
-                Component: Comments,
+                Component: CommentsPage,
               },
               {
                 path: 'comments/:commentId',
-                Component: Comment,
+                Component: CommentPage,
                 loader: commentLoader(state.accessToken),
               },
               {
                 path: 'users',
-                Component: Users,
+                Component: UsersPage,
               },
               {
                 path: 'users/new',
-                Component: NewUser,
+                Component: NewUserPage,
               },
               {
                 path: 'users/:userId',
-                Component: User,
+                Component: UserPage,
                 loader: userLoader(state.accessToken),
               },
               {
                 path: 'log-in',
-                Component: LogIn,
+                Component: LogInPage,
               },
             ],
           },

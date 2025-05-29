@@ -2,7 +2,7 @@ import useUsers from '../hooks/useUsers';
 import { useState } from 'react';
 import { Link } from 'react-router';
 
-export default function Users() {
+export default function UsersPage() {
   const [query, setQuery] = useState('');
   const { users, error } = useUsers(query);
 

@@ -2,7 +2,7 @@ import useBlogs from '../hooks/useBlogs';
 import { useState } from 'react';
 import { Link } from 'react-router';
 
-export default function Blogs() {
+export default function BlogsPage() {
   const [query, setQuery] = useState('');
   const { blogs, error } = useBlogs(query);
 

@@ -4,7 +4,7 @@ import authFetch from '../ext/authFetch';
 import { useNavigate } from 'react-router';
 import { useState, useContext } from 'react';
 
-export default function NewBlog() {
+export default function NewBlogPage() {
   const { accessToken } = useContext(UserStateContext);
   const dispatch = useContext(UserDispatchContext);
   const navigate = useNavigate();

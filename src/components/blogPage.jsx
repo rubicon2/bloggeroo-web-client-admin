@@ -38,7 +38,7 @@ export function blogLoader(accessToken) {
   };
 }
 
-export default function Blog() {
+export default function BlogPage() {
   const json = useLoaderData();
   const { blog } = json.data;
   const navigate = useNavigate();

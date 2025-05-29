@@ -30,7 +30,7 @@ export function userLoader(accessToken) {
   };
 }
 
-export default function User() {
+export default function UserPage() {
   const json = useLoaderData();
   const user = json.data.user;
   const navigate = useNavigate();
