@@ -17,7 +17,7 @@ export default function Blogs() {
       <h2>Blogs</h2>
       <div>
         <Link to="/blogs/new">
-          <h3>New Blog</h3>
+          <button type="button">New Blog</button>
         </Link>
         {blogs &&
           blogs.map((blog) => {
