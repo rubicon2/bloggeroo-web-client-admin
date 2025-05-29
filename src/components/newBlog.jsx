@@ -32,7 +32,7 @@ export default function NewBlog() {
     if (fetchError) setError(fetchError);
     else {
       const responseJson = await response?.json();
-      switch (responseJson.status) {
+      switch (responseJson?.status) {
         case 'success': {
           navigate('/blogs');
           break;
