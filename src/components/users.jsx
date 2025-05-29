@@ -15,6 +15,9 @@ export default function Users() {
         onChange={(e) => setQuery(e.currentTarget.value)}
       />
       <h2>Users</h2>
+      <Link to="/users/new">
+        <button type="button">New User</button>
+      </Link>
       <div>
         {users &&
           users.map((user) => {

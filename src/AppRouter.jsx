@@ -8,6 +8,7 @@ import Comment, { commentLoader } from './components/comment';
 import LogIn from './components/logIn';
 import Users from './components/users';
 import User, { userLoader } from './components/user';
+import NewUser from './components/newUser';
 
 import { UserStateContext } from './contexts/UserContext';
 import { useContext, useMemo } from 'react';
@@ -55,6 +56,10 @@ export default function AppRouter() {
               {
                 path: 'users',
                 Component: Users,
+              },
+              {
+                path: 'users/new',
+                Component: NewUser,
               },
               {
                 path: 'users/:userId',
