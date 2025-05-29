@@ -3,7 +3,7 @@ import BlogsPage from './components/blogs/blogsPage';
 import BlogPage, { blogLoader } from './components/blogs/blogPage';
 import NewBlogPage from './components/blogs/newBlogPage';
 import ErrorPage from './components/errorPage';
-import CommentsPage from './components/commentsPage';
+import CommentsPage from './components/comments/commentsPage';
 import CommentPage, { commentLoader } from './components/commentPage';
 import LogInPage from './components/logInPage';
 import UsersPage from './components/usersPage';

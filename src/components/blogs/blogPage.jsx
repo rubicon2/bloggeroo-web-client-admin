@@ -1,7 +1,7 @@
 import BlogForm from './blogForm';
 import CommentsList from '../commentsList';
 import DeleteButton from '../deleteButton';
-import CommentForm from '../commentForm';
+import CommentForm from '../comments/commentForm';
 import useComments from '../../hooks/useComments';
 import authFetch from '../../ext/authFetch';
 import {

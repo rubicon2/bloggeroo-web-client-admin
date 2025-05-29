@@ -1,7 +1,10 @@
 import CommentForm from './commentForm';
-import DeleteButton from './deleteButton';
-import { UserDispatchContext, UserStateContext } from '../contexts/UserContext';
-import authFetch from '../ext/authFetch';
+import DeleteButton from '../deleteButton';
+import {
+  UserDispatchContext,
+  UserStateContext,
+} from '../../contexts/UserContext';
+import authFetch from '../../ext/authFetch';
 import { useContext, useState } from 'react';
 import { useLoaderData, useRouteError, Link, useNavigate } from 'react-router';
 
