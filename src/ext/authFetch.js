@@ -28,7 +28,7 @@ export default async function authFetch(url, accessRef, options = {}) {
         dataResponse = await fetch(url, {
           headers: {
             Authorization: accessRef.current
-              ? 'Bearer ' + accessRef.urrent
+              ? 'Bearer ' + accessRef.current
               : '',
           },
           ...options,
