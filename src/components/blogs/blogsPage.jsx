@@ -34,7 +34,7 @@ export default function BlogsPage() {
               </Link>
             );
           })}
-        {error && <p>{error}</p>}
+        {error && <p>{error.message}</p>}
       </div>
     </>
   );

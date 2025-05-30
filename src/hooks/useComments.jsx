@@ -22,12 +22,12 @@ export default function useComments(query = '') {
           }
           case 'fail': {
             setComments(null);
-            setError(json.data.message);
+            setError(new Error(json.data.message));
             break;
           }
           case 'error': {
             setComments(null);
-            setError(json.message);
+            setError(new Error(json.message));
             break;
           }
         }

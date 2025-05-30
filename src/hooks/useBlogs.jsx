@@ -22,12 +22,12 @@ export default function useBlogs(query = '') {
           }
           case 'fail': {
             setBlogs(null);
-            setError(json.data.message);
+            setError(new Error(json.data.message));
             break;
           }
           case 'error': {
             setBlogs(null);
-            setError(json.message);
+            setError(new Error(json.message));
           }
         }
       });

@@ -16,7 +16,7 @@ export default function CommentsPage() {
       <h2>Comments</h2>
       <div>
         <CommentsList comments={comments} />
-        {error && <p>{error}</p>}
+        {error && <p>{error.message}</p>}
       </div>
     </>
   );

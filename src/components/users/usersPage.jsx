@@ -32,7 +32,7 @@ export default function UsersPage() {
             );
           })}
       </div>
-      {error && <p>{error}</p>}
+      {error && <p>{error.message}</p>}
     </>
   );
 }

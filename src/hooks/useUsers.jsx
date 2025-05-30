@@ -26,13 +26,13 @@ export default function useUsers(query = '') {
           case 'fail': {
             // Errors expected by server.
             setUsers(null);
-            setError(json.data.message);
+            setError(new Error(json.data.message));
             break;
           }
           case 'error': {
             // Errors not expected by server.
             setUsers(null);
-            setError(json.message);
+            setError(new Error(json.message));
           }
         }
       });

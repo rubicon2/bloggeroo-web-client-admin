@@ -141,7 +141,7 @@ export default function UserPage() {
           </DeleteButton>
         </>
       )}
-      {error && <p>{error}</p>}
+      {error && <p>{error.message}</p>}
       <h3>Blogs</h3>
       {user.blogs?.length > 0 ? (
         <ul>

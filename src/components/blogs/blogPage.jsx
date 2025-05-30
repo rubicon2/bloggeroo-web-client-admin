@@ -59,11 +59,12 @@ export default function BlogPage() {
         case 'fail': {
           if (responseJson.data.validationErrors)
             setBlogValidationErrors(responseJson.data.validationErrors);
-          if (responseJson.data.message) setError(responseJson.data.message);
+          if (responseJson.data.message)
+            setError(new Error(responseJson.data.message));
           break;
         }
         case 'error': {
-          setError(responseJson.message);
+          setError(new Error(responseJson.message));
           break;
         }
       }
@@ -100,11 +101,12 @@ export default function BlogPage() {
         case 'fail': {
           if (responseJson.data.validationErrors)
             setCommentValidationErrors(responseJson.data.validationErrors);
-          if (responseJson.data.message) setError(responseJson.data.message);
+          if (responseJson.data.message)
+            setError(new Error(responseJson.data.message));
           break;
         }
         case 'error': {
-          setError(responseJson.message);
+          setError(new Error(responseJson.message));
           break;
         }
       }
