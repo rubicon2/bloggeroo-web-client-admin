@@ -1,38 +1,9 @@
-import useAuthFetch from './useAuthFetch';
-import { useState, useEffect } from 'react';
+import useJsend from './useJSend';
 
 export default function useBlogs(query = '') {
-  const [blogs, setBlogs] = useState(null);
-  const [error, setError] = useState(null);
-
-  const { response, fetchError } = useAuthFetch(
+  const { data, error } = useJsend(
     `${import.meta.env.VITE_SERVER_URL}/admin/blogs?${query}`,
   );
 
-  useEffect(() => {
-    if (fetchError) {
-      setError(fetchError);
-    } else {
-      response?.json().then((json) => {
-        switch (json.status) {
-          case 'success': {
-            setBlogs(json.data.blogs);
-            setError(null);
-            break;
-          }
-          case 'fail': {
-            setBlogs(null);
-            setError(new Error(json.data.message));
-            break;
-          }
-          case 'error': {
-            setBlogs(null);
-            setError(new Error(json.message));
-          }
-        }
-      });
-    }
-  }, [response, fetchError]);
-
-  return { blogs, error };
+  return { blogs: data?.blogs, error };
 }

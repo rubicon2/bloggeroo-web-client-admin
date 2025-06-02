@@ -1,39 +1,9 @@
-import useAuthFetch from './useAuthFetch';
-import { useState, useEffect } from 'react';
+import useJsend from './useJSend';
 
 export default function useComments(query = '') {
-  const [comments, setComments] = useState(null);
-  const [error, setError] = useState(null);
-
-  const { response, fetchError } = useAuthFetch(
+  const { data, error } = useJsend(
     `${import.meta.env.VITE_SERVER_URL}/admin/comments?${query}`,
   );
 
-  useEffect(() => {
-    if (fetchError) {
-      setError(fetchError);
-    } else {
-      response?.json().then((json) => {
-        switch (json.status) {
-          case 'success': {
-            setComments(json.data.comments);
-            setError(null);
-            break;
-          }
-          case 'fail': {
-            setComments(null);
-            setError(new Error(json.data.message));
-            break;
-          }
-          case 'error': {
-            setComments(null);
-            setError(new Error(json.message));
-            break;
-          }
-        }
-      });
-    }
-  }, [response, fetchError]);
-
-  return { comments, error };
+  return { comments: data?.comments, error };
 }
