@@ -20,12 +20,18 @@ export default function useAuthFetch(url) {
   // Not bother with useAuthFetch? Instead useEffect on component? Then can control when it re-runs
   // on a per-component basis.
   useEffect(() => {
+    let ignore = false;
     async function fetchData() {
       const { response, fetchError } = await authFetch(url, accessRef);
-      setResponse(response);
-      setFetchError(fetchError);
+      if (!ignore) {
+        setResponse(response);
+        setFetchError(fetchError);
+      }
     }
     fetchData();
+    return () => {
+      ignore = true;
+    };
   }, [url, accessRef, isLoggedIn]);
 
   return { response, fetchError };
