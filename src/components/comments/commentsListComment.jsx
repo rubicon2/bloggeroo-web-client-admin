@@ -9,6 +9,7 @@ export default function CommentsListComment({
   comment,
   isActiveComment,
   setActiveComment,
+  onReply,
 }) {
   const accessRef = useContext(AccessContext);
   const [error, setError] = useState(null);
@@ -34,6 +35,8 @@ export default function CommentsListComment({
         // Lol no it doesn't. React doesn't know it needs to re-render anything.
         // Close the form by setting active comment to null.
         setActiveComment(null);
+        // Call this prop function that will (on blog page at least) let it know to update comments.
+        if (onReply) onReply();
         break;
       }
       case 'fail': {

@@ -21,12 +21,26 @@ export default function BlogPage() {
   const [commentValidationErrors, setCommentValidationErrors] = useState(null);
   const [error, setError] = useState(useRouteError());
   const [isCreatingComment, setIsCreatingComment] = useState(false);
+  // Set to a uuid if we want to force the useComments fetch to re-run, as it will only
+  // re-run the useAuthFetch useEffect if the url changes or the user login status changes.
+  // I am clearly creating custom hooks incorrectly or misunderstanding some central aspect of react.
+  const [forceFetchId, setForceFetchId] = useState('');
 
   // Fetch comments in a separate fetch so query can change order, filter out certain ones, etc.
   // Split out into a separate component later.
   const { comments } = useComments(
-    `blogId=${blog?.id}&orderBy=createdAt&sortOrder=desc`,
+    `blogId=${blog?.id}&orderBy=createdAt&sortOrder=desc&fetchId=${forceFetchId}`,
   );
+
+  function updateComments() {
+    // Butttt we need to update the comments as part of state, otherwise the component will not re-render.
+    // But we have used useComments hook which has its own state. Otherwise it is a nice tidy way of getting
+    // the comments and any errors that might occur, but this is a problem. A big one.
+    // And useAuthFetch won't re-run unless the url is different. SO APPEND SOME RANDOM UUID TO MAKE IT RE-RUN!!!!
+    // This is one of the worst things I have ever done in my life. Will keep on working to try and find
+    // a solution that actually makes sense and isn't the hackiest garbage I have ever made.
+    setForceFetchId(crypto.randomUUID());
+  }
 
   async function saveChanges(event) {
     event.preventDefault();
@@ -85,9 +99,10 @@ export default function BlogPage() {
       const responseJson = await response.json();
       switch (responseJson.status) {
         case 'success': {
-          // Refresh the page with the new comment.
+          // Close comment input text area.
           setIsCreatingComment(false);
-          navigate(`/blogs/${blog.id}`);
+          // Refresh the page with the new comment.
+          updateComments();
           break;
         }
         case 'fail': {
@@ -143,7 +158,7 @@ export default function BlogPage() {
               Add comment
             </button>
           )}
-          <CommentsList comments={comments} />
+          <CommentsList comments={comments} onReply={updateComments} />
         </>
       )}
       {error && <p>{error.message}</p>}

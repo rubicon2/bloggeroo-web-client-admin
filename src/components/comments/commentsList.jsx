@@ -1,7 +1,7 @@
 import CommentsListComment from './commentsListComment';
 import { useState } from 'react';
 
-export default function CommentsList({ comments }) {
+export default function CommentsList({ comments, onReply }) {
   const [activeCommentId, setActiveCommentId] = useState(null);
   return (
     <>
@@ -13,6 +13,7 @@ export default function CommentsList({ comments }) {
                 comment={comment}
                 isActiveComment={comment.id === activeCommentId}
                 setActiveComment={(c) => setActiveCommentId(c?.id)}
+                onReply={onReply}
               />
             </li>
           ))}
