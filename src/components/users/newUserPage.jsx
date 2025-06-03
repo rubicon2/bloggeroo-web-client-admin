@@ -1,6 +1,7 @@
 import UserForm from './userForm';
 import { AccessContext } from '../../contexts/AppContexts';
 import authFetch from '../../ext/authFetch';
+import responseToJsend from '../../ext/responseToJsend';
 import { useNavigate } from 'react-router';
 import { useContext, useState } from 'react';
 
@@ -27,20 +28,14 @@ export default function NewUserPage() {
     );
     if (fetchError) setError(fetchError);
     else {
-      const json = await response?.json();
-      switch (json?.status) {
+      const { status, data, error } = await responseToJsend(response);
+      // If no error, responseToJsend will return a null error.
+      setError(error);
+      // Likewise, if validationErrors does not exist, this will set the state to undefined.
+      setValidationErrors(data.validationErrors);
+      switch (status) {
         case 'success': {
           navigate('/users');
-          break;
-        }
-        case 'fail': {
-          if (json.data.validationErrors)
-            setValidationErrors(json.data.validationErrors);
-          if (json.data.message) setError(new Error(json.data.message));
-          break;
-        }
-        case 'error': {
-          setError(new Error(json.message));
           break;
         }
       }

@@ -58,12 +58,14 @@ export default function BlogPage() {
     );
     if (fetchError) setError(fetchError);
     else {
-      const { data, error } = await responseToJsend(response);
+      const { status, data, error } = await responseToJsend(response);
       setError(error);
-      if (data.validationErrors) {
-        setBlogValidationErrors(data.validationErrors);
-      } else {
-        navigate('/blogs');
+      setBlogValidationErrors(data?.validationErrors);
+      switch (status) {
+        case 'success': {
+          navigate('/blogs');
+          break;
+        }
       }
     }
     setIsFetching(false);
@@ -85,13 +87,15 @@ export default function BlogPage() {
     );
     if (fetchError) setError(fetchError);
     else {
-      const { data, error } = await responseToJsend(response);
+      const { status, data, error } = await responseToJsend(response);
       setError(error);
-      if (data.validationErrors) {
-        setCommentValidationErrors(data.validationErrors);
-      } else {
-        setIsCreatingComment(false);
-        updateComments();
+      setCommentValidationErrors(data.validationErrors);
+      switch (status) {
+        case 'success': {
+          setIsCreatingComment(false);
+          updateComments();
+          break;
+        }
       }
     }
     setIsFetching(false);

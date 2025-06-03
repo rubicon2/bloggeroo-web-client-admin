@@ -2,6 +2,7 @@ import CommentForm from './commentForm';
 import DeleteButton from '../deleteButton';
 import { AccessContext } from '../../contexts/AppContexts';
 import authFetch from '../../ext/authFetch';
+import responseToJsend from '../../ext/responseToJsend';
 import { useContext, useState } from 'react';
 import { useLoaderData, useRouteError, Link, useNavigate } from 'react-router';
 
@@ -18,7 +19,7 @@ export default function CommentPage() {
   async function updateComment(event) {
     event.preventDefault();
     setIsFetching(true);
-    const { response, fetchError: newFetchError } = await authFetch(
+    const { response, fetchError } = await authFetch(
       `${import.meta.env.VITE_SERVER_URL}/admin/comments/${comment.id}`,
       accessRef,
       {
@@ -29,23 +30,14 @@ export default function CommentPage() {
         body: new URLSearchParams(new FormData(event.target)),
       },
     );
-    if (newFetchError) setError(newFetchError);
+    if (fetchError) setError(fetchError);
     else {
-      const responseJson = await response?.json();
-      switch (responseJson.status) {
+      const { status, data, error } = await responseToJsend(response);
+      setError(error);
+      setValidationErrors(data?.validationErrors);
+      switch (status) {
         case 'success': {
           navigate('/comments');
-          break;
-        }
-        case 'fail': {
-          if (responseJson.data.validationErrors)
-            setValidationErrors(responseJson.data.validationErrors);
-          if (responseJson.data.message)
-            setError(new Error(responseJson.data.message));
-          break;
-        }
-        case 'error': {
-          setError(new Error(responseJson.message));
           break;
         }
       }

@@ -1,6 +1,7 @@
 import BlogForm from './blogForm';
 import { AccessContext } from '../../contexts/AppContexts';
 import authFetch from '../../ext/authFetch';
+import responseToJsend from '../../ext/responseToJsend';
 import { useNavigate } from 'react-router';
 import { useState, useContext } from 'react';
 
@@ -28,21 +29,12 @@ export default function NewBlogPage() {
     );
     if (fetchError) setError(fetchError);
     else {
-      const responseJson = await response?.json();
-      switch (responseJson?.status) {
+      const { status, data, error } = await responseToJsend(response);
+      setError(error);
+      setValidationErrors(data?.validationErrors);
+      switch (status) {
         case 'success': {
           navigate('/blogs');
-          break;
-        }
-        case 'fail': {
-          if (responseJson.data.validationErrors)
-            setValidationErrors(responseJson.data.validationErrors);
-          if (responseJson.data.message)
-            setError(new Error(responseJson.data.message));
-          break;
-        }
-        case 'error': {
-          setError(new Error(responseJson.message));
           break;
         }
       }

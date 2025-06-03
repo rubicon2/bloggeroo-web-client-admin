@@ -2,6 +2,7 @@ import CommentForm from './commentForm';
 import DeleteButton from '../deleteButton';
 import { AccessContext } from '../../contexts/AppContexts';
 import authFetch from '../../ext/authFetch';
+import responseToJsend from '../../ext/responseToJsend';
 import { Link } from 'react-router';
 import { useContext, useState } from 'react';
 
@@ -28,26 +29,18 @@ export default function CommentsListComment({
       },
     );
     if (fetchError) setError(fetchError);
-    const json = await response?.json();
-    switch (json?.status) {
-      case 'success': {
-        // Comments on blog will automatically update. Just stop showing reply form and clear it.
-        // Lol no it doesn't. React doesn't know it needs to re-render anything.
-        // Close the form by setting active comment to null.
-        setActiveComment(null);
-        // Call this prop function that will (on blog page at least) let it know to update comments.
-        if (onReply) onReply();
-        break;
-      }
-      case 'fail': {
-        if (json.data.validationErrors)
-          setValidationErrors(json.data.validationErrors);
-        if (json.data.message) setError(new Error(json.data.message));
-        break;
-      }
-      case 'error': {
-        setError(new Error(json.message));
-        break;
+    else {
+      const { status, data, error } = await responseToJsend(response);
+      setError(error);
+      setValidationErrors(data?.validationErrors);
+      switch (status) {
+        case 'success': {
+          // Close form.
+          setActiveComment(null);
+          // Let parent components know that reply happened, i.e. stuff needs to be fetched again.
+          if (onReply) onReply();
+          break;
+        }
       }
     }
     setIsFetching(false);
