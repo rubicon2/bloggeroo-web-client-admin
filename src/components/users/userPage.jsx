@@ -124,7 +124,7 @@ export default function UserPage() {
           </button>
           <DeleteButton
             url={`${import.meta.env.VITE_SERVER_URL}/admin/users/${user.id}`}
-            successRedirect={'/users'}
+            onDelete={() => navigate('/users')}
           >
             Delete
           </DeleteButton>

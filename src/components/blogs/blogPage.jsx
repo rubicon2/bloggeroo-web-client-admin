@@ -92,6 +92,7 @@ export default function BlogPage() {
           <small>By {blog.owner.name}</small>
           <DeleteButton
             url={`${import.meta.env.VITE_SERVER_URL}/admin/blogs/${blog.id}`}
+            onDelete={() => navigate('/blogs')}
           >
             Delete
           </DeleteButton>
@@ -121,7 +122,11 @@ export default function BlogPage() {
               Add comment
             </button>
           )}
-          <CommentsList comments={comments} onReply={reloadBlog} />
+          <CommentsList
+            comments={comments}
+            onReply={reloadBlog}
+            onDelete={reloadBlog}
+          />
         </>
       )}
       {error && <p>{error.message}</p>}

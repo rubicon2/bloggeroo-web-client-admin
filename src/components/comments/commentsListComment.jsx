@@ -11,6 +11,7 @@ export default function CommentsListComment({
   isActiveComment,
   setActiveComment,
   onReply,
+  onDelete,
 }) {
   const accessRef = useContext(AccessContext);
   const [error, setError] = useState(null);
@@ -82,7 +83,7 @@ export default function CommentsListComment({
             </Link>
             <DeleteButton
               url={`${import.meta.env.VITE_SERVER_URL}/admin/comments/${comment.id}`}
-              successRedirect={'/comments'}
+              onDelete={onDelete}
             >
               Delete
             </DeleteButton>

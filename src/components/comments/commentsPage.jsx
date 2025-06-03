@@ -15,7 +15,11 @@ export default function CommentsPage() {
       />
       <h2>Comments</h2>
       <div>
-        <CommentsList comments={comments} />
+        <CommentsList
+          comments={filteredComments}
+          onReply={() => navigate('/comments')}
+          onDelete={() => navigate('/comments')}
+        />
         {error && <p>{error.message}</p>}
       </div>
     </>

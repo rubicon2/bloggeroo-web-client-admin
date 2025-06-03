@@ -67,7 +67,7 @@ export default function CommentPage() {
           )}
           <DeleteButton
             url={`${import.meta.env.VITE_SERVER_URL}/admin/comments/${comment.id}`}
-            successRedirect={'/comments'}
+            onDelete={() => navigate('/comments')}
           >
             Delete
           </DeleteButton>
