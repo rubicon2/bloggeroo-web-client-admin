@@ -6,8 +6,7 @@ import { useContext, useState } from 'react';
 import { Link, useLoaderData, useNavigate, useRouteError } from 'react-router';
 
 export default function UserPage() {
-  const json = useLoaderData();
-  const user = json.data.user;
+  const user = useLoaderData();
   const navigate = useNavigate();
 
   const accessRef = useContext(AccessContext);

@@ -10,8 +10,7 @@ import { useLoaderData, useNavigate, useRouteError } from 'react-router';
 import { AccessContext } from '../../contexts/AppContexts';
 
 export default function BlogPage() {
-  const json = useLoaderData();
-  const { blog } = json.data;
+  const blog = useLoaderData();
   const navigate = useNavigate();
 
   const accessRef = useContext(AccessContext);

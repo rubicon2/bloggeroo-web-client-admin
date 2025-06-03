@@ -1,4 +1,5 @@
 import authFetch from '../ext/authFetch';
+import responseToJsend from '../ext/responseToJsend';
 
 export default function commentLoader(accessRef) {
   return async ({ params }) => {
@@ -7,17 +8,8 @@ export default function commentLoader(accessRef) {
       accessRef,
     );
     if (fetchError) throw fetchError;
-    const json = await response.json();
-    switch (json.status) {
-      case 'success': {
-        return json;
-      }
-      case 'fail': {
-        throw new Error(json.data.message);
-      }
-      case 'error': {
-        throw new Error(json.message);
-      }
-    }
+    const { data, error } = await responseToJsend(response);
+    if (error) throw error;
+    return data.comment;
   };
 }

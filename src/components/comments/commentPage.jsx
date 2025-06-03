@@ -6,8 +6,7 @@ import { useContext, useState } from 'react';
 import { useLoaderData, useRouteError, Link, useNavigate } from 'react-router';
 
 export default function CommentPage() {
-  const json = useLoaderData();
-  const comment = json.data.comment;
+  const comment = useLoaderData();
   const navigate = useNavigate();
 
   const accessRef = useContext(AccessContext);

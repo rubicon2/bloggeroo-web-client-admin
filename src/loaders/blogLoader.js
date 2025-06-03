@@ -1,4 +1,5 @@
 import authFetch from '../ext/authFetch';
+import responseToJsend from '../ext/responseToJsend';
 
 export default function blogLoader(accessRef) {
   // If blogLoader tries to load a non-existent blog, accessToken is always null?
@@ -11,17 +12,8 @@ export default function blogLoader(accessRef) {
       accessRef,
     );
     if (fetchError) throw fetchError;
-    const json = await response.json();
-    switch (json.status) {
-      case 'success': {
-        return json;
-      }
-      case 'fail': {
-        throw new Error(json.data.message);
-      }
-      case 'error': {
-        throw new Error(json.message);
-      }
-    }
+    const { data, error } = await responseToJsend(response);
+    if (error) throw error;
+    return data.blog;
   };
 }
