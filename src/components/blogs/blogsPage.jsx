@@ -1,10 +1,18 @@
-import useBlogs from '../../hooks/useBlogs';
 import { useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useLoaderData, useRouteError } from 'react-router';
 
 export default function BlogsPage() {
+  const blogs = useLoaderData();
+  const error = useRouteError();
   const [query, setQuery] = useState('');
-  const { blogs, error } = useBlogs(query);
+
+  const filteredBlogs = blogs.filter((blog) => {
+    const queryStr = query.toLowerCase().trim();
+    return (
+      blog.title.toLowerCase().includes(queryStr) ||
+      blog.body.toLowerCase().includes(queryStr)
+    );
+  });
 
   return (
     <>
@@ -19,8 +27,8 @@ export default function BlogsPage() {
         <Link to="/blogs/new">
           <button type="button">New Blog</button>
         </Link>
-        {blogs &&
-          blogs.map((blog) => {
+        {filteredBlogs &&
+          filteredBlogs.map((blog) => {
             return (
               <Link key={blog.id} to={`/blogs/${blog.id}`}>
                 <h3>{blog.title}</h3>

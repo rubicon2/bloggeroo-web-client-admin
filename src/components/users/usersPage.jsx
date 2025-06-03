@@ -1,10 +1,19 @@
-import useUsers from '../../hooks/useUsers';
 import { useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useLoaderData, useRouteError } from 'react-router';
 
 export default function UsersPage() {
+  const users = useLoaderData();
+  const error = useRouteError();
   const [query, setQuery] = useState('');
-  const { users, error } = useUsers(query);
+
+  const filteredUsers = users.filter((user) => {
+    const queryStr = query.toLowerCase();
+    const { name, email } = user;
+    return (
+      name.toLowerCase().includes(queryStr) ||
+      email.toLowerCase().includes(queryStr)
+    );
+  });
 
   return (
     <>
@@ -19,8 +28,8 @@ export default function UsersPage() {
         <button type="button">New User</button>
       </Link>
       <div>
-        {users &&
-          users.map((user) => {
+        {filteredUsers &&
+          filteredUsers.map((user) => {
             return (
               <Link key={user.id} to={`/users/${user.id}`}>
                 <h3>

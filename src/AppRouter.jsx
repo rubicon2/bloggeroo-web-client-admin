@@ -10,8 +10,11 @@ import UsersPage from './components/users/usersPage';
 import UserPage from './components/users/userPage';
 import NewUserPage from './components/users/newUserPage';
 
+import blogsLoader from './loaders/blogsLoader';
 import blogLoader from './loaders/blogLoader';
+import commentsLoader from './loaders/commentsLoader';
 import commentLoader from './loaders/commentLoader';
+import usersLoader from './loaders/usersLoader';
 import userLoader from './loaders/userLoader';
 
 import { AccessContext } from './contexts/AppContexts';
@@ -41,10 +44,12 @@ export default function AppRouter() {
               {
                 index: true,
                 Component: BlogsPage,
+                loader: blogsLoader(accessRef),
               },
               {
                 path: 'blogs',
                 Component: BlogsPage,
+                loader: blogsLoader(accessRef),
               },
               {
                 path: 'blogs/new',
@@ -58,6 +63,7 @@ export default function AppRouter() {
               {
                 path: 'comments',
                 Component: CommentsPage,
+                loader: commentsLoader(accessRef),
               },
               {
                 path: 'comments/:commentId',
@@ -67,6 +73,7 @@ export default function AppRouter() {
               {
                 path: 'users',
                 Component: UsersPage,
+                loader: usersLoader(accessRef),
               },
               {
                 path: 'users/new',

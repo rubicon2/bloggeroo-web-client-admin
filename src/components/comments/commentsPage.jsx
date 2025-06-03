@@ -1,10 +1,22 @@
 import CommentsList from './commentsList';
-import useComments from '../../hooks/useComments';
+import { useLoaderData, useNavigate, useRouteError } from 'react-router';
 import { useState } from 'react';
 
 export default function CommentsPage() {
+  const comments = useLoaderData();
+  const error = useRouteError();
+  const navigate = useNavigate();
+  // Filter clientside instead of filtering what is selected server side. What was I thinking... ?
   const [query, setQuery] = useState('');
-  const { comments, error } = useComments(query);
+
+  const filteredComments = comments.filter((comment) => {
+    // text, owner.isAdmin, owner.isBanned, owner.name, etc.
+    const { name } = comment.owner;
+    const text = comment.text.toLowerCase();
+    const queryStr = query.toLowerCase();
+    return text.includes(queryStr) || name.toLowerCase().includes(queryStr);
+  });
+
   return (
     <>
       <input
