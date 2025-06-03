@@ -8,12 +8,12 @@ export default async function responseToJsend(response) {
         }
         case 'fail': {
           return {
-            data: null,
+            data: json.data,
             error: new Error(json.data.message),
           };
         }
         case 'error': {
-          return { data: null, error: new Error(json.message) };
+          return { data: json.data, error: new Error(json.message) };
         }
       }
     } else {
