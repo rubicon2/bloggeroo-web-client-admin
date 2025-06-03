@@ -4,6 +4,7 @@ import CommentsList from '../comments/commentsList';
 import CommentForm from '../comments/commentForm';
 import useComments from '../../hooks/useComments';
 import authFetch from '../../ext/authFetch';
+import responseToJsend from '../../ext/responseToJsend';
 
 import { useContext, useState } from 'react';
 import { useLoaderData, useNavigate, useRouteError } from 'react-router';
@@ -57,23 +58,12 @@ export default function BlogPage() {
     );
     if (fetchError) setError(fetchError);
     else {
-      const responseJson = await response.json();
-      switch (responseJson.status) {
-        case 'success': {
-          navigate('/blogs');
-          break;
-        }
-        case 'fail': {
-          if (responseJson.data.validationErrors)
-            setBlogValidationErrors(responseJson.data.validationErrors);
-          if (responseJson.data.message)
-            setError(new Error(responseJson.data.message));
-          break;
-        }
-        case 'error': {
-          setError(new Error(responseJson.message));
-          break;
-        }
+      const { data, error } = await responseToJsend(response);
+      setError(error);
+      if (data.validationErrors) {
+        setBlogValidationErrors(data.validationErrors);
+      } else {
+        navigate('/blogs');
       }
     }
     setIsFetching(false);
@@ -95,26 +85,13 @@ export default function BlogPage() {
     );
     if (fetchError) setError(fetchError);
     else {
-      const responseJson = await response.json();
-      switch (responseJson.status) {
-        case 'success': {
-          // Close comment input text area.
-          setIsCreatingComment(false);
-          // Refresh the page with the new comment.
-          updateComments();
-          break;
-        }
-        case 'fail': {
-          if (responseJson.data.validationErrors)
-            setCommentValidationErrors(responseJson.data.validationErrors);
-          if (responseJson.data.message)
-            setError(new Error(responseJson.data.message));
-          break;
-        }
-        case 'error': {
-          setError(new Error(responseJson.message));
-          break;
-        }
+      const { data, error } = await responseToJsend(response);
+      setError(error);
+      if (data.validationErrors) {
+        setCommentValidationErrors(data.validationErrors);
+      } else {
+        setIsCreatingComment(false);
+        updateComments();
       }
     }
     setIsFetching(false);
