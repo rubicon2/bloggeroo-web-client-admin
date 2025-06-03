@@ -1,4 +1,5 @@
 import useAuthFetch from './useAuthFetch';
+import responseToJsend from '../ext/responseToJsend';
 import { useEffect, useState } from 'react';
 
 export default function useJsend(url) {
@@ -10,23 +11,9 @@ export default function useJsend(url) {
     if (fetchError) {
       setError(fetchError);
     } else {
-      response?.json().then((json) => {
-        switch (json.status) {
-          case 'success': {
-            setData(json.data);
-            setError(null);
-            break;
-          }
-          case 'fail': {
-            setData(null);
-            setError(new Error(json.data.message));
-            break;
-          }
-          case 'error': {
-            setData(null);
-            setError(new Error(json.message));
-          }
-        }
+      responseToJsend(response).then(({ data, error }) => {
+        setData(data);
+        setError(error);
       });
     }
   }, [response, fetchError]);
