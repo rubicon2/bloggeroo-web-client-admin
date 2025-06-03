@@ -4,16 +4,21 @@ export default async function responseToJsend(response) {
       const json = await response.json();
       switch (json.status) {
         case 'success': {
-          return { data: json.data, error: null };
+          return { status: 'success', data: json.data, error: null };
         }
         case 'fail': {
           return {
+            status: 'fail',
             data: json.data,
             error: new Error(json.data.message),
           };
         }
         case 'error': {
-          return { data: json.data, error: new Error(json.message) };
+          return {
+            status: 'error',
+            data: json.data,
+            error: new Error(json.message),
+          };
         }
       }
     } else {
