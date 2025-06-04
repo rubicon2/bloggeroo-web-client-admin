@@ -64,7 +64,7 @@ export default function LogInPage() {
 
   return (
     <>
-      <h2>Log In</h2>
+      <h1>Bloggeroo Admin</h1>
       <form onSubmit={attemptLogIn}>
         <label htmlFor="email">
           Email:

@@ -8,18 +8,26 @@ export default function NavBar() {
   return (
     <nav>
       <ul>
-        <li>
-          <Link to="/blogs">Blogs</Link>
-        </li>
-        <li>
-          <Link to="/comments">Comments</Link>
-        </li>
-        <li>
-          <Link to="/users">Users</Link>
-        </li>
-        <li>
-          {isLoggedIn ? <LogOutButton /> : <Link to="/log-in">Log In</Link>}
-        </li>
+        {isLoggedIn ? (
+          <>
+            <li>
+              <Link to="/blogs">Blogs</Link>
+            </li>
+            <li>
+              <Link to="/comments">Comments</Link>
+            </li>
+            <li>
+              <Link to="/users">Users</Link>
+            </li>
+            <li>
+              <LogOutButton />
+            </li>
+          </>
+        ) : (
+          <li>
+            <Link to="/">Log In</Link>
+          </li>
+        )}
       </ul>
     </nav>
   );

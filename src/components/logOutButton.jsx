@@ -1,4 +1,5 @@
 import { AccessContext, UserContext } from '../contexts/AppContexts';
+import { useNavigate } from 'react-router';
 import { useState, useContext } from 'react';
 
 export default function LogOutButton() {
@@ -6,6 +7,7 @@ export default function LogOutButton() {
   const { setIsLoggedIn } = useContext(UserContext);
   const [error, setError] = useState(null);
   const [isFetching, setIsFetching] = useState(false);
+  const navigate = useNavigate();
 
   async function logOut(event) {
     event.preventDefault();
@@ -26,6 +28,8 @@ export default function LogOutButton() {
       if (response.ok) {
         accessRef.current = null;
         setIsLoggedIn(false);
+        // Redirect user back to log in page.
+        navigate('/');
       }
     } catch (error) {
       setError(error.message);
