@@ -1,11 +1,10 @@
 import { useSearchParams } from 'react-router';
 
-export default function PageNav() {
+export default function PageNav({ atLastPage }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPageNumber = parseInt(searchParams.get('page')) || 1;
   return (
     <div>
-      Page: {currentPageNumber}
       {currentPageNumber > 1 && (
         <button
           type="button"
@@ -14,13 +13,17 @@ export default function PageNav() {
           Previous
         </button>
       )}
-      {/* How to stop showing this button once we have reached the end? */}
-      <button
-        type="button"
-        onClick={() => setSearchParams({ page: currentPageNumber + 1 })}
-      >
-        Next
-      </button>
+      {!atLastPage && (
+        <button
+          type="button"
+          onClick={() => setSearchParams({ page: currentPageNumber + 1 })}
+        >
+          Next
+        </button>
+      )}
+      {!(currentPageNumber === 1 && atLastPage) && (
+        <div>Page: {currentPageNumber}</div>
+      )}
     </div>
   );
 }

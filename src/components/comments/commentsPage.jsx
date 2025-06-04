@@ -1,10 +1,11 @@
 import CommentsList from './commentsList';
+import PageNav from '../pageNav';
 import useRefresh from '../../hooks/useRefresh';
 import { useLoaderData, useRouteError } from 'react-router';
 import { useState } from 'react';
 
 export default function CommentsPage() {
-  const comments = useLoaderData();
+  const { comments, atLastPage } = useLoaderData();
   const error = useRouteError();
   const refresh = useRefresh();
   // Filter clientside instead of filtering what is selected server side. What was I thinking... ?
@@ -35,6 +36,7 @@ export default function CommentsPage() {
         />
         {error && <p>{error.message}</p>}
       </div>
+      <PageNav atLastPage={atLastPage} />
     </>
   );
 }
