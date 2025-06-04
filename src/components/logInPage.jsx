@@ -1,4 +1,5 @@
 import { AccessContext, UserContext } from '../contexts/AppContexts';
+import responseToJsend from '../ext/responseToJsend';
 import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router';
 
@@ -6,6 +7,7 @@ export default function LogInPage() {
   const accessRef = useContext(AccessContext);
   const { setIsLoggedIn } = useContext(UserContext);
   const [validationErrors, setValidationErrors] = useState(null);
+  const [error, setError] = useState(null);
   const [isFetching, setIsFetching] = useState(false);
   const navigate = useNavigate();
 
@@ -27,38 +29,35 @@ export default function LogInPage() {
           body: new URLSearchParams(new FormData(event.currentTarget)),
         },
       );
-      const json = await response.json();
-      switch (json.status) {
+      const { status, data, error } = await responseToJsend(response);
+      setError(error);
+      switch (status) {
         case 'success': {
           // Refresh token will be sent over in http response httpOnly cookie header.
           // Save access token.
-          accessRef.current = json.data.access;
+          accessRef.current = data.access;
           setIsLoggedIn(true);
           setValidationErrors(null);
-          // Redirect to home page.
-          navigate('/');
+          // Redirect to blogs page.
+          navigate('/blogs');
           break;
         }
         case 'fail': {
-          if (json.data.validationErrors) {
-            setValidationErrors(json.data.validationErrors);
+          if (data.validationErrors) {
+            setValidationErrors(data.validationErrors);
           }
-          if (json.data.message) {
+          if (data.message) {
             setValidationErrors({
-              password: [json.data.message],
-              array: [json.data.message],
+              password: [data.message],
+              array: [data.message],
             });
           }
           break;
         }
-        case 'error': {
-          throw new Error(json.message);
-        }
       }
     } catch (error) {
-      setValidationErrors({
-        array: [error.message],
-      });
+      setValidationErrors(null);
+      setError(error);
     }
     setIsFetching(false);
   }
@@ -90,6 +89,7 @@ export default function LogInPage() {
           ))}
         </ul>
       )}
+      {error && <p>{error.message}</p>}
     </>
   );
 }
