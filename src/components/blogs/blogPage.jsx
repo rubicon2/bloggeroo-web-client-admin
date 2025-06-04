@@ -2,6 +2,7 @@ import BlogForm from './blogForm';
 import DeleteButton from '../deleteButton';
 import CommentsList from '../comments/commentsList';
 import CommentForm from '../comments/commentForm';
+import useRefresh from '../../hooks/useRefresh';
 import authFetch from '../../ext/authFetch';
 import responseToJsend from '../../ext/responseToJsend';
 
@@ -12,6 +13,7 @@ import { AccessContext } from '../../contexts/AppContexts';
 export default function BlogPage() {
   const { blog, comments } = useLoaderData();
   const navigate = useNavigate();
+  const refresh = useRefresh();
 
   const accessRef = useContext(AccessContext);
 
@@ -20,10 +22,6 @@ export default function BlogPage() {
   const [commentValidationErrors, setCommentValidationErrors] = useState(null);
   const [error, setError] = useState(useRouteError());
   const [isCreatingComment, setIsCreatingComment] = useState(false);
-
-  function reloadBlog() {
-    navigate(`/blogs/${blog.id}`);
-  }
 
   async function saveChanges(event) {
     event.preventDefault();
@@ -76,7 +74,7 @@ export default function BlogPage() {
       switch (status) {
         case 'success': {
           setIsCreatingComment(false);
-          reloadBlog();
+          refresh();
           break;
         }
       }
@@ -124,8 +122,8 @@ export default function BlogPage() {
           )}
           <CommentsList
             comments={comments}
-            onReply={reloadBlog}
-            onDelete={reloadBlog}
+            onReply={refresh}
+            onDelete={refresh}
           />
         </>
       )}

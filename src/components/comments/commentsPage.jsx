@@ -1,11 +1,12 @@
 import CommentsList from './commentsList';
-import { useLoaderData, useNavigate, useRouteError } from 'react-router';
+import useRefresh from '../../hooks/useRefresh';
+import { useLoaderData, useRouteError } from 'react-router';
 import { useState } from 'react';
 
 export default function CommentsPage() {
   const comments = useLoaderData();
   const error = useRouteError();
-  const navigate = useNavigate();
+  const refresh = useRefresh();
   // Filter clientside instead of filtering what is selected server side. What was I thinking... ?
   const [query, setQuery] = useState('');
 
@@ -29,8 +30,8 @@ export default function CommentsPage() {
       <div>
         <CommentsList
           comments={filteredComments}
-          onReply={() => navigate('/comments')}
-          onDelete={() => navigate('/comments')}
+          onReply={refresh}
+          onDelete={refresh}
         />
         {error && <p>{error.message}</p>}
       </div>
