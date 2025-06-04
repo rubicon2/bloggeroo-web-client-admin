@@ -24,10 +24,7 @@ import { createBrowserRouter, Outlet, RouterProvider } from 'react-router';
 
 // This re-generates the browser router every time the state (i.e. access token) changes. Not great.
 // But the only way I could find to get the access token into the loader was by currying the access token
-// into generated loader functions. So when the access token changes, the loader functios need to be re-generated.
-// I assume there is a better way to deal with having an access token in memory/state and getting it to the loader?
-// Or maybe storing the access token in state is just a bad idea. Maybe ref is better? Will not trigger re-renders.
-// Then ref obj could be passed to loaders, which could then just access the current version of the object.
+// into generated loader functions. So when the access token changes, the loader functions need to be re-generated.
 export default function AppRouter() {
   const accessRef = useContext(AccessContext);
   const router = useMemo(() => {
