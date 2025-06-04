@@ -1,15 +1,20 @@
 import { AccessContext, UserContext } from '../contexts/AppContexts';
 import responseToJsend from '../ext/responseToJsend';
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 
 export default function LogInPage() {
   const accessRef = useContext(AccessContext);
-  const { setIsLoggedIn } = useContext(UserContext);
+  const { isLoggedIn, setIsLoggedIn } = useContext(UserContext);
   const [validationErrors, setValidationErrors] = useState(null);
   const [error, setError] = useState(null);
   const [isFetching, setIsFetching] = useState(false);
   const navigate = useNavigate();
+
+  // If user is already logged in, stop them accessing the log in page.
+  useEffect(() => {
+    if (isLoggedIn) navigate('/blogs');
+  }, [isLoggedIn, navigate]);
 
   async function attemptLogIn(event) {
     event.preventDefault();
