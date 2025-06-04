@@ -1,6 +1,7 @@
 import DeleteButton from '../deleteButton';
 import { AccessContext } from '../../contexts/AppContexts';
 import authFetch from '../../ext/authFetch';
+import responseToJsend from '../../ext/responseToJsend';
 
 import { useContext, useState } from 'react';
 import { Link, useLoaderData, useNavigate, useRouteError } from 'react-router';
@@ -50,21 +51,12 @@ export default function UserPage() {
 
     if (fetchError) setError(fetchError);
     else {
-      const responseJson = await response?.json();
-      switch (responseJson.status) {
+      const { status, data, error } = await responseToJsend(response);
+      if (error) setError(error);
+      setValidationErrors(data?.validationErrors);
+      switch (status) {
         case 'success': {
           navigate('/users');
-          break;
-        }
-        case 'fail': {
-          if (responseJson.data.validationErrors)
-            setValidationErrors(responseJson.data.validationErrors);
-          if (responseJson.data.message)
-            setError(new Error(responseJson.data.message));
-          break;
-        }
-        case 'error': {
-          setError(new Error(responseJson.message));
           break;
         }
       }
