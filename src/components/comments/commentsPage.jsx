@@ -1,6 +1,7 @@
 import CommentsList from './commentsList';
 import PageNav from '../pageNav';
 import useRefresh from '../../hooks/useRefresh';
+import useSearchParamsPageNumber from '../../hooks/useSearchParamsPageNumber';
 import { useLoaderData, useRouteError } from 'react-router';
 import { useState } from 'react';
 
@@ -10,6 +11,7 @@ export default function CommentsPage() {
   const refresh = useRefresh();
   // Filter clientside instead of filtering what is selected server side. What was I thinking... ?
   const [query, setQuery] = useState('');
+  const [currentPageNumber, setCurrentPageNumber] = useSearchParamsPageNumber();
 
   const filteredComments = comments.filter((comment) => {
     // text, owner.isAdmin, owner.isBanned, owner.name, etc.
@@ -36,7 +38,11 @@ export default function CommentsPage() {
         />
         {error && <p>{error.message}</p>}
       </div>
-      <PageNav atLastPage={atLastPage} />
+      <PageNav
+        currentPageNumber={currentPageNumber}
+        onPageChange={setCurrentPageNumber}
+        atLastPage={atLastPage}
+      />
     </>
   );
 }

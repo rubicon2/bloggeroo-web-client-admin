@@ -1,10 +1,12 @@
 import PageNav from '../pageNav';
+import useSearchParamsPageNumber from '../../hooks/useSearchParamsPageNumber';
 import { useState } from 'react';
 import { Link, useLoaderData, useRouteError } from 'react-router';
 
 export default function BlogsPage() {
   const { blogs, atLastPage } = useLoaderData();
   const error = useRouteError();
+  const [currentPageNumber, setCurrentPageNumber] = useSearchParamsPageNumber();
   const [query, setQuery] = useState('');
 
   const filteredBlogs = blogs.filter((blog) => {
@@ -44,7 +46,11 @@ export default function BlogsPage() {
             );
           })}
         {error && <p>{error.message}</p>}
-        <PageNav atLastPage={atLastPage} />
+        <PageNav
+          currentPageNumber={currentPageNumber}
+          onPageChange={setCurrentPageNumber}
+          atLastPage={atLastPage}
+        />
       </div>
     </>
   );

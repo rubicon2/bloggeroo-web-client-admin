@@ -1,14 +1,14 @@
-import { useSearchParams } from 'react-router';
-
-export default function PageNav({ atLastPage }) {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const currentPageNumber = parseInt(searchParams.get('page')) || 1;
+export default function PageNav({
+  currentPageNumber,
+  onPageChange,
+  atLastPage,
+}) {
   return (
     <div>
       {currentPageNumber > 1 && (
         <button
           type="button"
-          onClick={() => setSearchParams({ page: currentPageNumber - 1 })}
+          onClick={() => onPageChange(currentPageNumber - 1)}
         >
           Previous
         </button>
@@ -16,7 +16,7 @@ export default function PageNav({ atLastPage }) {
       {!atLastPage && (
         <button
           type="button"
-          onClick={() => setSearchParams({ page: currentPageNumber + 1 })}
+          onClick={() => onPageChange(currentPageNumber + 1)}
         >
           Next
         </button>
