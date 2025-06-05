@@ -1,11 +1,12 @@
 import DeleteButton from '../deleteButton';
+import UserPageBlogs from './userPageBlogs';
 import UserPageComments from './userPageComments';
 import { AccessContext } from '../../contexts/AppContexts';
 import authFetch from '../../ext/authFetch';
 import responseToJsend from '../../ext/responseToJsend';
 
 import { useContext, useState } from 'react';
-import { Link, useLoaderData, useNavigate, useRouteError } from 'react-router';
+import { useLoaderData, useNavigate, useRouteError } from 'react-router';
 
 export default function UserPage() {
   const user = useLoaderData();
@@ -124,18 +125,7 @@ export default function UserPage() {
         </>
       )}
       {error && <p>{error.message}</p>}
-      <h3>Blogs</h3>
-      {user.blogs?.length > 0 ? (
-        <ul>
-          {user.blogs.map((blog) => (
-            <Link to={`/blogs/${blog.id}`}>
-              <li>{blog.title}</li>
-            </Link>
-          ))}
-        </ul>
-      ) : (
-        <p>This user has not made any blogs.</p>
-      )}
+      <UserPageBlogs blogs={user.blogs} />
       <UserPageComments comments={user.comments} />
     </>
   );
