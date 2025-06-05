@@ -1,5 +1,5 @@
 import DeleteButton from '../deleteButton';
-import PageNav from '../pageNav';
+import UserPageComments from './userPageComments';
 import { AccessContext } from '../../contexts/AppContexts';
 import authFetch from '../../ext/authFetch';
 import responseToJsend from '../../ext/responseToJsend';
@@ -17,18 +17,12 @@ export default function UserPage() {
   const [email, setEmail] = useState(user.email);
   const [isBanned, setIsBanned] = useState(user.isBanned);
   const [isAdmin, setIsAdmin] = useState(user.isAdmin);
-  const [commentsPage, setCommentsPage] = useState(1);
 
   // routeError, fetchError, validationErrors? 3 types of errors? This sucks.
   // Could initialise error to useRouteError result? Then at least only 2 types.
   const [error, setError] = useState(useRouteError());
   const [validationErrors, setValidationErrors] = useState(null);
   const [isFetching, setIsFetching] = useState(false);
-
-  const commentsPerPage = 5;
-  const firstCommentIndex = (commentsPage - 1) * commentsPerPage;
-  const lastCommentIndex = firstCommentIndex + commentsPerPage - 1;
-  const atLastCommentPage = lastCommentIndex > user.comments.length - 1;
 
   const haveFieldsChanged =
     user.email !== email ||
@@ -142,34 +136,7 @@ export default function UserPage() {
       ) : (
         <p>This user has not made any blogs.</p>
       )}
-      <h3>Comments</h3>
-      {user.comments?.length > 0 ? (
-        <div>
-          <ul>
-            {user.comments
-              .filter(
-                (comment, index) =>
-                  index >= firstCommentIndex && index <= lastCommentIndex,
-              )
-              .map((comment) => (
-                <Link to={`/comments/${comment.id}`}>
-                  <li>
-                    <Link to={`/blogs/${comment.blogId}`}>For this blog</Link>
-                    <div>{comment.createdAt}</div>
-                    <div>{comment.text}</div>
-                  </li>
-                </Link>
-              ))}
-          </ul>
-          <PageNav
-            currentPageNumber={commentsPage}
-            onPageChange={(page) => setCommentsPage(page)}
-            atLastPage={atLastCommentPage}
-          />
-        </div>
-      ) : (
-        <p>This user has not made any comments.</p>
-      )}
+      <UserPageComments comments={user.comments} />
     </>
   );
 }
