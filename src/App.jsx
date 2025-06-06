@@ -1,13 +1,12 @@
 import AppRouter from './AppRouter';
 import { AccessContext, UserContext } from './contexts/AppContexts';
-import { useRef, useState } from 'react';
+import useLoginState from './hooks/useLoginState';
+import { useRef } from 'react';
 import './App.css';
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useLoginState();
   const accessRef = useRef(null);
-  // Passing the function down in the context and calling does not trigger re-render.
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  // Re-render occurs when user logs out, but current page still shown - does not update to reflect logged out state.
   return (
     <AccessContext value={accessRef}>
       <UserContext value={{ isLoggedIn, setIsLoggedIn }}>
