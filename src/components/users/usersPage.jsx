@@ -2,6 +2,7 @@ import PageNav from '../pageNav';
 import UsersSearchForm from './usersSearchForm';
 import useSearchParamsPageNumber from '../../hooks/useSearchParamsPageNumber';
 import { Link, useLoaderData, useRouteError } from 'react-router';
+import UsersList from './usersList';
 
 export default function UsersPage() {
   const { users, atLastPage } = useLoaderData();
@@ -16,25 +17,14 @@ export default function UsersPage() {
         <button type="button">New User</button>
       </Link>
       <div>
-        {users &&
-          users.map((user) => {
-            return (
-              <Link key={user.id} to={`/users/${user.id}`}>
-                <h3>
-                  {user.email} - {user.name}
-                </h3>
-                <div>Banned - {'' + user.isBanned}</div>
-                <div>Admin - {'' + user.isAdmin}</div>
-              </Link>
-            );
-          })}
+        <UsersList users={users} />
+        {error && <p>{error.message}</p>}
+        <PageNav
+          currentPageNumber={currentPageNumber}
+          onPageChange={setCurrentPageNumber}
+          atLastPage={atLastPage}
+        />
       </div>
-      {error && <p>{error.message}</p>}
-      <PageNav
-        currentPageNumber={currentPageNumber}
-        onPageChange={setCurrentPageNumber}
-        atLastPage={atLastPage}
-      />
     </>
   );
 }
