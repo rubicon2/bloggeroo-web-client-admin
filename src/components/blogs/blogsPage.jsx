@@ -1,5 +1,6 @@
 import PageNav from '../pageNav';
 import BlogsSearchForm from './blogsSearchForm';
+import BlogsList from './blogsList';
 import useSearchParamsPageNumber from '../../hooks/useSearchParamsPageNumber';
 import { Link, useLoaderData, useRouteError } from 'react-router';
 
@@ -16,21 +17,7 @@ export default function BlogsPage() {
         <Link to="/blogs/new">
           <button type="button">New Blog</button>
         </Link>
-        {blogs &&
-          blogs.map((blog) => {
-            return (
-              <Link key={blog.id} to={`/blogs/${blog.id}`}>
-                <h3>{blog.title}</h3>
-                <small>
-                  By {blog.owner.name} at{' '}
-                  {blog.publishedAt
-                    ? new Date(blog.publishedAt).toDateString()
-                    : 'never'}
-                </small>
-                <p>{blog.body}</p>
-              </Link>
-            );
-          })}
+        <BlogsList blogs={blogs} />
         {error && <p>{error.message}</p>}
         <PageNav
           currentPageNumber={currentPageNumber}
