@@ -20,7 +20,7 @@ export default function CommentsList({ comments, onReply, onDelete }) {
           ))}
         </ul>
       ) : (
-        <p>There are no comments.</p>
+        <p>No comments found.</p>
       )}
     </>
   );
