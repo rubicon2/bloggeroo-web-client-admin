@@ -9,9 +9,6 @@ export default function BlogsSearchForm() {
     const formFields = formToFields(event.target);
     // Make sure we land on the first page of results, otherwise
     // could end up on a non-existent second page with no results.
-    if (formFields.publishedAt) {
-      formFields.publishedAt = null;
-    }
     setSearchParams({ ...formFields, page: 1 });
   }
 
@@ -39,7 +36,7 @@ export default function BlogsSearchForm() {
       </label>
       <label>
         Only Unpublished?
-        <input type="checkbox" name="publishedAt" />
+        <input type="checkbox" name="onlyUnpublished" />
       </label>
       <button type="reset">Clear Filters</button>
       <button type="submit">Search</button>
