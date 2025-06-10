@@ -28,6 +28,7 @@ export default function CommentsSearchForm() {
         To date:
         <input type="date" name="toDate" />
       </label>
+      <button type="reset">Clear Filters</button>
       <button type="submit">Search</button>
     </form>
   );

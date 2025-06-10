@@ -41,6 +41,7 @@ export default function BlogsSearchForm() {
         Only Unpublished?
         <input type="checkbox" name="publishedAt" />
       </label>
+      <button type="reset">Clear Filters</button>
       <button type="submit">Search</button>
     </form>
   );

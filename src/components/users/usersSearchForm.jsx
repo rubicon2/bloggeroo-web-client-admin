@@ -28,6 +28,7 @@ export default function UsersSearchForm() {
         Only Banned?
         <input type="checkbox" name="isBanned" />
       </label>
+      <button type="reset">Clear Filters</button>
       <button type="submit">Search</button>
     </form>
   );
