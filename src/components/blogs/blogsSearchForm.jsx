@@ -46,7 +46,7 @@ export default function BlogsSearchForm() {
         <label>
           Sort by:
           <select name="orderBy" defaultValue="publishedAt">
-            <option value="author">Author (not working)</option>
+            <option value="owner.name">Author</option>
             <option value="body">Body text</option>
             <option value="publishedAt">Publication date</option>
             <option value="title">Title text</option>
