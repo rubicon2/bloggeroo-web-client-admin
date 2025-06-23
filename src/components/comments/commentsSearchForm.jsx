@@ -19,6 +19,10 @@ export default function CommentsSearchForm() {
           <input type="text" name="author" />
         </label>
         <label>
+          Blog title:
+          <input type="text" name="blog.title" />
+        </label>
+        <label>
           Text:
           <input type="text" name="text" />
         </label>
