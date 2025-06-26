@@ -1,16 +1,17 @@
+import UnstyledList from '../unstyledList';
 import BlogsListBlog from './blogsListBlog';
 
 export default function BlogsPageList({ blogs }) {
   return (
     <>
       {blogs?.length > 0 ? (
-        <ul>
+        <UnstyledList>
           {blogs.map((blog) => (
             <li key={blog.id}>
               <BlogsListBlog blog={blog} />
             </li>
           ))}
-        </ul>
+        </UnstyledList>
       ) : (
         <p>No blogs found.</p>
       )}

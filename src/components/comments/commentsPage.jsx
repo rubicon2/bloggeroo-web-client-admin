@@ -1,4 +1,6 @@
+import PageTitleBar from '../pageTitleBar';
 import CommentsList from './commentsList';
+import Container from '../container';
 import PageNav from '../pageNav';
 import CommentsSearchForm from './commentsSearchForm';
 import useRefresh from '../../hooks/useRefresh';
@@ -13,21 +15,23 @@ export default function CommentsPage() {
 
   return (
     <>
-      <CommentsSearchForm />
-      <h2>Comments</h2>
-      <div>
-        <CommentsList
-          comments={comments}
-          onReply={refresh}
-          onDelete={refresh}
-        />
-        {error && <p>{error.message}</p>}
-      </div>
-      <PageNav
-        currentPageNumber={currentPageNumber}
-        onPageChange={setCurrentPageNumber}
-        atLastPage={atLastPage}
-      />
+      <PageTitleBar title="Comments" />
+      <Container>
+        <main>
+          <CommentsList
+            comments={comments}
+            onReply={refresh}
+            onDelete={refresh}
+          />
+          {error && <p>{error.message}</p>}
+          <PageNav
+            currentPageNumber={currentPageNumber}
+            onPageChange={setCurrentPageNumber}
+            atLastPage={atLastPage}
+          />
+        </main>
+        <CommentsSearchForm />
+      </Container>
     </>
   );
 }

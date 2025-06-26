@@ -1,7 +1,26 @@
+import Header from './header';
+import Container from './container';
+import Form from './form';
+import FormRow from './formRow';
+
 import { AccessContext, UserContext } from '../contexts/AppContexts';
 import responseToJsend from '../ext/responseToJsend';
 import { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router';
+import styled from 'styled-components';
+
+import HappyAdminImg from '../static/img/happy_admin.png';
+
+const Cols = styled.div`
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+`;
+
+const SubmitButton = styled.button`
+  background-color: rgb(32, 133, 240);
+  color: white;
+  padding: 16px;
+`;
 
 export default function LogInPage() {
   const accessRef = useContext(AccessContext);
@@ -69,32 +88,42 @@ export default function LogInPage() {
 
   return (
     <>
-      <h1>Bloggeroo Admin</h1>
-      <form onSubmit={attemptLogIn}>
-        <label htmlFor="email">
-          Email:
-          <input type="email" name="email" id="email" />
-          <small>{validationErrors?.email ? validationErrors.email : ''}</small>
-        </label>
-        <label htmlFor="password">
-          Password:
-          <input type="password" name="password" id="password" />
-          <small>
-            {validationErrors?.password ? validationErrors.password : ''}
-          </small>
-        </label>
-        <button type="submit" disabled={isFetching}>
-          Log In
-        </button>
-      </form>
-      {validationErrors && (
-        <ul>
-          {validationErrors.array.map((error) => (
-            <li>{error}</li>
-          ))}
-        </ul>
-      )}
-      {error && <p>{error.message}</p>}
+      <Header />
+      <Container>
+        <Cols>
+          <img
+            src={HappyAdminImg}
+            alt="The world's happiest administrator using Bloggeroo"
+          />
+          <div>
+            <Form onSubmit={attemptLogIn}>
+              <FormRow label="Email">
+                <input type="email" name="email" id="email" />
+                <small>
+                  {validationErrors?.email ? validationErrors.email : ''}
+                </small>
+              </FormRow>
+              <FormRow label="Password">
+                <input type="password" name="password" id="password" />
+                <small>
+                  {validationErrors?.password ? validationErrors.password : ''}
+                </small>
+              </FormRow>
+              <SubmitButton type="submit" disabled={isFetching}>
+                Log In
+              </SubmitButton>
+            </Form>
+          </div>
+        </Cols>
+        {validationErrors && (
+          <ul>
+            {validationErrors.array.map((error) => (
+              <li>{error}</li>
+            ))}
+          </ul>
+        )}
+        {error && <p>{error.message}</p>}
+      </Container>
     </>
   );
 }

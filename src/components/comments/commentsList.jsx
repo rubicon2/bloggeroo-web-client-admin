@@ -1,3 +1,4 @@
+import UnstyledList from '../unstyledList';
 import CommentsListComment from './commentsListComment';
 import { useState } from 'react';
 
@@ -6,7 +7,7 @@ export default function CommentsList({ comments, onReply, onDelete }) {
   return (
     <>
       {comments?.length > 0 ? (
-        <ul>
+        <UnstyledList>
           {comments.map((comment) => (
             <li key={comment.id}>
               <CommentsListComment
@@ -18,7 +19,7 @@ export default function CommentsList({ comments, onReply, onDelete }) {
               />
             </li>
           ))}
-        </ul>
+        </UnstyledList>
       ) : (
         <p>No comments found.</p>
       )}

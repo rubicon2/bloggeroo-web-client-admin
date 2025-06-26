@@ -1,3 +1,5 @@
+import PageTitleBar from '../pageTitleBar';
+import Container from '../container';
 import DeleteButton from '../deleteButton';
 import UserPageBlogs from './userPageBlogs';
 import UserPageComments from './userPageComments';

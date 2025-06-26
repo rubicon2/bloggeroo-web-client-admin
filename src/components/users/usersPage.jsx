@@ -1,8 +1,11 @@
+import UsersList from './usersList';
+import PageTitleBar from '../pageTitleBar';
+import Container from '../container';
 import PageNav from '../pageNav';
 import UsersSearchForm from './usersSearchForm';
+
 import useSearchParamsPageNumber from '../../hooks/useSearchParamsPageNumber';
 import { Link, useLoaderData, useRouteError } from 'react-router';
-import UsersList from './usersList';
 
 export default function UsersPage() {
   const { users, atLastPage } = useLoaderData();
@@ -11,20 +14,23 @@ export default function UsersPage() {
 
   return (
     <>
-      <UsersSearchForm />
-      <h2>Users</h2>
-      <Link to="/users/new">
-        <button type="button">New User</button>
-      </Link>
-      <div>
-        <UsersList users={users} />
-        {error && <p>{error.message}</p>}
-        <PageNav
-          currentPageNumber={currentPageNumber}
-          onPageChange={setCurrentPageNumber}
-          atLastPage={atLastPage}
-        />
-      </div>
+      <PageTitleBar title="Users">
+        <Link to="/users/new">
+          <button type="button">New</button>
+        </Link>
+      </PageTitleBar>
+      <Container>
+        <main>
+          <UsersList users={users} />
+          {error && <p>{error.message}</p>}
+          <PageNav
+            currentPageNumber={currentPageNumber}
+            onPageChange={setCurrentPageNumber}
+            atLastPage={atLastPage}
+          />
+        </main>
+        <UsersSearchForm />
+      </Container>
     </>
   );
 }
