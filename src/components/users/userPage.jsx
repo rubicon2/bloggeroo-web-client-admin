@@ -40,24 +40,19 @@ export default function UserPage() {
       `${import.meta.env.VITE_SERVER_URL}/admin/users/${user.id}`,
       accessRef,
       {
-        headers: {
-          'Content-Type': 'application/json',
-        },
         method: 'put',
-        body: JSON.stringify({
-          email,
-          name,
-          isBanned,
-          isAdmin,
-        }),
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams(new FormData(event.target)),
       },
     );
 
     if (fetchError) setError(fetchError);
     else {
       const { status, data, error } = await responseToJsend(response);
-      if (error) setError(error);
-      setValidationErrors(data?.validationErrors);
+      setError(error);
+      setValidationErrors(data.validationErrors);
       switch (status) {
         case 'success': {
           navigate('/users');
@@ -75,55 +70,49 @@ export default function UserPage() {
           <h2>
             {user.email} - {user.name}
           </h2>
-          <label>
-            Email:
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <small>{validationErrors?.email}</small>
-          </label>
-          <label>
-            Name:
-            <input
-              type="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            <small>{validationErrors?.name}</small>
-          </label>
-          <div>
-            Banned
-            <input
-              type="checkbox"
-              name="is_banned"
-              checked={isBanned}
-              onChange={(e) => setIsBanned(e.target.checked)}
-            />
-          </div>
-          <div>
-            Admin
-            <input
-              type="checkbox"
-              name="is_admin"
-              checked={isAdmin}
-              onChange={(e) => setIsAdmin(e.target.checked)}
-            />
-          </div>
-          <button
-            type="button"
-            disabled={isFetching || !haveFieldsChanged}
-            onClick={saveChanges}
-          >
-            Save Changes
-          </button>
-          <DeleteButton
-            url={`${import.meta.env.VITE_SERVER_URL}/admin/users/${user.id}`}
-            onDelete={() => navigate('/users')}
-          >
-            Delete
-          </DeleteButton>
+            <form onSubmit={saveChanges}>
+              <label>
+                Email:
+                <input
+                  type="email"
+                  name="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                <small>{validationErrors?.email}</small>
+              </label>
+              <label>
+                Name:
+                <input
+                  type="text"
+                  name="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+                <small>{validationErrors?.name}</small>
+              </label>
+              <label>
+                Banned
+                <input
+                  type="checkbox"
+                  name="isBanned"
+                  checked={isBanned}
+                  onChange={(e) => setIsBanned(e.target.checked)}
+                />
+              </label>
+              <label>
+                Admin
+                <input
+                  type="checkbox"
+                  name="isAdmin"
+                  checked={isAdmin}
+                  onChange={(e) => setIsAdmin(e.target.checked)}
+                />
+              </label>
+              <button type="submit" disabled={isFetching || !haveFieldsChanged}>
+                Save Changes
+              </button>
+            </form>
         </>
       )}
       {error && <p>{error.message}</p>}
