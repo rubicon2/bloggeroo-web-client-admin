@@ -3,6 +3,8 @@ import CommentsList from './commentsList';
 import Container from '../container';
 import PageNav from '../pageNav';
 import CommentsSearchForm from './commentsSearchForm';
+import { Cols, Sticky } from '../styles/mainPage';
+
 import useRefresh from '../../hooks/useRefresh';
 import useSearchParamsPageNumber from '../../hooks/useSearchParamsPageNumber';
 import { useLoaderData, useRouteError } from 'react-router';
@@ -17,20 +19,26 @@ export default function CommentsPage() {
     <>
       <PageTitleBar title="Comments" />
       <Container>
-        <main>
-          <CommentsList
-            comments={comments}
-            onReply={refresh}
-            onDelete={refresh}
-          />
-          {error && <p>{error.message}</p>}
-          <PageNav
-            currentPageNumber={currentPageNumber}
-            onPageChange={setCurrentPageNumber}
-            atLastPage={atLastPage}
-          />
-        </main>
-        <CommentsSearchForm />
+        <Cols>
+          <main>
+            <CommentsList
+              comments={comments}
+              onReply={refresh}
+              onDelete={refresh}
+            />
+            {error && <p>{error.message}</p>}
+            <PageNav
+              currentPageNumber={currentPageNumber}
+              onPageChange={setCurrentPageNumber}
+              atLastPage={atLastPage}
+            />
+          </main>
+          <aside>
+            <Sticky>
+              <CommentsSearchForm />
+            </Sticky>
+          </aside>
+        </Cols>
       </Container>
     </>
   );

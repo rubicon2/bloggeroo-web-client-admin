@@ -3,6 +3,7 @@ import PageTitleBar from '../pageTitleBar';
 import Container from '../container';
 import PageNav from '../pageNav';
 import UsersSearchForm from './usersSearchForm';
+import { Cols, Sticky } from '../styles/mainPage';
 
 import useSearchParamsPageNumber from '../../hooks/useSearchParamsPageNumber';
 import { Link, useLoaderData, useRouteError } from 'react-router';
@@ -20,16 +21,22 @@ export default function UsersPage() {
         </Link>
       </PageTitleBar>
       <Container>
-        <main>
-          <UsersList users={users} />
-          {error && <p>{error.message}</p>}
-          <PageNav
-            currentPageNumber={currentPageNumber}
-            onPageChange={setCurrentPageNumber}
-            atLastPage={atLastPage}
-          />
-        </main>
-        <UsersSearchForm />
+        <Cols>
+          <main>
+            <UsersList users={users} />
+            {error && <p>{error.message}</p>}
+            <PageNav
+              currentPageNumber={currentPageNumber}
+              onPageChange={setCurrentPageNumber}
+              atLastPage={atLastPage}
+            />
+          </main>
+          <aside>
+            <Sticky>
+              <UsersSearchForm />
+            </Sticky>
+          </aside>
+        </Cols>
       </Container>
     </>
   );

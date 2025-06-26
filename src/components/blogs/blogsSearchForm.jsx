@@ -1,3 +1,9 @@
+import {
+  Form,
+  FormFieldsetGrid,
+  FormRow,
+  FormButtons,
+} from '../styles/searchForm';
 import formToFields from '../../ext/formToFields';
 import { useSearchParams } from 'react-router';
 
@@ -13,37 +19,37 @@ export default function BlogsSearchForm() {
   }
 
   return (
-    <form onSubmit={handleForm}>
-      <fieldset>
+    <Form onSubmit={handleForm}>
+      <FormFieldsetGrid>
         <legend>Search</legend>
-        <label>
+        <FormRow>
           Author:
           <input type="text" name="author" />
-        </label>
-        <label>
+        </FormRow>
+        <FormRow>
           Title:
           <input type="text" name="title" />
-        </label>
-        <label>
+        </FormRow>
+        <FormRow>
           Body:
           <input type="text" name="body" />
-        </label>
-        <label>
+        </FormRow>
+        <FormRow>
           From date:
           <input type="date" name="fromDate" />
-        </label>
-        <label>
+        </FormRow>
+        <FormRow>
           To date:
           <input type="date" name="toDate" />
-        </label>
-        <label>
+        </FormRow>
+        <FormRow>
           Only Unpublished?
           <input type="checkbox" name="onlyUnpublished" />
-        </label>
-      </fieldset>
-      <fieldset>
+        </FormRow>
+      </FormFieldsetGrid>
+      <FormFieldsetGrid>
         <legend>Sort</legend>
-        <label>
+        <FormRow>
           Sort by:
           <select name="orderBy" defaultValue="publishedAt">
             <option value="owner.name">Author</option>
@@ -51,17 +57,19 @@ export default function BlogsSearchForm() {
             <option value="publishedAt">Publication date</option>
             <option value="title">Title text</option>
           </select>
-        </label>
-        <label>
+        </FormRow>
+        <FormRow>
           Sort order:
           <select name="sortOrder" defaultValue="desc">
             <option value="asc">Ascending</option>
             <option value="desc">Descending</option>
           </select>
-        </label>
-      </fieldset>
-      <button type="reset">Clear Filters</button>
-      <button type="submit">Search</button>
-    </form>
+        </FormRow>
+      </FormFieldsetGrid>
+      <FormButtons>
+        <button type="reset">Clear Filters</button>
+        <button type="submit">Search</button>
+      </FormButtons>
+    </Form>
   );
 }
