@@ -3,6 +3,7 @@ import Container from '../container';
 import DeleteButton from '../deleteButton';
 import UserPageBlogs from './userPageBlogs';
 import UserPageComments from './userPageComments';
+
 import { AccessContext } from '../../contexts/AppContexts';
 import authFetch from '../../ext/authFetch';
 import responseToJsend from '../../ext/responseToJsend';
@@ -67,9 +68,15 @@ export default function UserPage() {
     <>
       {user && (
         <>
-          <h2>
-            {user.email} - {user.name}
-          </h2>
+          <PageTitleBar title={user.email}>
+            <DeleteButton
+              url={`${import.meta.env.VITE_SERVER_URL}/admin/users/${user.id}`}
+              onDelete={() => navigate('/users')}
+            >
+              Delete
+            </DeleteButton>
+          </PageTitleBar>
+          <Container>
             <form onSubmit={saveChanges}>
               <label>
                 Email:
@@ -113,11 +120,12 @@ export default function UserPage() {
                 Save Changes
               </button>
             </form>
+            {error && <p>{error.message}</p>}
+            <UserPageBlogs blogs={user.blogs} />
+            <UserPageComments comments={user.comments} />
+          </Container>
         </>
       )}
-      {error && <p>{error.message}</p>}
-      <UserPageBlogs blogs={user.blogs} />
-      <UserPageComments comments={user.comments} />
     </>
   );
 }
