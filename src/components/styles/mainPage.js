@@ -13,7 +13,7 @@ const Cols = styled.div`
 const Sticky = styled.div`
   height: min-content;
   position: sticky;
-  top: 20px;
+  top: 48px;
 `;
 
 export { Cols, Sticky };
