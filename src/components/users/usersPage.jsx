@@ -4,6 +4,7 @@ import Container from '../container';
 import PageNav from '../pageNav';
 import UsersSearchForm from './usersSearchForm';
 import { Cols, Sticky } from '../styles/mainPage';
+import { GeneralButton } from '../styles/buttons';
 
 import useSearchParamsPageNumber from '../../hooks/useSearchParamsPageNumber';
 import { Link, useLoaderData, useRouteError } from 'react-router';
@@ -16,8 +17,8 @@ export default function UsersPage() {
   return (
     <>
       <PageTitleBar title="Users">
-        <Link to="/users/new">
-          <button type="button">New</button>
+        <Link to="/users/new" as={GeneralButton}>
+          <GeneralButton type="button">New</GeneralButton>
         </Link>
       </PageTitleBar>
       <Container>

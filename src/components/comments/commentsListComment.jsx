@@ -1,10 +1,18 @@
 import CommentForm from './commentForm';
 import DeleteButton from '../deleteButton';
+import { GeneralButton } from '../styles/buttons';
+
 import { AccessContext } from '../../contexts/AppContexts';
 import authFetch from '../../ext/authFetch';
 import responseToJsend from '../../ext/responseToJsend';
 import { Link } from 'react-router';
 import { useContext, useState } from 'react';
+import styled from 'styled-components';
+
+const CommentButtons = styled.div`
+  display: flex;
+  gap: 1rem;
+`;
 
 export default function CommentsListComment({
   comment,
@@ -77,20 +85,23 @@ export default function CommentsListComment({
               </small>
             </div>
           )}
-          <div>
+          <CommentButtons>
             <Link to={`/comments/${comment.id}`}>
-              <button type="button">Edit</button>
+              <GeneralButton type="button">Edit</GeneralButton>
             </Link>
+            <GeneralButton
+              type="button"
+              onClick={() => setActiveComment(comment)}
+            >
+              Reply
+            </GeneralButton>
             <DeleteButton
               url={`${import.meta.env.VITE_SERVER_URL}/admin/comments/${comment.id}`}
               onDelete={onDelete}
             >
               Delete
             </DeleteButton>
-            <button type="button" onClick={() => setActiveComment(comment)}>
-              Reply
-            </button>
-          </div>
+          </CommentButtons>
         </>
       )}
       {error && <p>{error.message}</p>}

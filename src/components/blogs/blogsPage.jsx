@@ -4,6 +4,7 @@ import BlogsSearchForm from './blogsSearchForm';
 import BlogsList from './blogsList';
 import PageTitleBar from '../pageTitleBar';
 import { Cols, Sticky } from '../styles/mainPage';
+import { GeneralButton } from '../styles/buttons';
 
 import useSearchParamsPageNumber from '../../hooks/useSearchParamsPageNumber';
 import { Link, useLoaderData, useRouteError } from 'react-router';
@@ -16,7 +17,7 @@ export default function BlogsPage() {
     <>
       <PageTitleBar title="Blogs">
         <Link to="/blogs/new">
-          <button type="button">New</button>
+          <GeneralButton type="button">New</GeneralButton>
         </Link>
       </PageTitleBar>
       <Container>

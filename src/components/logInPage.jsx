@@ -2,6 +2,7 @@ import Header from './header';
 import Container from './container';
 import Form from './form';
 import FormRow from './formRow';
+import { GeneralButton } from './styles/buttons';
 
 import { AccessContext, UserContext } from '../contexts/AppContexts';
 import responseToJsend from '../ext/responseToJsend';
@@ -16,9 +17,7 @@ const Cols = styled.div`
   grid-template-columns: 1.5fr 1fr;
 `;
 
-const SubmitButton = styled.button`
-  background-color: rgb(32, 133, 240);
-  color: white;
+const SubmitButton = styled(GeneralButton)`
   padding: 16px;
 `;
 

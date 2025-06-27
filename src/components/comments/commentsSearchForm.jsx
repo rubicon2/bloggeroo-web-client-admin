@@ -4,6 +4,7 @@ import {
   FormRow,
   FormButtons,
 } from '../styles/searchForm';
+import { GeneralButton } from '../styles/buttons';
 import formToFields from '../../ext/formToFields';
 import { useSearchParams } from 'react-router';
 
@@ -59,8 +60,8 @@ export default function CommentsSearchForm() {
         </FormRow>
       </FormFieldsetGrid>
       <FormButtons>
-        <button type="reset">Clear Filters</button>
-        <button type="submit">Search</button>
+        <GeneralButton type="reset">Clear Filters</GeneralButton>
+        <GeneralButton type="submit">Search</GeneralButton>
       </FormButtons>
     </Form>
   );
