@@ -5,6 +5,17 @@ import { useContext } from 'react';
 import { Link } from 'react-router';
 import styled from 'styled-components';
 
+const Nav = styled.nav`
+  position: sticky;
+  z-index: 1;
+  top: 0;
+  background-color: var(--theme-main-color);
+
+  & * {
+    color: white;
+  }
+`;
+
 const NavList = styled.ul`
   list-style: none;
   padding: 0;
@@ -21,7 +32,7 @@ const ButtonListItem = styled.li`
 export default function NavBar() {
   const { isLoggedIn } = useContext(UserContext);
   return (
-    <nav style={{ backgroundColor: 'pink' }}>
+    <Nav>
       <Container>
         <NavList>
           {isLoggedIn ? (
@@ -46,6 +57,6 @@ export default function NavBar() {
           )}
         </NavList>
       </Container>
-    </nav>
+    </Nav>
   );
 }
