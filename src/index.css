@@ -65,6 +65,10 @@ button:focus-visible {
 }
 
 /* My Stuff */
+:root {
+  --theme-main-color: rgb(32, 133, 240);
+}
+
 img {
   max-width: 100%;
 }

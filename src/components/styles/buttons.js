@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const GeneralButton = styled.button`
-  background-color: rgb(32, 133, 240);
+  background-color: var(--theme-main-color);
   color: white;
 
   &:hover {
