@@ -1,4 +1,7 @@
+import Container from '../container';
+import PageTitleBar from '../pageTitleBar';
 import UserForm from './userForm';
+
 import { AccessContext } from '../../contexts/AppContexts';
 import authFetch from '../../ext/authFetch';
 import responseToJsend from '../../ext/responseToJsend';
@@ -45,15 +48,17 @@ export default function NewUserPage() {
 
   return (
     <main>
-      <h2>New User</h2>
-      <UserForm
-        buttonText={'Create User'}
-        initialValues={{}}
-        isFetching={isFetching}
-        validationErrors={validationErrors}
-        onSubmit={createUser}
-      />
-      {error && <p>{error.message}</p>}
+      <PageTitleBar title="New User" />
+      <Container>
+        <UserForm
+          buttonText={'Create User'}
+          initialValues={{}}
+          isFetching={isFetching}
+          validationErrors={validationErrors}
+          onSubmit={createUser}
+        />
+        {error && <p>{error.message}</p>}
+      </Container>
     </main>
   );
 }
