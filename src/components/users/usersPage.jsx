@@ -5,23 +5,43 @@ import PageNav from '../pageNav';
 import UsersSearchForm from './usersSearchForm';
 import { Cols, Sticky } from '../styles/mainPage';
 import { GeneralButton } from '../styles/buttons';
+import { MediaMobileOnly, MediaTabletAndLarger } from '../styles/mediaQueries';
 
 import useSearchParamsPageNumber from '../../hooks/useSearchParamsPageNumber';
 import { Link, useLoaderData, useRouteError } from 'react-router';
+import { useState } from 'react';
 
 export default function UsersPage() {
   const { users, atLastPage } = useLoaderData();
   const error = useRouteError();
   const [currentPageNumber, setCurrentPageNumber] = useSearchParamsPageNumber();
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
 
   return (
     <main>
       <PageTitleBar title="Users">
+        <MediaMobileOnly>
+          <GeneralButton
+            type="button"
+            onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
+            aria-label={
+              isMobileSearchOpen ? 'Close search form' : 'Show search form'
+            }
+          >
+            {isMobileSearchOpen ? 'Close' : 'Search'}
+          </GeneralButton>
+        </MediaMobileOnly>
         <Link to="/users/new" as={GeneralButton}>
           <GeneralButton type="button">New</GeneralButton>
         </Link>
       </PageTitleBar>
       <Container>
+        {isMobileSearchOpen && (
+          // Form seemed sluggish on Firefox but only when touch simulation was turned on?
+          <MediaMobileOnly>
+            <UsersSearchForm />
+          </MediaMobileOnly>
+        )}
         <Cols>
           <div>
             <UsersList users={users} />
@@ -32,11 +52,11 @@ export default function UsersPage() {
               atLastPage={atLastPage}
             />
           </div>
-          <div>
+          <MediaTabletAndLarger>
             <Sticky>
               <UsersSearchForm />
             </Sticky>
-          </div>
+          </MediaTabletAndLarger>
         </Cols>
       </Container>
     </main>
