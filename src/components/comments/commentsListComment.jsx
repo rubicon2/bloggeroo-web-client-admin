@@ -12,6 +12,7 @@ import styled from 'styled-components';
 const CommentButtons = styled.div`
   display: flex;
   gap: 1rem;
+  margin-bottom: 1rem;
 `;
 
 export default function CommentsListComment({
@@ -56,11 +57,10 @@ export default function CommentsListComment({
   }
 
   return (
-    <>
-      <small>
-        {comment.owner.name} - {comment.createdAt}
-      </small>
-      {comment.text}
+    <div>
+      <h3>{comment.createdAt}</h3>
+      <small>by {comment.owner.name}</small>
+      <p>{comment.text}</p>
       {isActiveComment ? (
         <>
           <CommentForm
@@ -105,6 +105,6 @@ export default function CommentsListComment({
         </>
       )}
       {error && <p>{error.message}</p>}
-    </>
+    </div>
   );
 }
