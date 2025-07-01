@@ -1,5 +1,6 @@
 import UnstyledList from '../unstyledList';
 import BlogsListBlog from './blogsListBlog';
+import LineSeparatedListItem from '../lineSeparatedListItem';
 
 export default function BlogsPageList({ blogs }) {
   return (
@@ -7,9 +8,9 @@ export default function BlogsPageList({ blogs }) {
       {blogs?.length > 0 ? (
         <UnstyledList>
           {blogs.map((blog) => (
-            <li key={blog.id}>
+            <LineSeparatedListItem key={blog.id}>
               <BlogsListBlog blog={blog} />
-            </li>
+            </LineSeparatedListItem>
           ))}
         </UnstyledList>
       ) : (

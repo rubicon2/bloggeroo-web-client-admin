@@ -1,4 +1,5 @@
 import UnstyledList from '../unstyledList';
+import LineSeparatedListItem from '../lineSeparatedListItem';
 import CommentsListComment from './commentsListComment';
 import { useState } from 'react';
 
@@ -9,7 +10,7 @@ export default function CommentsList({ comments, onReply, onDelete }) {
       {comments?.length > 0 ? (
         <UnstyledList>
           {comments.map((comment) => (
-            <li key={comment.id}>
+            <LineSeparatedListItem key={comment.id}>
               <CommentsListComment
                 comment={comment}
                 isActiveComment={comment.id === activeCommentId}
@@ -17,7 +18,7 @@ export default function CommentsList({ comments, onReply, onDelete }) {
                 onReply={onReply}
                 onDelete={onDelete}
               />
-            </li>
+            </LineSeparatedListItem>
           ))}
         </UnstyledList>
       ) : (

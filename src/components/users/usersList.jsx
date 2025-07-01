@@ -1,4 +1,5 @@
 import UnstyledList from '../unstyledList';
+import LineSeparatedListItem from '../lineSeparatedListItem';
 import UsersListUser from './usersListUser';
 
 export default function UsersList({ users }) {
@@ -7,9 +8,9 @@ export default function UsersList({ users }) {
       {users?.length > 0 ? (
         <UnstyledList>
           {users.map((user) => (
-            <li key={user.id}>
+            <LineSeparatedListItem key={user.id}>
               <UsersListUser user={user} />
-            </li>
+            </LineSeparatedListItem>
           ))}
         </UnstyledList>
       ) : (
