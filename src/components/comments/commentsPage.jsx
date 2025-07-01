@@ -16,11 +16,11 @@ export default function CommentsPage() {
   const [currentPageNumber, setCurrentPageNumber] = useSearchParamsPageNumber();
 
   return (
-    <>
+    <main>
       <PageTitleBar title="Comments" />
       <Container>
         <Cols>
-          <main>
+          <div>
             <CommentsList
               comments={comments}
               onReply={refresh}
@@ -32,14 +32,14 @@ export default function CommentsPage() {
               onPageChange={setCurrentPageNumber}
               atLastPage={atLastPage}
             />
-          </main>
-          <aside>
+          </div>
+          <div>
             <Sticky>
               <CommentsSearchForm />
             </Sticky>
-          </aside>
+          </div>
         </Cols>
       </Container>
-    </>
+    </main>
   );
 }

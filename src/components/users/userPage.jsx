@@ -65,7 +65,7 @@ export default function UserPage() {
   }
 
   return (
-    <>
+    <main>
       {user && (
         <>
           <PageTitleBar title={user.email}>
@@ -126,6 +126,6 @@ export default function UserPage() {
           </Container>
         </>
       )}
-    </>
+    </main>
   );
 }

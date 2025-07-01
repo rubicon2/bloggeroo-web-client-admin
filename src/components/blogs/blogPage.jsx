@@ -86,7 +86,7 @@ export default function BlogPage() {
   }
 
   return (
-    <>
+    <main>
       {blog && (
         <>
           <PageTitleBar title={blog.title}>
@@ -98,51 +98,46 @@ export default function BlogPage() {
             </DeleteButton>
           </PageTitleBar>
           <Container>
-            <main>
-              <BlogForm
-                buttonText={'Save changes'}
-                initialValues={blog}
-                isFetching={isFetching}
-                validationErrors={blogValidationErrors}
-                onSubmit={saveChanges}
-              />
-              <h3>
-                Comments {comments?.length > 0 ? `(${comments.length})` : ''}
-              </h3>
-              {isCreatingComment ? (
-                <>
-                  <CommentForm
-                    buttonText="Submit"
-                    initialValues={{ text: '' }}
-                    isFetching={isFetching}
-                    validationErrors={commentValidationErrors}
-                    onSubmit={createComment}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setIsCreatingComment(false)}
-                  >
-                    Cancel
-                  </button>
-                </>
-              ) : (
+            <BlogForm
+              buttonText={'Save changes'}
+              initialValues={blog}
+              isFetching={isFetching}
+              validationErrors={blogValidationErrors}
+              onSubmit={saveChanges}
+            />
+            <h3>
+              Comments {comments?.length > 0 ? `(${comments.length})` : ''}
+            </h3>
+            {isCreatingComment ? (
+              <>
+                <CommentForm
+                  buttonText="Submit"
+                  initialValues={{ text: '' }}
+                  isFetching={isFetching}
+                  validationErrors={commentValidationErrors}
+                  onSubmit={createComment}
+                />
                 <button
                   type="button"
-                  onClick={() => setIsCreatingComment(true)}
+                  onClick={() => setIsCreatingComment(false)}
                 >
-                  Add comment
+                  Cancel
                 </button>
-              )}
-              <CommentsList
-                comments={comments}
-                onReply={refresh}
-                onDelete={refresh}
-              />
-              {error && <p>{error.message}</p>}
-            </main>
+              </>
+            ) : (
+              <button type="button" onClick={() => setIsCreatingComment(true)}>
+                Add comment
+              </button>
+            )}
+            <CommentsList
+              comments={comments}
+              onReply={refresh}
+              onDelete={refresh}
+            />
+            {error && <p>{error.message}</p>}
           </Container>
         </>
       )}
-    </>
+    </main>
   );
 }

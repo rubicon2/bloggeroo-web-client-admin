@@ -15,7 +15,7 @@ export default function UsersPage() {
   const [currentPageNumber, setCurrentPageNumber] = useSearchParamsPageNumber();
 
   return (
-    <>
+    <main>
       <PageTitleBar title="Users">
         <Link to="/users/new" as={GeneralButton}>
           <GeneralButton type="button">New</GeneralButton>
@@ -23,7 +23,7 @@ export default function UsersPage() {
       </PageTitleBar>
       <Container>
         <Cols>
-          <main>
+          <div>
             <UsersList users={users} />
             {error && <p>{error.message}</p>}
             <PageNav
@@ -31,14 +31,14 @@ export default function UsersPage() {
               onPageChange={setCurrentPageNumber}
               atLastPage={atLastPage}
             />
-          </main>
-          <aside>
+          </div>
+          <div>
             <Sticky>
               <UsersSearchForm />
             </Sticky>
-          </aside>
+          </div>
         </Cols>
       </Container>
-    </>
+    </main>
   );
 }

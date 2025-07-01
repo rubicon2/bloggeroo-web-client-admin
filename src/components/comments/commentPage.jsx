@@ -50,7 +50,7 @@ export default function CommentPage() {
   }
 
   return (
-    <>
+    <main>
       {comment && (
         <>
           <PageTitleBar title={`Comment by ${comment.owner.name}`}>
@@ -81,6 +81,6 @@ export default function CommentPage() {
           </Container>
         </>
       )}
-    </>
+    </main>
   );
 }

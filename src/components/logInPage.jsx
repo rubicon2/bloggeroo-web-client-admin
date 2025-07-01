@@ -88,41 +88,45 @@ export default function LogInPage() {
   return (
     <>
       <Header />
-      <Container>
-        <Cols>
-          <img
-            src={HappyAdminImg}
-            alt="The world's happiest administrator using Bloggeroo"
-          />
-          <div>
-            <Form onSubmit={attemptLogIn}>
-              <FormRow label="Email">
-                <input type="email" name="email" id="email" />
-                <small>
-                  {validationErrors?.email ? validationErrors.email : ''}
-                </small>
-              </FormRow>
-              <FormRow label="Password">
-                <input type="password" name="password" id="password" />
-                <small>
-                  {validationErrors?.password ? validationErrors.password : ''}
-                </small>
-              </FormRow>
-              <SubmitButton type="submit" disabled={isFetching}>
-                Log In
-              </SubmitButton>
-            </Form>
-          </div>
-        </Cols>
-        {validationErrors && (
-          <ul>
-            {validationErrors.array.map((error) => (
-              <li>{error}</li>
-            ))}
-          </ul>
-        )}
-        {error && <p>{error.message}</p>}
-      </Container>
+      <main>
+        <Container>
+          <Cols>
+            <img
+              src={HappyAdminImg}
+              alt="The world's happiest administrator using Bloggeroo"
+            />
+            <div>
+              <Form onSubmit={attemptLogIn}>
+                <FormRow label="Email">
+                  <input type="email" name="email" id="email" />
+                  <small>
+                    {validationErrors?.email ? validationErrors.email : ''}
+                  </small>
+                </FormRow>
+                <FormRow label="Password">
+                  <input type="password" name="password" id="password" />
+                  <small>
+                    {validationErrors?.password
+                      ? validationErrors.password
+                      : ''}
+                  </small>
+                </FormRow>
+                <SubmitButton type="submit" disabled={isFetching}>
+                  Log In
+                </SubmitButton>
+              </Form>
+            </div>
+          </Cols>
+          {validationErrors && (
+            <ul>
+              {validationErrors.array.map((error) => (
+                <li>{error}</li>
+              ))}
+            </ul>
+          )}
+          {error && <p>{error.message}</p>}
+        </Container>
+      </main>
     </>
   );
 }

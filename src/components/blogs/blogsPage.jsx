@@ -14,7 +14,7 @@ export default function BlogsPage() {
   const error = useRouteError();
   const [currentPageNumber, setCurrentPageNumber] = useSearchParamsPageNumber();
   return (
-    <>
+    <main>
       <PageTitleBar title="Blogs">
         <Link to="/blogs/new">
           <GeneralButton type="button">New</GeneralButton>
@@ -22,7 +22,7 @@ export default function BlogsPage() {
       </PageTitleBar>
       <Container>
         <Cols>
-          <main>
+          <div>
             <BlogsList blogs={blogs} />
             {error && <p>{error.message}</p>}
             <PageNav
@@ -30,14 +30,14 @@ export default function BlogsPage() {
               onPageChange={setCurrentPageNumber}
               atLastPage={atLastPage}
             />
-          </main>
-          <aside>
+          </div>
+          <div>
             <Sticky>
               <BlogsSearchForm />
             </Sticky>
-          </aside>
+          </div>
         </Cols>
       </Container>
-    </>
+    </main>
   );
 }
