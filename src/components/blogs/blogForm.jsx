@@ -1,3 +1,5 @@
+import { GeneralButton } from '../styles/buttons';
+import { Form, FormRow } from '../styles/searchForm';
 import { useState } from 'react';
 
 export default function BlogForm({
@@ -25,8 +27,8 @@ export default function BlogForm({
     initialValues.body !== body ||
     publishedAtInitialValue !== publishedAt;
   return (
-    <form onSubmit={onSubmit}>
-      <label>
+    <Form onSubmit={onSubmit}>
+      <FormRow>
         Title:
         <input
           type="text"
@@ -36,8 +38,8 @@ export default function BlogForm({
           required={true}
         />
         <small>{validationErrors?.title}</small>
-      </label>
-      <label>
+      </FormRow>
+      <FormRow>
         Body:
         <textarea
           name="body"
@@ -47,8 +49,8 @@ export default function BlogForm({
           onChange={(e) => setBody(e.target.value)}
         />
         <small>{validationErrors?.body}</small>
-      </label>
-      <label>
+      </FormRow>
+      <FormRow>
         Published at:
         <input
           type="datetime-local"
@@ -57,10 +59,10 @@ export default function BlogForm({
           onChange={(e) => setPublishedAt(e.target.value)}
         />
         <small>{validationErrors?.publishedAt}</small>
-      </label>
-      <button type="submit" disabled={isFetching || !haveFieldsChanged}>
+      </FormRow>
+      <GeneralButton type="submit" disabled={isFetching || !haveFieldsChanged}>
         {buttonText}
-      </button>
-    </form>
+      </GeneralButton>
+    </Form>
   );
 }
