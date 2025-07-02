@@ -27,7 +27,8 @@ const NavList = styled.ul`
   margin: 0;
   display: flex;
   align-items: center;
-  gap: 2rem;
+  // To stop outline being obscured on one side or the other, when selected via keyboard.
+  gap: 5px;
 `;
 
 const RightButton = styled.li`
