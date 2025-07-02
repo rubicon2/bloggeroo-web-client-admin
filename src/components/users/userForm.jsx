@@ -1,3 +1,5 @@
+import { GeneralButton } from '../styles/buttons';
+import { Form, FormRow } from '../styles/searchForm';
 import { useState } from 'react';
 
 export default function UserForm({
@@ -17,8 +19,8 @@ export default function UserForm({
   const [isAdmin, setIsAdmin] = useState(initialValues?.isAdmin || false);
 
   return (
-    <form onSubmit={onSubmit}>
-      <label>
+    <Form onSubmit={onSubmit}>
+      <FormRow>
         Email:
         <input
           type="email"
@@ -27,8 +29,8 @@ export default function UserForm({
           onChange={(e) => setEmail(e.target.value)}
         />
         <small>{validationErrors?.email}</small>
-      </label>
-      <label>
+      </FormRow>
+      <FormRow>
         Name:
         <input
           type="text"
@@ -37,8 +39,8 @@ export default function UserForm({
           onChange={(e) => setName(e.target.value)}
         />
         <small>{validationErrors?.name}</small>
-      </label>
-      <label>
+      </FormRow>
+      <FormRow>
         Password:
         <input
           type="password"
@@ -47,8 +49,8 @@ export default function UserForm({
           onChange={(e) => setPassword(e.target.value)}
         />
         <small>{validationErrors?.password}</small>
-      </label>
-      <label>
+      </FormRow>
+      <FormRow>
         Confirm password:
         <input
           type="password"
@@ -57,8 +59,8 @@ export default function UserForm({
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
         <small>{validationErrors?.confirm_password}</small>
-      </label>
-      <label>
+      </FormRow>
+      <FormRow>
         Is Banned?
         <input
           type="checkbox"
@@ -67,8 +69,8 @@ export default function UserForm({
           onChange={(e) => setIsBanned(e.target.checked)}
         />
         <small>{validationErrors?.is_banned}</small>
-      </label>
-      <label>
+      </FormRow>
+      <FormRow>
         Is Admin?
         <input
           type="checkbox"
@@ -77,10 +79,10 @@ export default function UserForm({
           onChange={(e) => setIsAdmin(e.target.checked)}
         />
         <small>{validationErrors?.is_admin}</small>
-      </label>
-      <button type="submit" disabled={isFetching}>
+      </FormRow>
+      <GeneralButton type="submit" disabled={isFetching}>
         {buttonText}
-      </button>
-    </form>
+      </GeneralButton>
+    </Form>
   );
 }
