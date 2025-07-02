@@ -3,6 +3,8 @@ import Container from '../container';
 import DeleteButton from '../deleteButton';
 import UserPageBlogs from './userPageBlogs';
 import UserPageComments from './userPageComments';
+import { Form, FormRow } from '../styles/searchForm';
+import { GeneralButton } from '../styles/buttons';
 
 import { AccessContext } from '../../contexts/AppContexts';
 import authFetch from '../../ext/authFetch';
@@ -77,8 +79,8 @@ export default function UserPage() {
             </DeleteButton>
           </PageTitleBar>
           <Container>
-            <form onSubmit={saveChanges}>
-              <label>
+            <Form onSubmit={saveChanges}>
+              <FormRow>
                 Email:
                 <input
                   type="email"
@@ -87,8 +89,8 @@ export default function UserPage() {
                   onChange={(e) => setEmail(e.target.value)}
                 />
                 <small>{validationErrors?.email}</small>
-              </label>
-              <label>
+              </FormRow>
+              <FormRow>
                 Name:
                 <input
                   type="text"
@@ -97,8 +99,8 @@ export default function UserPage() {
                   onChange={(e) => setName(e.target.value)}
                 />
                 <small>{validationErrors?.name}</small>
-              </label>
-              <label>
+              </FormRow>
+              <FormRow>
                 Banned
                 <input
                   type="checkbox"
@@ -106,8 +108,8 @@ export default function UserPage() {
                   checked={isBanned}
                   onChange={(e) => setIsBanned(e.target.checked)}
                 />
-              </label>
-              <label>
+              </FormRow>
+              <FormRow>
                 Admin
                 <input
                   type="checkbox"
@@ -115,11 +117,14 @@ export default function UserPage() {
                   checked={isAdmin}
                   onChange={(e) => setIsAdmin(e.target.checked)}
                 />
-              </label>
-              <button type="submit" disabled={isFetching || !haveFieldsChanged}>
+              </FormRow>
+              <GeneralButton
+                type="submit"
+                disabled={isFetching || !haveFieldsChanged}
+              >
                 Save Changes
-              </button>
-            </form>
+              </GeneralButton>
+            </Form>
             {error && <p>{error.message}</p>}
             <UserPageBlogs blogs={user.blogs} />
             <UserPageComments comments={user.comments} />
