@@ -3,6 +3,11 @@ import { Form, FormRow } from '../styles/searchForm';
 import { useState } from 'react';
 import styled from 'styled-components';
 
+// Otherwise with a long blog, the label will appear comically far down.
+const BlogTextAreaLabelText = styled.div`
+  align-self: start;
+`;
+
 const BlogTextArea = styled.textarea`
   resize: vertical;
 `;
@@ -45,7 +50,7 @@ export default function BlogForm({
         <small>{validationErrors?.title}</small>
       </FormRow>
       <FormRow>
-        Body:
+        <BlogTextAreaLabelText>Body:</BlogTextAreaLabelText>
         <BlogTextArea
           name="body"
           rows="20"
