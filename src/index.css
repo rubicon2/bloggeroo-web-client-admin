@@ -55,7 +55,8 @@ img {
   max-width: 100%;
 }
 
-input {
+input,
+textarea {
   padding: 14px 16px;
   font-size: 1rem;
   border-radius: 5px;

@@ -43,7 +43,6 @@ export default function BlogForm({
         Body:
         <textarea
           name="body"
-          cols="60"
           rows="10"
           value={body}
           onChange={(e) => setBody(e.target.value)}
