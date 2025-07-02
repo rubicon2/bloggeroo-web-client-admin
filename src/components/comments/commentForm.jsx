@@ -1,4 +1,4 @@
-import { Form, FormRow } from '../styles/searchForm';
+import { Form, FormRow, FormButtons } from '../styles/searchForm';
 import { GeneralButton } from '../styles/buttons';
 import { useState } from 'react';
 import styled from 'styled-components';
@@ -13,6 +13,7 @@ export default function CommentForm({
   isFetching,
   validationErrors,
   onSubmit,
+  children,
 }) {
   const [text, setText] = useState(initialValues.text);
   const haveFieldsChanged = initialValues.text !== text;
@@ -28,9 +29,15 @@ export default function CommentForm({
         aria-labelledby="Edit comment"
       />
       <small>{validationErrors?.text}</small>
-      <GeneralButton type="submit" disabled={isFetching || !haveFieldsChanged}>
-        {buttonText}
-      </GeneralButton>
+      <FormButtons>
+        {children}
+        <GeneralButton
+          type="submit"
+          disabled={isFetching || !haveFieldsChanged}
+        >
+          {buttonText}
+        </GeneralButton>
+      </FormButtons>
       {validationErrors?.blogId && <p>Error: {validationErrors.blogId}</p>}
     </Form>
   );

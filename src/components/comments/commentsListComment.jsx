@@ -69,10 +69,11 @@ export default function CommentsListComment({
             isFetching={isFetching}
             validationErrors={validationErrors}
             onSubmit={createReply}
-          />
-          <button type="button" onClick={() => setActiveComment(null)}>
-            Cancel
-          </button>
+          >
+            <GeneralButton type="button" onClick={() => setActiveComment(null)}>
+              Cancel
+            </GeneralButton>
+          </CommentForm>
         </>
       ) : (
         <>

@@ -4,6 +4,7 @@ import BlogForm from './blogForm';
 import DeleteButton from '../deleteButton';
 import CommentsList from '../comments/commentsList';
 import CommentForm from '../comments/commentForm';
+import { GeneralButton } from '../styles/buttons';
 
 import { AccessContext } from '../../contexts/AppContexts';
 import useRefresh from '../../hooks/useRefresh';
@@ -116,18 +117,22 @@ export default function BlogPage() {
                   isFetching={isFetching}
                   validationErrors={commentValidationErrors}
                   onSubmit={createComment}
-                />
-                <button
-                  type="button"
-                  onClick={() => setIsCreatingComment(false)}
                 >
-                  Cancel
-                </button>
+                  <GeneralButton
+                    type="button"
+                    onClick={() => setIsCreatingComment(false)}
+                  >
+                    Cancel
+                  </GeneralButton>
+                </CommentForm>
               </>
             ) : (
-              <button type="button" onClick={() => setIsCreatingComment(true)}>
+              <GeneralButton
+                type="button"
+                onClick={() => setIsCreatingComment(true)}
+              >
                 Add comment
-              </button>
+              </GeneralButton>
             )}
             <CommentsList
               comments={comments}
