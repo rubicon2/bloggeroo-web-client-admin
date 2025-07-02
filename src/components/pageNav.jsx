@@ -24,7 +24,7 @@ export default function PageNav({
   atLastPage,
 }) {
   return (
-    <div>
+    <nav>
       <ButtonsContainer>
         {currentPageNumber > 1 && (
           <LeftButton
@@ -46,6 +46,6 @@ export default function PageNav({
       {!(currentPageNumber === 1 && atLastPage) && (
         <Page>Page: {currentPageNumber}</Page>
       )}
-    </div>
+    </nav>
   );
 }
