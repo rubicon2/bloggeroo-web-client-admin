@@ -1,4 +1,11 @@
+import { Form, FormRow } from '../styles/searchForm';
+import { GeneralButton } from '../styles/buttons';
 import { useState } from 'react';
+import styled from 'styled-components';
+
+const CommentTextArea = styled.textarea`
+  resize: vertical;
+`;
 
 export default function CommentForm({
   buttonText,
@@ -11,20 +18,20 @@ export default function CommentForm({
   const haveFieldsChanged = initialValues.text !== text;
 
   return (
-    <form onSubmit={onSubmit}>
-      <textarea
+    <Form onSubmit={onSubmit}>
+      <CommentTextArea
         name="text"
         id="text"
-        cols="60"
         rows="10"
         value={text}
         onChange={(e) => setText(e.target.value)}
+        aria-labelledby="Edit comment"
       />
       <small>{validationErrors?.text}</small>
-      <button type="submit" disabled={isFetching || !haveFieldsChanged}>
+      <GeneralButton type="submit" disabled={isFetching || !haveFieldsChanged}>
         {buttonText}
-      </button>
+      </GeneralButton>
       {validationErrors?.blogId && <p>Error: {validationErrors.blogId}</p>}
-    </form>
+    </Form>
   );
 }

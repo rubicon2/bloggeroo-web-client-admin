@@ -53,7 +53,7 @@ export default function CommentPage() {
     <main>
       {comment && (
         <>
-          <PageTitleBar title={`Comment by ${comment.owner.name}`}>
+          <PageTitleBar title={`Edit comment by ${comment.owner.name}`}>
             <DeleteButton
               url={`${import.meta.env.VITE_SERVER_URL}/admin/comments/${comment.id}`}
               onDelete={() => navigate('/comments')}
