@@ -17,6 +17,10 @@ const Nav = styled.nav`
   }
 `;
 
+const ContainerNoPadding = styled(Container)`
+  padding: 0;
+`;
+
 const NavList = styled.ul`
   list-style: none;
   padding: 0;
@@ -34,7 +38,7 @@ export default function NavBar() {
   const { isLoggedIn } = useContext(UserContext);
   return (
     <Nav>
-      <Container>
+      <ContainerNoPadding>
         <NavList>
           {isLoggedIn ? (
             <>
@@ -63,7 +67,7 @@ export default function NavBar() {
             </ButtonListItem>
           )}
         </NavList>
-      </Container>
+      </ContainerNoPadding>
     </Nav>
   );
 }
