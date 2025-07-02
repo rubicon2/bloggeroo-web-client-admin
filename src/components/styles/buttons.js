@@ -22,6 +22,12 @@ const GeneralButton = styled.button`
   &:focus-visible {
     outline: 4px auto -webkit-focus-ring-color;
   }
+
+  &:disabled {
+    filter: saturate(0.2);
+    color: lightgrey;
+    cursor: not-allowed;
+  }
 `;
 
 const DeleteButton = styled(GeneralButton)`
