@@ -28,4 +28,14 @@ const DeleteButton = styled(GeneralButton)`
   background-color: rgb(238, 56, 141);
 `;
 
-export { GeneralButton, DeleteButton };
+const NavButton = styled(GeneralButton)`
+  border-radius: 0;
+  border: 1px solid transparent;
+
+  // In case as='a' or as={Link}.
+  &:hover {
+    color: white;
+  }
+`;
+
+export { GeneralButton, DeleteButton, NavButton };
