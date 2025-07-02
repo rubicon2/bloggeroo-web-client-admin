@@ -29,6 +29,7 @@ const DeleteButton = styled(GeneralButton)`
 `;
 
 const NavButton = styled(GeneralButton)`
+  display: inline-block;
   border-radius: 0;
   border: 1px solid transparent;
 

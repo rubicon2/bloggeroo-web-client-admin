@@ -64,7 +64,9 @@ export default function NavBar() {
             </>
           ) : (
             <RightButton>
-              <Link to="/">Log In</Link>
+              <NavButton as={Link} to="/">
+                Log In
+              </NavButton>
             </RightButton>
           )}
         </NavList>
