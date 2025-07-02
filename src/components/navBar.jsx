@@ -1,5 +1,6 @@
 import Container from './container';
 import LogOutButton from './logOutButton';
+import { NavButton } from './styles/buttons';
 import { UserContext } from '../contexts/AppContexts';
 import { useContext } from 'react';
 import { Link } from 'react-router';
@@ -38,13 +39,19 @@ export default function NavBar() {
           {isLoggedIn ? (
             <>
               <li>
-                <Link to="/blogs">Blogs</Link>
+                <NavButton as={Link} to="/blogs">
+                  Blogs
+                </NavButton>
               </li>
               <li>
-                <Link to="/comments">Comments</Link>
+                <NavButton as={Link} to="/comments">
+                  Comments
+                </NavButton>
               </li>
               <li>
-                <Link to="/users">Users</Link>
+                <NavButton as={Link} to="/users">
+                  Users
+                </NavButton>
               </li>
               <ButtonListItem>
                 <LogOutButton />
