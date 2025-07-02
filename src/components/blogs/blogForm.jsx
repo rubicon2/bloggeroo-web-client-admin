@@ -14,12 +14,16 @@ export default function BlogForm({
   // What an annoying quirk. Why does it not work with the .00Z, if that is part
   // of the standardised date format? The server returns the datetime as stored
   // by prisma. In fact if the Z appears at all even without the .00, it fails to show.
-  const [publishedAt, setPublishedAt] = useState(
-    initialValues.publishedAt ? initialValues.publishedAt.split('.')[0] : '',
-  );
+  const publishedAtInitialValue = initialValues.publishedAt
+    ? initialValues.publishedAt.split('.')[0]
+    : '';
+
+  const [publishedAt, setPublishedAt] = useState(publishedAtInitialValue);
 
   const haveFieldsChanged =
-    initialValues.title !== title || initialValues.body !== body;
+    initialValues.title !== title ||
+    initialValues.body !== body ||
+    publishedAtInitialValue !== publishedAt;
   return (
     <form onSubmit={onSubmit}>
       <label>
