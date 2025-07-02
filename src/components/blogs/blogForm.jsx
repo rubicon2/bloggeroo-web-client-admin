@@ -1,6 +1,11 @@
 import { GeneralButton } from '../styles/buttons';
 import { Form, FormRow } from '../styles/searchForm';
 import { useState } from 'react';
+import styled from 'styled-components';
+
+const BlogTextArea = styled.textarea`
+  resize: vertical;
+`;
 
 export default function BlogForm({
   buttonText,
@@ -41,9 +46,9 @@ export default function BlogForm({
       </FormRow>
       <FormRow>
         Body:
-        <textarea
+        <BlogTextArea
           name="body"
-          rows="10"
+          rows="20"
           value={body}
           onChange={(e) => setBody(e.target.value)}
         />
