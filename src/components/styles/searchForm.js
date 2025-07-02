@@ -12,7 +12,7 @@ const FormFieldsetGrid = styled.fieldset`
 
 const FormRow = styled.label`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 2fr;
   align-items: center;
   gap: 1rem;
 `;
