@@ -29,3 +29,15 @@ Once this is over I am going to look deeply into how to fetch with react, becaus
 I am equating the prescence of an access token with being logged in. As a result, I need components to update when the access token is updated, e.g. so the navbar button changes from 'log in' to 'log out'. Maybe this was a mistake. After all, we don't actually want anything to re-render if the access code changes. We just want a new code in order to fetch stuff from the backend.
 
 How else are we supposed to store the log-in state on the client? Just have a bool called loggedIn that is set when the client logs in or logs out? It sounds stupid, but that way we could update components like the navBar when the user logs in or out, and avoid re-rendering anything when the access code is updated, but still have it accessible throughout the application.
+
+## Using styled-components properly
+
+Any component that does some formatting and plops the children inside of it does not need to be a standard react component. Exporting the styled-component is much better as that can be extended by other components.
+
+I.e. if a component performs a purely stylistic function, create a styled-component and export that, instead of putting it into a standard react component!
+
+## Media queries and styled-components
+
+As styled-components define their styles with template literals/template strings, you can easily include some text that has been imported from another file. Therefore the device breakpoints (and any other media queries) are in a js file and exported as an object. It has been easy to ensure there is one source of truth for the breakpoints. I decided that the reactivity will not be in pure css at all. In fact, I think it is generally a good idea to reduce the use of css in an app that uses styled-components. Perhaps use css for a reset, or for very basic styling of basic elements, but that's it.
+
+I also created some styled-components whose whole purpose is to set display to none depending on a particular media query. This way any page content that needs to be shown on mobile only will have display set to none when the page width goes above a certain threshold. This has been very nice and readable within the react components. Certainly it is a lot nicer than previous react projects with responsive styling.
