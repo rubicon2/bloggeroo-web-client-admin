@@ -1,3 +1,4 @@
+import { devices } from '../../mediaQueries';
 import styled from 'styled-components';
 
 const Cols = styled.div`
@@ -5,7 +6,7 @@ const Cols = styled.div`
   gap: 1rem;
   position: relative;
 
-  @media (min-width: 720px) {
+  @media ${devices.tablet} {
     grid-template-columns: 1fr 1fr;
   }
 `;
