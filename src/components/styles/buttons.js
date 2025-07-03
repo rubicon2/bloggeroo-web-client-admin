@@ -35,9 +35,9 @@ const DeleteButton = styled(GeneralButton)`
 `;
 
 const NavButton = styled(GeneralButton)`
-  display: inline-block;
+  display: block;
   border-radius: 0;
-  border: 1px solid transparent;
+  border: 0;
 
   // In case as='a' or as={Link}.
   &:hover {
