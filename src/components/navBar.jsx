@@ -38,7 +38,7 @@ const RightListItem = styled.li`
 export default function NavBar() {
   const { isLoggedIn } = useContext(UserContext);
   return (
-    <Nav aria-labelledby="primary navigation">
+    <Nav aria-label="primary navigation">
       <ContainerNoPadding>
         <NavList>
           {isLoggedIn ? (

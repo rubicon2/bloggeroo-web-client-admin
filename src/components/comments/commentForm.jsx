@@ -26,7 +26,7 @@ export default function CommentForm({
         rows="10"
         value={text}
         onChange={(e) => setText(e.target.value)}
-        aria-labelledby="Edit comment"
+        aria-label="Edit comment"
       />
       <small>{validationErrors?.text}</small>
       <FormButtons>
