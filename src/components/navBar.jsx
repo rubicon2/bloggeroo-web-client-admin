@@ -31,7 +31,7 @@ const NavList = styled.ul`
   gap: 5px;
 `;
 
-const RightButton = styled.li`
+const RightListItem = styled.li`
   margin-left: auto;
 `;
 
@@ -58,16 +58,16 @@ export default function NavBar() {
                   Users
                 </NavButton>
               </li>
-              <RightButton>
+              <RightListItem>
                 <LogOutButton />
-              </RightButton>
+              </RightListItem>
             </>
           ) : (
-            <RightButton>
+            <RightListItem>
               <NavButton as={Link} to="/">
                 Log In
               </NavButton>
-            </RightButton>
+            </RightListItem>
           )}
         </NavList>
       </ContainerNoPadding>
