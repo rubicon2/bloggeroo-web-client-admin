@@ -1,4 +1,5 @@
-import { Form, FormRow, FormButtons } from '../styles/searchForm';
+import { Form } from '../styles/searchForm';
+import ListItemButtonsContainer from '../listItemButtonsContainer';
 import { GeneralButton } from '../styles/buttons';
 import { useState } from 'react';
 import styled from 'styled-components';
@@ -28,8 +29,8 @@ export default function CommentForm({
         onChange={(e) => setText(e.target.value)}
         aria-label="Edit comment"
       />
-      <small>{validationErrors?.text}</small>
-      <FormButtons>
+      {validationErrors?.text && <small>{validationErrors?.text}</small>}
+      <ListItemButtonsContainer>
         {children}
         <GeneralButton
           type="submit"
@@ -37,7 +38,7 @@ export default function CommentForm({
         >
           {buttonText}
         </GeneralButton>
-      </FormButtons>
+      </ListItemButtonsContainer>
       {validationErrors?.blogId && <p>Error: {validationErrors.blogId}</p>}
     </Form>
   );
