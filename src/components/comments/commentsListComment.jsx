@@ -1,19 +1,13 @@
 import CommentForm from './commentForm';
 import DeleteButton from '../deleteButton';
 import { GeneralButton } from '../styles/buttons';
+import ListItemButtonsContainer from '../listItemButtonsContainer';
 
 import { AccessContext } from '../../contexts/AppContexts';
 import authFetch from '../../ext/authFetch';
 import responseToJsend from '../../ext/responseToJsend';
 import { Link } from 'react-router';
 import { useContext, useState } from 'react';
-import styled from 'styled-components';
-
-const CommentButtons = styled.div`
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 1rem;
-`;
 
 export default function CommentsListComment({
   comment,
@@ -86,7 +80,7 @@ export default function CommentsListComment({
               </small>
             </div>
           )}
-          <CommentButtons>
+          <ListItemButtonsContainer>
             <Link to={`/comments/${comment.id}`}>
               <GeneralButton type="button">Edit</GeneralButton>
             </Link>
@@ -102,7 +96,7 @@ export default function CommentsListComment({
             >
               Delete
             </DeleteButton>
-          </CommentButtons>
+          </ListItemButtonsContainer>
         </>
       )}
       {error && <p>{error.message}</p>}
