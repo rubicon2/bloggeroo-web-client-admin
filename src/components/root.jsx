@@ -1,5 +1,6 @@
 import Header from './header';
 import NavBar from './navBar';
+import Footer from './footer';
 import { Outlet } from 'react-router';
 
 export default function Root() {
@@ -8,6 +9,7 @@ export default function Root() {
       <Header />
       <NavBar />
       <Outlet />
+      <Footer />
     </>
   );
 }
