@@ -8,6 +8,7 @@ import { GeneralButton } from '../styles/buttons';
 import { MediaMobileOnly, MediaTabletAndLarger } from '../styles/mediaQueries';
 
 import useSearchParamsPageNumber from '../../hooks/useSearchParamsPageNumber';
+import useRefresh from '../../hooks/useRefresh';
 import { Link, useLoaderData, useRouteError } from 'react-router';
 import { useState } from 'react';
 
@@ -16,6 +17,7 @@ export default function UsersPage() {
   const error = useRouteError();
   const [currentPageNumber, setCurrentPageNumber] = useSearchParamsPageNumber();
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
+  const refresh = useRefresh();
 
   return (
     <main>
@@ -44,7 +46,7 @@ export default function UsersPage() {
         )}
         <Cols>
           <div>
-            <UsersList users={users} />
+            <UsersList users={users} onDelete={refresh} />
             {error && <p>{error.message}</p>}
             <PageNav
               currentPageNumber={currentPageNumber}

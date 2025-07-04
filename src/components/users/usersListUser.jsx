@@ -1,20 +1,29 @@
+import ListItemButtonsContainer from '../listItemButtonsContainer';
+import { GeneralButton } from '../styles/buttons';
+import DeleteButton from '../deleteButton';
 import { Link } from 'react-router';
-import styled from 'styled-components';
 
-const Container = styled.div`
-  padding-bottom: 1rem;
-`;
-
-export default function UsersListUser({ user }) {
+export default function UsersListUser({ user, onDelete }) {
   return (
-    <Link key={user.id} to={`/users/${user.id}`}>
+    <div>
       <h3>
         {user.email} - {user.name}
       </h3>
-      <Container>
+      <div>
         <div>Banned - {'' + user.isBanned}</div>
         <div>Admin - {'' + user.isAdmin}</div>
-      </Container>
-    </Link>
+      </div>
+      <ListItemButtonsContainer>
+        <Link to={`/users/${user.id}`}>
+          <GeneralButton type="button">Edit</GeneralButton>
+        </Link>
+        <DeleteButton
+          url={`${import.meta.env.VITE_SERVER_URL}/admin/users/${user.id}`}
+          onDelete={onDelete}
+        >
+          Delete
+        </DeleteButton>
+      </ListItemButtonsContainer>
+    </div>
   );
 }
