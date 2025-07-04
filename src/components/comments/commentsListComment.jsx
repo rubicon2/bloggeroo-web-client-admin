@@ -6,8 +6,14 @@ import ListItemButtonsContainer from '../listItemButtonsContainer';
 import { AccessContext } from '../../contexts/AppContexts';
 import authFetch from '../../ext/authFetch';
 import responseToJsend from '../../ext/responseToJsend';
+import dateTimeFormatter from '../../ext/dateTimeFormatter';
 import { Link } from 'react-router';
 import { useContext, useState } from 'react';
+import styled from 'styled-components';
+
+const CommentHeading = styled.h3`
+  margin-bottom: 0;
+`;
 
 export default function CommentsListComment({
   comment,
@@ -52,13 +58,24 @@ export default function CommentsListComment({
 
   return (
     <div>
-      <h3>{comment.createdAt}</h3>
+      <CommentHeading>
+        {dateTimeFormatter.format(new Date(comment.createdAt))}
+      </CommentHeading>
       <small>by {comment.owner.name}</small>
+      {comment.parentCommentId && (
+        <div>
+          <small>
+            <Link to={`/comments/${comment.parentCommentId}`}>
+              In response to this comment
+            </Link>
+          </small>
+        </div>
+      )}
       <p>{comment.text}</p>
       {isActiveComment ? (
         <>
           <CommentForm
-            buttonText={'Create comment'}
+            buttonText={'Reply'}
             initialValues={{ text: '' }}
             isFetching={isFetching}
             validationErrors={validationErrors}
@@ -71,15 +88,6 @@ export default function CommentsListComment({
         </>
       ) : (
         <>
-          {comment.parentCommentId && (
-            <div>
-              <small>
-                <Link to={`/comments/${comment.parentCommentId}`}>
-                  In response to this comment
-                </Link>
-              </small>
-            </div>
-          )}
           <ListItemButtonsContainer>
             <Link to={`/comments/${comment.id}`}>
               <GeneralButton type="button">Edit</GeneralButton>
