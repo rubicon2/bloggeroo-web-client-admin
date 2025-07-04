@@ -6,6 +6,7 @@ import DeleteButton from '../deleteButton';
 import { AccessContext } from '../../contexts/AppContexts';
 import authFetch from '../../ext/authFetch';
 import responseToJsend from '../../ext/responseToJsend';
+import dateTimeFormatter from '../../ext/dateTimeFormatter';
 
 import { useContext, useState } from 'react';
 import { useLoaderData, useRouteError, Link, useNavigate } from 'react-router';
@@ -62,7 +63,9 @@ export default function CommentPage() {
             </DeleteButton>
           </PageTitleBar>
           <Container>
-            <small>At {comment.createdAt}</small>
+            <small>
+              At {dateTimeFormatter.format(new Date(comment.createdAt))}
+            </small>
             <CommentForm
               buttonText={'Save'}
               initialValues={{ text: comment.text }}
