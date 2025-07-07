@@ -17,6 +17,13 @@ const CommentHeading = styled.h3`
 
 export default function CommentsListComment({
   comment,
+  // This is horrible, but not sure how else to customise commentList comment links via parent.
+  // Needs to be able to be an object or a string.
+  // i.e. on blog want to scroll over to the comment (so use hash), but on commentsPage want to go
+  // straight to comment - only 5 comments loaded at once so not certain to be listed on current page.
+  createParentCommentLink = (comment) => ({
+    hash: `#${comment.parentCommentId}`,
+  }),
   isActiveComment,
   setActiveComment,
   onReply,
@@ -57,7 +64,7 @@ export default function CommentsListComment({
   }
 
   return (
-    <div>
+    <div id={comment.id}>
       <CommentHeading>
         {dateTimeFormatter.format(new Date(comment.createdAt))}
       </CommentHeading>
@@ -65,7 +72,7 @@ export default function CommentsListComment({
       {comment.parentCommentId && (
         <div>
           <small>
-            <Link to={`/comments/${comment.parentCommentId}`}>
+            <Link to={createParentCommentLink(comment)} reloadDocument>
               In response to this comment
             </Link>
           </small>

@@ -47,6 +47,9 @@ export default function CommentsPage() {
               comments={comments}
               onReply={refresh}
               onDelete={refresh}
+              createParentCommentLink={(comment) =>
+                `/comments?commentId=${comment.parentCommentId}`
+              }
             />
             {error && <p>{error.message}</p>}
             <PageNav

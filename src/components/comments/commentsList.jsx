@@ -3,7 +3,12 @@ import LineSeparatedListItem from '../lineSeparatedListItem';
 import CommentsListComment from './commentsListComment';
 import { useState } from 'react';
 
-export default function CommentsList({ comments, onReply, onDelete }) {
+export default function CommentsList({
+  comments,
+  onReply,
+  onDelete,
+  createParentCommentLink,
+}) {
   const [activeCommentId, setActiveCommentId] = useState(null);
   return (
     <>
@@ -13,6 +18,7 @@ export default function CommentsList({ comments, onReply, onDelete }) {
             <LineSeparatedListItem key={comment.id}>
               <CommentsListComment
                 comment={comment}
+                createParentCommentLink={createParentCommentLink}
                 isActiveComment={comment.id === activeCommentId}
                 setActiveComment={(c) => setActiveCommentId(c?.id)}
                 onReply={onReply}
