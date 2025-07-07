@@ -7,12 +7,8 @@ import styled from 'styled-components';
 
 import menuIcon from '../static/icons/menu_48px.svg';
 
-const NavList = styled(UnstyledList)`
-  position: absolute;
-  width: 100%;
-
-  display: grid;
-  grid-auto-rows: 1fr;
+const Menu = styled.div`
+  position: relative;
   text-align: center;
 
   & a,
@@ -26,27 +22,38 @@ const NavList = styled(UnstyledList)`
   & button {
     width: 100%;
   }
+
+  height: 48px;
+`;
+
+const NavList = styled(UnstyledList)`
+  position: absolute;
+  z-index: -1;
+  width: 100%;
+
+  display: grid;
+  grid-auto-rows: 48px;
+
+  box-shadow: 5px 5px 5px 5px var(--theme-shadow);
 `;
 
 export default function PrimaryNavListMobile({ isLoggedIn }) {
   const [menuOpen, setMenuOpen] = useState(false);
   return (
-    <NavList>
+    <Menu>
       {isLoggedIn ? (
         <>
-          <li>
-            <NavButton onClick={() => setMenuOpen(!menuOpen)}>
-              <img
-                src={menuIcon}
-                alt=""
-                aria-label={
-                  menuOpen ? 'Close main Navigation' : 'Open main navigation'
-                }
-              />
-            </NavButton>
-          </li>
+          <NavButton onClick={() => setMenuOpen(!menuOpen)}>
+            <img
+              src={menuIcon}
+              alt=""
+              aria-label={
+                menuOpen ? 'Close main Navigation' : 'Open main navigation'
+              }
+            />
+          </NavButton>
           {menuOpen && (
-            <>
+            <NavList>
               <li>
                 <NavButton
                   as={Link}
@@ -77,12 +84,14 @@ export default function PrimaryNavListMobile({ isLoggedIn }) {
               <li>
                 <LogOutButton />
               </li>
-            </>
+            </NavList>
           )}
         </>
       ) : (
-        <NavButton to="/">Log In</NavButton>
+        <NavList>
+          <NavButton to="/">Log In</NavButton>
+        </NavList>
       )}
-    </NavList>
+    </Menu>
   );
 }

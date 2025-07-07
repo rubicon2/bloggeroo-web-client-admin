@@ -11,6 +11,7 @@ const Nav = styled.nav`
   z-index: 1;
   top: 0;
   background-color: var(--theme-main-color);
+  box-shadow: 5px 5px 5px 5px var(--theme-shadow);
 
   & * {
     color: white;
