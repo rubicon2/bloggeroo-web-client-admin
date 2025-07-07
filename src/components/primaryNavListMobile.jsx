@@ -8,6 +8,9 @@ import styled from 'styled-components';
 import menuIcon from '../static/icons/menu_48px.svg';
 
 const NavList = styled(UnstyledList)`
+  position: absolute;
+  width: 100%;
+
   display: grid;
   grid-auto-rows: 1fr;
   text-align: center;
