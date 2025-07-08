@@ -8,7 +8,3 @@ const Form = styled.form`
 `;
 
 export default Form;
-
-// export default function Form({ children, ...rest }) {
-//   return <FormContainer {...rest}>{children}</FormContainer>;
-// }
