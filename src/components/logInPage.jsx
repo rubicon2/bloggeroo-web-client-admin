@@ -1,8 +1,11 @@
 import Header from './header';
+import Footer from './footer';
 import Container from './container';
 import Form from './form';
 import FormRow from './formRow';
 import { GeneralButton } from './styles/buttons';
+import { MediaTabletAndLarger } from './styles/mediaQueries';
+import { devices } from '../mediaQueries';
 
 import { AccessContext, UserContext } from '../contexts/AppContexts';
 import responseToJsend from '../ext/responseToJsend';
@@ -12,9 +15,16 @@ import styled from 'styled-components';
 
 import HappyAdminImg from '../static/img/happy_admin.png';
 
+const CenteredForm = styled(Form)`
+  margin: 0 auto;
+`;
+
 const Cols = styled.div`
   display: grid;
-  grid-template-columns: 1.5fr 1fr;
+
+  @media ${devices.tablet} {
+    grid-template-columns: 1.5fr 1fr;
+  }
 `;
 
 const SubmitButton = styled(GeneralButton)`
@@ -91,12 +101,14 @@ export default function LogInPage() {
       <main>
         <Container>
           <Cols>
-            <img
-              src={HappyAdminImg}
-              alt="The world's happiest administrator using Bloggeroo"
-            />
+            <MediaTabletAndLarger>
+              <img
+                src={HappyAdminImg}
+                alt="The world's happiest administrator using Bloggeroo"
+              />
+            </MediaTabletAndLarger>
             <div>
-              <Form onSubmit={attemptLogIn}>
+              <CenteredForm onSubmit={attemptLogIn}>
                 <FormRow label="Email">
                   <input type="email" name="email" id="email" />
                   <small>
@@ -114,16 +126,9 @@ export default function LogInPage() {
                 <SubmitButton type="submit" disabled={isFetching}>
                   Log In
                 </SubmitButton>
-              </Form>
+              </CenteredForm>
             </div>
           </Cols>
-          {validationErrors && (
-            <ul>
-              {validationErrors.array.map((error) => (
-                <li>{error}</li>
-              ))}
-            </ul>
-          )}
           {error && <p>{error.message}</p>}
         </Container>
       </main>
