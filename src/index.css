@@ -81,3 +81,21 @@ textarea {
   border-radius: 5px;
   border: 1px solid #dddfe2;
 }
+
+table {
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 0.5rem;
+}
+
+th {
+  background-color: rgb(60, 60, 60);
+  color: white;
+}
+
+tr {
+  border: 1px solid var(--theme-grey);
+}
