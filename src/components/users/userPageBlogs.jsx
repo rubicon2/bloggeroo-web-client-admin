@@ -1,5 +1,7 @@
+import UserPageListLink from './userPageListLink';
 import PageNav from '../pageNav';
-import { Link } from 'react-router';
+import MarginUnstyledList from '../marginUnstyledList';
+import dateTimeFormatter from '../../ext/dateTimeFormatter';
 import { useState } from 'react';
 
 export default function UserPageBlogs({
@@ -17,17 +19,22 @@ export default function UserPageBlogs({
       <h3>Blogs</h3>
       {blogs?.length > 0 ? (
         <div>
-          <ul>
+          <MarginUnstyledList>
             {blogs
               .filter(
                 (blog, index) => index >= firstIndex && index <= lastIndex,
               )
               .map((blog) => (
                 <li key={blog.id}>
-                  <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+                  <UserPageListLink to={`/blogs/${blog.id}`}>
+                    <div>{blog.title}</div>
+                    <div>
+                      {dateTimeFormatter.format(new Date(blog.createdAt))}
+                    </div>
+                  </UserPageListLink>
                 </li>
               ))}
-          </ul>
+          </MarginUnstyledList>
           <PageNav
             currentPageNumber={currentPage}
             onPageChange={(page) => setCurrentPage(page)}
