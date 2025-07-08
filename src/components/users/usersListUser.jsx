@@ -18,11 +18,11 @@ export default function UsersListUser({ user, onDelete }) {
       <UserDetailsContainer>
         <FormRow>
           Banned?
-          <input type="checkbox" checked={user.isBanned} />
+          <input type="checkbox" checked={user.isBanned} readOnly />
         </FormRow>
         <FormRow>
           Admin?
-          <input type="checkbox" checked={user.isAdmin} />
+          <input type="checkbox" checked={user.isAdmin} readOnly />
         </FormRow>
       </UserDetailsContainer>
       <ListItemButtonsContainer>
