@@ -17,4 +17,12 @@ const Sticky = styled.div`
   top: 48px;
 `;
 
-export { Cols, Sticky };
+const MobileMarginContainer = styled.div`
+  margin-bottom: 1rem;
+
+  @media ${devices.tablet} {
+    margin-bottom: 0;
+  }
+`;
+
+export { Cols, Sticky, MobileMarginContainer };
