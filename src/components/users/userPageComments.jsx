@@ -23,13 +23,9 @@ export default function UserPageComments({
                 (comment, index) => index >= firstIndex && index <= lastIndex,
               )
               .map((comment) => (
-                <Link to={`/comments/${comment.id}`}>
-                  <li>
-                    <Link to={`/blogs/${comment.blogId}`}>For this blog</Link>
-                    <div>{comment.createdAt}</div>
-                    <div>{comment.text}</div>
-                  </li>
-                </Link>
+                <li key={comment.id}>
+                  <Link to={`/comments/${comment.id}`}>{comment.text}</Link>
+                </li>
               ))}
           </ul>
           <PageNav

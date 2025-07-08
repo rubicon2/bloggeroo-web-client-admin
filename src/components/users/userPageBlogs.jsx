@@ -23,9 +23,9 @@ export default function UserPageBlogs({
                 (blog, index) => index >= firstIndex && index <= lastIndex,
               )
               .map((blog) => (
-                <Link to={`/blogs/${blog.id}`}>
-                  <li>{blog.title}</li>
-                </Link>
+                <li key={blog.id}>
+                  <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+                </li>
               ))}
           </ul>
           <PageNav
