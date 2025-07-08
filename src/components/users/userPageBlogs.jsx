@@ -1,4 +1,6 @@
 import PageNav from '../pageNav';
+import { MarginFixedTable } from '../styles/tables';
+import dateTimeFormatter from '../../ext/dateTimeFormatter';
 import { Link } from 'react-router';
 import { useState } from 'react';
 
@@ -16,24 +18,43 @@ export default function UserPageBlogs({
     <section>
       <h3>Blogs</h3>
       {blogs?.length > 0 ? (
-        <div>
-          <ul>
-            {blogs
-              .filter(
-                (blog, index) => index >= firstIndex && index <= lastIndex,
-              )
-              .map((blog) => (
-                <Link to={`/blogs/${blog.id}`}>
-                  <li>{blog.title}</li>
-                </Link>
-              ))}
-          </ul>
+        <>
+          <MarginFixedTable>
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Published Date</th>
+                <th>Created Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {blogs
+                .filter(
+                  (blog, index) => index >= firstIndex && index <= lastIndex,
+                )
+                .map((blog) => (
+                  <tr key={blog.id}>
+                    <td>
+                      <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+                    </td>
+                    <td>
+                      {blog.publishedAt
+                        ? dateTimeFormatter.format(new Date(blog.publishedAt))
+                        : 'Never'}
+                    </td>
+                    <td>
+                      {dateTimeFormatter.format(new Date(blog.createdAt))}
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </MarginFixedTable>
           <PageNav
             currentPageNumber={currentPage}
             onPageChange={(page) => setCurrentPage(page)}
             atLastPage={atLastPage}
           />
-        </div>
+        </>
       ) : (
         <p>This user has not made any blogs.</p>
       )}

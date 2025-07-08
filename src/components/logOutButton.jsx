@@ -1,6 +1,7 @@
 import { AccessContext, UserContext } from '../contexts/AppContexts';
 import { useNavigate } from 'react-router';
 import { useState, useContext } from 'react';
+import { NavButton } from './styles/buttons';
 
 export default function LogOutButton() {
   const accessRef = useContext(AccessContext);
@@ -38,11 +39,9 @@ export default function LogOutButton() {
   }
 
   return (
-    <form onSubmit={logOut}>
-      <button type="submit" disabled={isFetching}>
-        Log Out
-      </button>
-      {error && <small>{error}</small>}
-    </form>
+    <NavButton type="button" onClick={logOut} disabled={isFetching}>
+      Log Out
+      {error && (<div>{error}</div>)}
+    </NavButton>
   );
 }

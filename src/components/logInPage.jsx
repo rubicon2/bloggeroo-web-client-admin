@@ -1,7 +1,35 @@
+import Header from './header';
+import Footer from './footer';
+import Container from './container';
+import Form from './form';
+import FormRow from './formRow';
+import { GeneralButton } from './styles/buttons';
+import { MediaTabletAndLarger } from './styles/mediaQueries';
+import { devices } from '../mediaQueries';
+
 import { AccessContext, UserContext } from '../contexts/AppContexts';
 import responseToJsend from '../ext/responseToJsend';
 import { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router';
+import styled from 'styled-components';
+
+import HappyAdminImg from '../static/img/happy_admin.png';
+
+const CenteredForm = styled(Form)`
+  margin: 0 auto;
+`;
+
+const Cols = styled.div`
+  display: grid;
+
+  @media ${devices.tablet} {
+    grid-template-columns: 1.5fr 1fr;
+  }
+`;
+
+const SubmitButton = styled(GeneralButton)`
+  padding: 16px;
+`;
 
 export default function LogInPage() {
   const accessRef = useContext(AccessContext);
@@ -69,32 +97,42 @@ export default function LogInPage() {
 
   return (
     <>
-      <h1>Bloggeroo Admin</h1>
-      <form onSubmit={attemptLogIn}>
-        <label htmlFor="email">
-          Email:
-          <input type="email" name="email" id="email" />
-          <small>{validationErrors?.email ? validationErrors.email : ''}</small>
-        </label>
-        <label htmlFor="password">
-          Password:
-          <input type="password" name="password" id="password" />
-          <small>
-            {validationErrors?.password ? validationErrors.password : ''}
-          </small>
-        </label>
-        <button type="submit" disabled={isFetching}>
-          Log In
-        </button>
-      </form>
-      {validationErrors && (
-        <ul>
-          {validationErrors.array.map((error) => (
-            <li>{error}</li>
-          ))}
-        </ul>
-      )}
-      {error && <p>{error.message}</p>}
+      <Header />
+      <main>
+        <Container>
+          <Cols>
+            <MediaTabletAndLarger>
+              <img
+                src={HappyAdminImg}
+                alt="The world's happiest administrator using Bloggeroo"
+              />
+            </MediaTabletAndLarger>
+            <div>
+              <CenteredForm onSubmit={attemptLogIn}>
+                <FormRow label="Email">
+                  <input type="email" name="email" id="email" />
+                  <small>
+                    {validationErrors?.email ? validationErrors.email : ''}
+                  </small>
+                </FormRow>
+                <FormRow label="Password">
+                  <input type="password" name="password" id="password" />
+                  <small>
+                    {validationErrors?.password
+                      ? validationErrors.password
+                      : ''}
+                  </small>
+                </FormRow>
+                <SubmitButton type="submit" disabled={isFetching}>
+                  Log In
+                </SubmitButton>
+              </CenteredForm>
+            </div>
+          </Cols>
+          {error && <p>{error.message}</p>}
+        </Container>
+      </main>
+      <Footer />
     </>
   );
 }

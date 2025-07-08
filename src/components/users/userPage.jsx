@@ -1,6 +1,12 @@
+import PageTitleBar from '../pageTitleBar';
+import Container from '../container';
 import DeleteButton from '../deleteButton';
 import UserPageBlogs from './userPageBlogs';
 import UserPageComments from './userPageComments';
+import { Form, FormRow } from '../styles/searchForm';
+import { GeneralButton } from '../styles/buttons';
+import { MobileMarginContainer } from '../styles/mainPage';
+
 import { AccessContext } from '../../contexts/AppContexts';
 import authFetch from '../../ext/authFetch';
 import responseToJsend from '../../ext/responseToJsend';
@@ -38,24 +44,19 @@ export default function UserPage() {
       `${import.meta.env.VITE_SERVER_URL}/admin/users/${user.id}`,
       accessRef,
       {
-        headers: {
-          'Content-Type': 'application/json',
-        },
         method: 'put',
-        body: JSON.stringify({
-          email,
-          name,
-          isBanned,
-          isAdmin,
-        }),
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams(new FormData(event.target)),
       },
     );
 
     if (fetchError) setError(fetchError);
     else {
       const { status, data, error } = await responseToJsend(response);
-      if (error) setError(error);
-      setValidationErrors(data?.validationErrors);
+      setError(error);
+      setValidationErrors(data.validationErrors);
       switch (status) {
         case 'success': {
           navigate('/users');
@@ -67,66 +68,72 @@ export default function UserPage() {
   }
 
   return (
-    <>
+    <main>
       {user && (
         <>
-          <h2>
-            {user.email} - {user.name}
-          </h2>
-          <label>
-            Email:
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <small>{validationErrors?.email}</small>
-          </label>
-          <label>
-            Name:
-            <input
-              type="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            <small>{validationErrors?.name}</small>
-          </label>
-          <div>
-            Banned
-            <input
-              type="checkbox"
-              name="is_banned"
-              checked={isBanned}
-              onChange={(e) => setIsBanned(e.target.checked)}
-            />
-          </div>
-          <div>
-            Admin
-            <input
-              type="checkbox"
-              name="is_admin"
-              checked={isAdmin}
-              onChange={(e) => setIsAdmin(e.target.checked)}
-            />
-          </div>
-          <button
-            type="button"
-            disabled={isFetching || !haveFieldsChanged}
-            onClick={saveChanges}
-          >
-            Save Changes
-          </button>
-          <DeleteButton
-            url={`${import.meta.env.VITE_SERVER_URL}/admin/users/${user.id}`}
-            onDelete={() => navigate('/users')}
-          >
-            Delete
-          </DeleteButton>
+          <MobileMarginContainer>
+            <PageTitleBar title={user.email}>
+              <DeleteButton
+                url={`${import.meta.env.VITE_SERVER_URL}/admin/users/${user.id}`}
+                onDelete={() => navigate('/users')}
+              >
+                Delete
+              </DeleteButton>
+            </PageTitleBar>
+          </MobileMarginContainer>
+          <Container>
+            <Form onSubmit={saveChanges}>
+              <FormRow>
+                Email:
+                <input
+                  type="email"
+                  name="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                <small>{validationErrors?.email}</small>
+              </FormRow>
+              <FormRow>
+                Name:
+                <input
+                  type="text"
+                  name="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+                <small>{validationErrors?.name}</small>
+              </FormRow>
+              <FormRow>
+                Banned
+                <input
+                  type="checkbox"
+                  name="isBanned"
+                  checked={isBanned}
+                  onChange={(e) => setIsBanned(e.target.checked)}
+                />
+              </FormRow>
+              <FormRow>
+                Admin
+                <input
+                  type="checkbox"
+                  name="isAdmin"
+                  checked={isAdmin}
+                  onChange={(e) => setIsAdmin(e.target.checked)}
+                />
+              </FormRow>
+              <GeneralButton
+                type="submit"
+                disabled={isFetching || !haveFieldsChanged}
+              >
+                Save Changes
+              </GeneralButton>
+            </Form>
+            {error && <p>{error.message}</p>}
+            <UserPageBlogs blogs={user.blogs} />
+            <UserPageComments comments={user.comments} />
+          </Container>
         </>
       )}
-      {error && <p>{error.message}</p>}
-      <UserPageBlogs blogs={user.blogs} />
-      <UserPageComments comments={user.comments} />
-    </>
+    </main>
   );
 }

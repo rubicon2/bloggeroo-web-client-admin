@@ -1,3 +1,10 @@
+import {
+  Form,
+  FormFieldsetGrid,
+  FormRow,
+  FormButtons,
+} from '../styles/searchForm';
+import { GeneralButton } from '../styles/buttons';
 import formToFields from '../../ext/formToFields';
 import { useSearchParams } from 'react-router';
 
@@ -11,29 +18,29 @@ export default function UsersSearchForm() {
   }
 
   return (
-    <form onSubmit={handleForm}>
-      <fieldset>
+    <Form onSubmit={handleForm}>
+      <FormFieldsetGrid>
         <legend>Search</legend>
-        <label>
+        <FormRow>
           Name:
           <input type="text" name="name" />
-        </label>
-        <label>
+        </FormRow>
+        <FormRow>
           Email:
           <input type="text" name="email" />
-        </label>
-        <label>
+        </FormRow>
+        <FormRow>
           Only Admins?
           <input type="checkbox" name="isAdmin" />
-        </label>
-        <label>
+        </FormRow>
+        <FormRow>
           Only Banned?
           <input type="checkbox" name="isBanned" />
-        </label>
-      </fieldset>
-      <fieldset>
+        </FormRow>
+      </FormFieldsetGrid>
+      <FormFieldsetGrid>
         <legend>Sort</legend>
-        <label>
+        <FormRow>
           Sort by:
           <select name="orderBy" defaultValue="email">
             <option value="name">Name</option>
@@ -41,17 +48,19 @@ export default function UsersSearchForm() {
             <option value="createdAt">Joined date</option>
             <option value="updatedAt">Updated date</option>
           </select>
-        </label>
-        <label>
+        </FormRow>
+        <FormRow>
           Sort order:
           <select name="sortOrder" defaultValue="asc">
             <option value="asc">Ascending</option>
             <option value="desc">Descending</option>
           </select>
-        </label>
-      </fieldset>
-      <button type="reset">Clear Filters</button>
-      <button type="submit">Search</button>
-    </form>
+        </FormRow>
+      </FormFieldsetGrid>
+      <FormButtons>
+        <GeneralButton type="reset">Clear Filters</GeneralButton>
+        <GeneralButton type="submit">Search</GeneralButton>
+      </FormButtons>
+    </Form>
   );
 }

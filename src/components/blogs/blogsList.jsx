@@ -1,16 +1,18 @@
+import UnstyledList from '../unstyledList';
 import BlogsListBlog from './blogsListBlog';
+import LineSeparatedListItem from '../lineSeparatedListItem';
 
-export default function BlogsPageList({ blogs }) {
+export default function BlogsPageList({ blogs, onDelete }) {
   return (
     <>
       {blogs?.length > 0 ? (
-        <ul>
+        <UnstyledList>
           {blogs.map((blog) => (
-            <li key={blog.id}>
-              <BlogsListBlog blog={blog} />
-            </li>
+            <LineSeparatedListItem key={blog.id}>
+              <BlogsListBlog blog={blog} onDelete={onDelete} />
+            </LineSeparatedListItem>
           ))}
-        </ul>
+        </UnstyledList>
       ) : (
         <p>No blogs found.</p>
       )}

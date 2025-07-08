@@ -12,7 +12,7 @@ export default function blogLoader(accessRef) {
       accessRef,
     );
     const commentsPromise = authFetch(
-      `${import.meta.env.VITE_SERVER_URL}/admin/comments?blogId=${params.blogId}`,
+      `${import.meta.env.VITE_SERVER_URL}/admin/comments?blogId=${params.blogId}&orderBy=createdAt&orderBy=id&sortOrder=desc`,
       accessRef,
     );
 

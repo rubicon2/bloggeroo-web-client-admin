@@ -1,14 +1,19 @@
+import PageTitleBar from '../pageTitleBar';
+import Container from '../container';
 import BlogForm from './blogForm';
 import DeleteButton from '../deleteButton';
 import CommentsList from '../comments/commentsList';
 import CommentForm from '../comments/commentForm';
+import { GeneralButton } from '../styles/buttons';
+import { MobileMarginContainer } from '../styles/mainPage';
+
+import { AccessContext } from '../../contexts/AppContexts';
 import useRefresh from '../../hooks/useRefresh';
 import authFetch from '../../ext/authFetch';
 import responseToJsend from '../../ext/responseToJsend';
 
 import { useContext, useState } from 'react';
 import { useLoaderData, useNavigate, useRouteError } from 'react-router';
-import { AccessContext } from '../../contexts/AppContexts';
 
 export default function BlogPage() {
   const { blog, comments } = useLoaderData();
@@ -83,51 +88,64 @@ export default function BlogPage() {
   }
 
   return (
-    <>
+    <main>
       {blog && (
         <>
-          <h2>{blog.title}</h2>
-          <small>By {blog.owner.name}</small>
-          <DeleteButton
-            url={`${import.meta.env.VITE_SERVER_URL}/admin/blogs/${blog.id}`}
-            onDelete={() => navigate('/blogs')}
-          >
-            Delete
-          </DeleteButton>
-          <BlogForm
-            buttonText={'Save changes'}
-            initialValues={blog}
-            isFetching={isFetching}
-            validationErrors={blogValidationErrors}
-            onSubmit={saveChanges}
-          />
-          <h3>Comments {comments?.length > 0 ? `(${comments.length})` : ''}</h3>
-          {isCreatingComment ? (
-            <>
-              <CommentForm
-                buttonText="Submit"
-                initialValues={{ text: '' }}
-                isFetching={isFetching}
-                validationErrors={commentValidationErrors}
-                onSubmit={createComment}
-              />
-              <button type="button" onClick={() => setIsCreatingComment(false)}>
-                Cancel
-              </button>
-            </>
-          ) : (
-            <button type="button" onClick={() => setIsCreatingComment(true)}>
-              Add comment
-            </button>
-          )}
-          <CommentsList
-            comments={comments}
-            onReply={refresh}
-            onDelete={refresh}
-          />
+          <MobileMarginContainer>
+            <PageTitleBar title={blog.title}>
+              <DeleteButton
+                url={`${import.meta.env.VITE_SERVER_URL}/admin/blogs/${blog.id}`}
+                onDelete={() => navigate('/blogs')}
+              >
+                Delete
+              </DeleteButton>
+            </PageTitleBar>
+          </MobileMarginContainer>
+          <Container>
+            <BlogForm
+              buttonText={'Save changes'}
+              initialValues={blog}
+              isFetching={isFetching}
+              validationErrors={blogValidationErrors}
+              onSubmit={saveChanges}
+            />
+            <h3>
+              Comments {comments?.length > 0 ? `(${comments.length})` : ''}
+            </h3>
+            {isCreatingComment ? (
+              <>
+                <CommentForm
+                  buttonText="Submit"
+                  initialValues={{ text: '' }}
+                  isFetching={isFetching}
+                  validationErrors={commentValidationErrors}
+                  onSubmit={createComment}
+                >
+                  <GeneralButton
+                    type="button"
+                    onClick={() => setIsCreatingComment(false)}
+                  >
+                    Cancel
+                  </GeneralButton>
+                </CommentForm>
+              </>
+            ) : (
+              <GeneralButton
+                type="button"
+                onClick={() => setIsCreatingComment(true)}
+              >
+                Add comment
+              </GeneralButton>
+            )}
+            <CommentsList
+              comments={comments}
+              onReply={refresh}
+              onDelete={refresh}
+            />
+            {error && <p>{error.message}</p>}
+          </Container>
         </>
       )}
-      {error && <p>{error.message}</p>}
-    </>
+    </main>
   );
 }

@@ -1,8 +1,14 @@
+import PageTitleBar from '../pageTitleBar';
+import Container from '../container';
 import CommentForm from './commentForm';
 import DeleteButton from '../deleteButton';
+import { MobileMarginContainer } from '../styles/mainPage';
+
 import { AccessContext } from '../../contexts/AppContexts';
 import authFetch from '../../ext/authFetch';
 import responseToJsend from '../../ext/responseToJsend';
+import dateTimeFormatter from '../../ext/dateTimeFormatter';
+
 import { useContext, useState } from 'react';
 import { useLoaderData, useRouteError, Link, useNavigate } from 'react-router';
 
@@ -46,34 +52,41 @@ export default function CommentPage() {
   }
 
   return (
-    <>
+    <main>
       {comment && (
-        <div key={comment.id}>
-          <h2>By {comment.owner.name}</h2>
-          <small>At {comment.createdAt}</small>
-          <CommentForm
-            buttonText={'Save'}
-            initialValues={{ text: comment.text }}
-            isFetching={isFetching}
-            validationErrors={validationErrors}
-            onSubmit={updateComment}
-          />
-          {comment.parentCommentId && (
+        <>
+          <MobileMarginContainer>
+            <PageTitleBar title={`Edit comment by ${comment.owner.name}`}>
+              <DeleteButton
+                url={`${import.meta.env.VITE_SERVER_URL}/admin/comments/${comment.id}`}
+                onDelete={() => navigate('/comments')}
+              >
+                Delete
+              </DeleteButton>
+            </PageTitleBar>
+          </MobileMarginContainer>
+          <Container>
             <small>
-              <Link to={`/comments/${comment.parentCommentId}`}>
-                In response to this comment
-              </Link>
+              At {dateTimeFormatter.format(new Date(comment.createdAt))}
             </small>
-          )}
-          <DeleteButton
-            url={`${import.meta.env.VITE_SERVER_URL}/admin/comments/${comment.id}`}
-            onDelete={() => navigate('/comments')}
-          >
-            Delete
-          </DeleteButton>
-        </div>
+            <CommentForm
+              buttonText={'Save'}
+              initialValues={{ text: comment.text }}
+              isFetching={isFetching}
+              validationErrors={validationErrors}
+              onSubmit={updateComment}
+            />
+            {comment.parentCommentId && (
+              <small>
+                <Link to={`/comments/${comment.parentCommentId}`}>
+                  In response to this comment
+                </Link>
+              </small>
+            )}
+            {error && <p>{error.message}</p>}
+          </Container>
+        </>
       )}
-      {error && <p>{error.message}</p>}
-    </>
+    </main>
   );
 }

@@ -1,16 +1,18 @@
+import UnstyledList from '../unstyledList';
+import LineSeparatedListItem from '../lineSeparatedListItem';
 import UsersListUser from './usersListUser';
 
-export default function UsersList({ users }) {
+export default function UsersList({ users, onDelete }) {
   return (
     <>
       {users?.length > 0 ? (
-        <ul>
+        <UnstyledList>
           {users.map((user) => (
-            <li key={user.id}>
-              <UsersListUser user={user} />
-            </li>
+            <LineSeparatedListItem key={user.id}>
+              <UsersListUser user={user} onDelete={onDelete} />
+            </LineSeparatedListItem>
           ))}
-        </ul>
+        </UnstyledList>
       ) : (
         <p>No users found.</p>
       )}

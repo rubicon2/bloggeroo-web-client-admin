@@ -1,4 +1,12 @@
+import { Form } from '../styles/searchForm';
+import ListItemButtonsContainer from '../listItemButtonsContainer';
+import { GeneralButton } from '../styles/buttons';
 import { useState } from 'react';
+import styled from 'styled-components';
+
+const CommentTextArea = styled.textarea`
+  resize: vertical;
+`;
 
 export default function CommentForm({
   buttonText,
@@ -6,25 +14,32 @@ export default function CommentForm({
   isFetching,
   validationErrors,
   onSubmit,
+  children,
 }) {
   const [text, setText] = useState(initialValues.text);
   const haveFieldsChanged = initialValues.text !== text;
 
   return (
-    <form onSubmit={onSubmit}>
-      <textarea
+    <Form onSubmit={onSubmit}>
+      <CommentTextArea
         name="text"
         id="text"
-        cols="60"
         rows="10"
         value={text}
         onChange={(e) => setText(e.target.value)}
+        aria-label="Edit comment"
       />
-      <small>{validationErrors?.text}</small>
-      <button type="submit" disabled={isFetching || !haveFieldsChanged}>
-        {buttonText}
-      </button>
+      {validationErrors?.text && <small>{validationErrors?.text}</small>}
+      <ListItemButtonsContainer>
+        {children}
+        <GeneralButton
+          type="submit"
+          disabled={isFetching || !haveFieldsChanged}
+        >
+          {buttonText}
+        </GeneralButton>
+      </ListItemButtonsContainer>
       {validationErrors?.blogId && <p>Error: {validationErrors.blogId}</p>}
-    </form>
+    </Form>
   );
 }

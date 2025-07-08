@@ -1,3 +1,4 @@
+import { DeleteButton as DeleteButtonStyle } from './styles/buttons';
 import { AccessContext } from '../contexts/AppContexts';
 import authFetch from '../ext/authFetch';
 import { useContext, useState } from 'react';
@@ -18,8 +19,8 @@ export default function DeleteButton({ url, onDelete, children }) {
   }
 
   return (
-    <button onClick={handleClick} disabled={isFetching}>
+    <DeleteButtonStyle onClick={handleClick} disabled={isFetching}>
       {children}
-    </button>
+    </DeleteButtonStyle>
   );
 }

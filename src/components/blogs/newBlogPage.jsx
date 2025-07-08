@@ -1,4 +1,7 @@
+import PageTitleBar from '../pageTitleBar';
+import Container from '../container';
 import BlogForm from './blogForm';
+
 import { AccessContext } from '../../contexts/AppContexts';
 import authFetch from '../../ext/authFetch';
 import responseToJsend from '../../ext/responseToJsend';
@@ -44,15 +47,17 @@ export default function NewBlogPage() {
 
   return (
     <main>
-      <h2>New Blog</h2>
-      <BlogForm
-        buttonText={'Create Blog'}
-        initialValues={{ title: '', body: '' }}
-        isFetching={isFetching}
-        validationErrors={validationErrors}
-        onSubmit={createBlog}
-      />
-      {error && <p>{error.message}</p>}
+      <PageTitleBar title="New Blog" />
+      <Container>
+        <BlogForm
+          buttonText={'Create Blog'}
+          initialValues={{ title: '', body: '' }}
+          isFetching={isFetching}
+          validationErrors={validationErrors}
+          onSubmit={createBlog}
+        />
+        {error && <p>{error.message}</p>}
+      </Container>
     </main>
   );
 }

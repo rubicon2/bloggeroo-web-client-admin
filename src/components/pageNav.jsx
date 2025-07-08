@@ -1,29 +1,51 @@
+import styled from 'styled-components';
+import { GeneralButton } from './styles/buttons';
+
+const LeftButton = styled(GeneralButton)`
+  grid-column: 1 / span 1;
+`;
+
+const RightButton = styled(GeneralButton)`
+  grid-column: 3 / span 1;
+`;
+
+const ButtonsContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+`;
+
+const Page = styled.div`
+  text-align: center;
+`;
+
 export default function PageNav({
   currentPageNumber,
   onPageChange,
   atLastPage,
 }) {
   return (
-    <div>
-      {currentPageNumber > 1 && (
-        <button
-          type="button"
-          onClick={() => onPageChange(currentPageNumber - 1)}
-        >
-          Previous
-        </button>
-      )}
-      {!atLastPage && (
-        <button
-          type="button"
-          onClick={() => onPageChange(currentPageNumber + 1)}
-        >
-          Next
-        </button>
-      )}
+    <nav>
+      <ButtonsContainer>
+        {currentPageNumber > 1 && (
+          <LeftButton
+            type="button"
+            onClick={() => onPageChange(currentPageNumber - 1)}
+          >
+            Previous
+          </LeftButton>
+        )}
+        {!atLastPage && (
+          <RightButton
+            type="button"
+            onClick={() => onPageChange(currentPageNumber + 1)}
+          >
+            Next
+          </RightButton>
+        )}
+      </ButtonsContainer>
       {!(currentPageNumber === 1 && atLastPage) && (
-        <div>Page: {currentPageNumber}</div>
+        <Page>Page: {currentPageNumber}</Page>
       )}
-    </div>
+    </nav>
   );
 }
