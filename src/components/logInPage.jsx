@@ -132,6 +132,7 @@ export default function LogInPage() {
           {error && <p>{error.message}</p>}
         </Container>
       </main>
+      <Footer />
     </>
   );
 }
