@@ -5,6 +5,7 @@ import DeleteButton from '../deleteButton';
 import CommentsList from '../comments/commentsList';
 import CommentForm from '../comments/commentForm';
 import { GeneralButton } from '../styles/buttons';
+import { MobileMarginContainer } from '../styles/mainPage';
 
 import { AccessContext } from '../../contexts/AppContexts';
 import useRefresh from '../../hooks/useRefresh';
@@ -90,14 +91,16 @@ export default function BlogPage() {
     <main>
       {blog && (
         <>
-          <PageTitleBar title={blog.title}>
-            <DeleteButton
-              url={`${import.meta.env.VITE_SERVER_URL}/admin/blogs/${blog.id}`}
-              onDelete={() => navigate('/blogs')}
-            >
-              Delete
-            </DeleteButton>
-          </PageTitleBar>
+          <MobileMarginContainer>
+            <PageTitleBar title={blog.title}>
+              <DeleteButton
+                url={`${import.meta.env.VITE_SERVER_URL}/admin/blogs/${blog.id}`}
+                onDelete={() => navigate('/blogs')}
+              >
+                Delete
+              </DeleteButton>
+            </PageTitleBar>
+          </MobileMarginContainer>
           <Container>
             <BlogForm
               buttonText={'Save changes'}

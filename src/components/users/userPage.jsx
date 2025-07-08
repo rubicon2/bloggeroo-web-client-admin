@@ -5,6 +5,7 @@ import UserPageBlogs from './userPageBlogs';
 import UserPageComments from './userPageComments';
 import { Form, FormRow } from '../styles/searchForm';
 import { GeneralButton } from '../styles/buttons';
+import { MobileMarginContainer } from '../styles/mainPage';
 
 import { AccessContext } from '../../contexts/AppContexts';
 import authFetch from '../../ext/authFetch';
@@ -70,14 +71,16 @@ export default function UserPage() {
     <main>
       {user && (
         <>
-          <PageTitleBar title={user.email}>
-            <DeleteButton
-              url={`${import.meta.env.VITE_SERVER_URL}/admin/users/${user.id}`}
-              onDelete={() => navigate('/users')}
-            >
-              Delete
-            </DeleteButton>
-          </PageTitleBar>
+          <MobileMarginContainer>
+            <PageTitleBar title={user.email}>
+              <DeleteButton
+                url={`${import.meta.env.VITE_SERVER_URL}/admin/users/${user.id}`}
+                onDelete={() => navigate('/users')}
+              >
+                Delete
+              </DeleteButton>
+            </PageTitleBar>
+          </MobileMarginContainer>
           <Container>
             <Form onSubmit={saveChanges}>
               <FormRow>

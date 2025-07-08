@@ -2,6 +2,7 @@ import PageTitleBar from '../pageTitleBar';
 import Container from '../container';
 import CommentForm from './commentForm';
 import DeleteButton from '../deleteButton';
+import { MobileMarginContainer } from '../styles/mainPage';
 
 import { AccessContext } from '../../contexts/AppContexts';
 import authFetch from '../../ext/authFetch';
@@ -54,14 +55,16 @@ export default function CommentPage() {
     <main>
       {comment && (
         <>
-          <PageTitleBar title={`Edit comment by ${comment.owner.name}`}>
-            <DeleteButton
-              url={`${import.meta.env.VITE_SERVER_URL}/admin/comments/${comment.id}`}
-              onDelete={() => navigate('/comments')}
-            >
-              Delete
-            </DeleteButton>
-          </PageTitleBar>
+          <MobileMarginContainer>
+            <PageTitleBar title={`Edit comment by ${comment.owner.name}`}>
+              <DeleteButton
+                url={`${import.meta.env.VITE_SERVER_URL}/admin/comments/${comment.id}`}
+                onDelete={() => navigate('/comments')}
+              >
+                Delete
+              </DeleteButton>
+            </PageTitleBar>
+          </MobileMarginContainer>
           <Container>
             <small>
               At {dateTimeFormatter.format(new Date(comment.createdAt))}
