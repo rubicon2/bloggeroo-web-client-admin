@@ -60,6 +60,16 @@ h1 {
   --theme-shadow: rgb(0, 0, 0, 0.1);
 }
 
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#root > main {
+  flex-grow: 1;
+}
+
 img {
   max-width: 100%;
 }
