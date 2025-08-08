@@ -25,13 +25,10 @@ export default function LogOutButton() {
           credentials: 'include',
         },
       );
-
-      if (response.ok) {
-        accessRef.current = null;
-        setIsLoggedIn(false);
-        // Redirect user back to log in page.
-        navigate('/');
-      }
+      accessRef.current = null;
+      setIsLoggedIn(false);
+      // Redirect user back to log in page.
+      navigate('/');
     } catch (error) {
       setError(error.message);
     }
@@ -41,7 +38,7 @@ export default function LogOutButton() {
   return (
     <NavButton type="button" onClick={logOut} disabled={isFetching}>
       Log Out
-      {error && (<div>{error}</div>)}
+      {error && <div>{error}</div>}
     </NavButton>
   );
 }
