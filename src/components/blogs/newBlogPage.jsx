@@ -1,12 +1,13 @@
-import PageTitleBar from '../pageTitleBar';
-import Container from '../container';
+import GridTwoCol from '../styles/gridTwoCol';
 import BlogForm from './blogForm';
+import MarkdownBlog from './markdownBlog';
 
 import { AccessContext } from '../../contexts/AppContexts';
 import authFetch from '../../ext/authFetch';
 import responseToJsend from '../../ext/responseToJsend';
 import { useNavigate } from 'react-router';
 import { useState, useContext } from 'react';
+import WideContainer from '../wideContainer';
 
 export default function NewBlogPage() {
   const accessRef = useContext(AccessContext);
@@ -14,6 +15,7 @@ export default function NewBlogPage() {
   const [isFetching, setIsFetching] = useState(false);
   const [validationErrors, setValidationErrors] = useState(null);
   const [error, setError] = useState(null);
+  const [markdown, setMarkdown] = useState(`# No markdown to preview yet!`);
 
   async function createBlog(event) {
     event.preventDefault();
@@ -47,17 +49,26 @@ export default function NewBlogPage() {
 
   return (
     <main>
-      <PageTitleBar title="New Blog" />
-      <Container>
-        <BlogForm
-          buttonText={'Create Blog'}
-          initialValues={{ title: '', body: '' }}
-          isFetching={isFetching}
-          validationErrors={validationErrors}
-          onSubmit={createBlog}
-        />
+      <WideContainer>
+        <GridTwoCol>
+          <div>
+            <h2>Edit</h2>
+            <BlogForm
+              buttonText={'Create Blog'}
+              initialValues={{ title: '', body: '' }}
+              isFetching={isFetching}
+              validationErrors={validationErrors}
+              onSubmit={createBlog}
+              onChange={({ body }) => setMarkdown(body)}
+            />
+          </div>
+          <div>
+            <h2>Preview</h2>
+            <MarkdownBlog>{markdown}</MarkdownBlog>
+          </div>
+        </GridTwoCol>
         {error && <p>{error.message}</p>}
-      </Container>
+      </WideContainer>
     </main>
   );
 }
