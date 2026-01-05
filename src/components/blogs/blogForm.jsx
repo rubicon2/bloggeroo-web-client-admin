@@ -1,12 +1,7 @@
 import { GeneralButton } from '../styles/buttons';
-import { Form, FormRow } from '../styles/searchForm';
-import { useState } from 'react';
+import { Form, FormRow } from '../styles/blogForm';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-
-// Otherwise with a long blog, the label will appear comically far down.
-const BlogTextAreaLabelText = styled.div`
-  align-self: start;
-`;
 
 const BlogTextArea = styled.textarea`
   resize: vertical;
@@ -17,10 +12,14 @@ export default function BlogForm({
   initialValues,
   isFetching,
   validationErrors,
-  onSubmit,
+  // All fields are handled within this form component, but for markdown preview
+  // to get the value of body, we need to report any changes to the field values.
+  onChange = () => {},
+  onSubmit = () => {},
 }) {
   const [title, setTitle] = useState(initialValues.title);
   const [body, setBody] = useState(initialValues.body);
+
   // Cut off the .00Z at the end of a date string if it appears.
   // That stops the datetime-local from correctly displaying the existing date.
   // What an annoying quirk. Why does it not work with the .00Z, if that is part
@@ -31,6 +30,14 @@ export default function BlogForm({
     : '';
 
   const [publishedAt, setPublishedAt] = useState(publishedAtInitialValue);
+
+  useEffect(() => {
+    onChange({
+      title,
+      body,
+      publishedAt,
+    });
+  }, [onChange, title, body, publishedAt]);
 
   const haveFieldsChanged =
     initialValues.title !== title ||
@@ -50,16 +57,6 @@ export default function BlogForm({
         <small>{validationErrors?.title}</small>
       </FormRow>
       <FormRow>
-        <BlogTextAreaLabelText>Body:</BlogTextAreaLabelText>
-        <BlogTextArea
-          name="body"
-          rows="20"
-          value={body}
-          onChange={(e) => setBody(e.target.value)}
-        />
-        <small>{validationErrors?.body}</small>
-      </FormRow>
-      <FormRow>
         Published at:
         <input
           type="datetime-local"
@@ -68,6 +65,16 @@ export default function BlogForm({
           onChange={(e) => setPublishedAt(e.target.value)}
         />
         <small>{validationErrors?.publishedAt}</small>
+      </FormRow>
+      <FormRow>
+        Body:
+        <BlogTextArea
+          name="body"
+          rows="80"
+          value={body}
+          onChange={(e) => setBody(e.target.value)}
+        />
+        <small>{validationErrors?.body}</small>
       </FormRow>
       <GeneralButton type="submit" disabled={isFetching || !haveFieldsChanged}>
         {buttonText}

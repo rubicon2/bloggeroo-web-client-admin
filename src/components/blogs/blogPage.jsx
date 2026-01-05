@@ -1,11 +1,11 @@
-import PageTitleBar from '../pageTitleBar';
-import Container from '../container';
+import WideContainer from '../wideContainer';
+import GridTwoCol from '../styles/gridTwoCol';
 import BlogForm from './blogForm';
 import DeleteButton from '../deleteButton';
 import CommentsList from '../comments/commentsList';
 import CommentForm from '../comments/commentForm';
 import { GeneralButton } from '../styles/buttons';
-import { MobileMarginContainer } from '../styles/mainPage';
+import MarkdownBlog from './markdownBlog';
 
 import { AccessContext } from '../../contexts/AppContexts';
 import useRefresh from '../../hooks/useRefresh';
@@ -27,6 +27,7 @@ export default function BlogPage() {
   const [commentValidationErrors, setCommentValidationErrors] = useState(null);
   const [error, setError] = useState(useRouteError());
   const [isCreatingComment, setIsCreatingComment] = useState(false);
+  const [markdown, setMarkdown] = useState(`# No markdown to preview yet!`);
 
   async function saveChanges(event) {
     event.preventDefault();
@@ -91,24 +92,30 @@ export default function BlogPage() {
     <main>
       {blog && (
         <>
-          <MobileMarginContainer>
-            <PageTitleBar title={blog.title}>
-              <DeleteButton
-                url={`${import.meta.env.VITE_SERVER_URL}/admin/blogs/${blog.id}`}
-                onDelete={() => navigate('/blogs')}
-              >
-                Delete
-              </DeleteButton>
-            </PageTitleBar>
-          </MobileMarginContainer>
-          <Container>
-            <BlogForm
-              buttonText={'Save changes'}
-              initialValues={blog}
-              isFetching={isFetching}
-              validationErrors={blogValidationErrors}
-              onSubmit={saveChanges}
-            />
+          <WideContainer>
+            <GridTwoCol>
+              <div>
+                <h2>Edit</h2>
+                <BlogForm
+                  buttonText={'Save changes'}
+                  initialValues={blog}
+                  isFetching={isFetching}
+                  validationErrors={blogValidationErrors}
+                  onSubmit={saveChanges}
+                  onChange={({ body }) => setMarkdown(body)}
+                />
+              </div>
+              <div>
+                <h2>Preview</h2>
+                <MarkdownBlog>{markdown}</MarkdownBlog>
+              </div>
+            </GridTwoCol>
+            <DeleteButton
+              url={`${import.meta.env.VITE_SERVER_URL}/admin/blogs/${blog.id}`}
+              onDelete={() => navigate('/blogs')}
+            >
+              Delete Blog
+            </DeleteButton>
             <h3>
               Comments {comments?.length > 0 ? `(${comments.length})` : ''}
             </h3>
@@ -143,7 +150,7 @@ export default function BlogPage() {
               onDelete={refresh}
             />
             {error && <p>{error.message}</p>}
-          </Container>
+          </WideContainer>
         </>
       )}
     </main>
