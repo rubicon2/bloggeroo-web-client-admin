@@ -1,6 +1,8 @@
 import ListItemButtonsContainer from '../listItemButtonsContainer';
 import { GeneralButton } from '../styles/buttons';
 import DeleteButton from '../deleteButton';
+import MarkdownBlog from './markdownBlog';
+import createBlogPreviewText from '../../ext/createBlogPreviewText';
 import dateTimeFormatter from '../../ext/dateTimeFormatter';
 import { Link } from 'react-router';
 import styled from 'styled-components';
@@ -10,6 +12,7 @@ const BlogHeader = styled.h3`
 `;
 
 export default function BlogsListBlog({ blog, onDelete }) {
+  const blogPreview = createBlogPreviewText(blog);
   return (
     <div>
       <BlogHeader>{blog.title}</BlogHeader>
@@ -19,7 +22,7 @@ export default function BlogsListBlog({ blog, onDelete }) {
           ? dateTimeFormatter.format(new Date(blog.publishedAt))
           : 'never'}
       </small>
-      <p>{blog.body}</p>
+      <MarkdownBlog>{blogPreview}</MarkdownBlog>
       <ListItemButtonsContainer>
         <Link to={`/blogs/${blog.id}`}>
           <GeneralButton type="button">Edit</GeneralButton>
