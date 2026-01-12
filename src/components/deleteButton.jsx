@@ -3,7 +3,12 @@ import { AccessContext } from '../contexts/AppContexts';
 import authFetch from '../ext/authFetch';
 import { useContext, useState } from 'react';
 
-export default function DeleteButton({ url, onDelete, children }) {
+export default function DeleteButton({
+  url,
+  onDelete,
+  children,
+  disabled = false,
+}) {
   const accessRef = useContext(AccessContext);
   const [isFetching, setIsFetching] = useState(false);
 
@@ -19,7 +24,7 @@ export default function DeleteButton({ url, onDelete, children }) {
   }
 
   return (
-    <DeleteButtonStyle onClick={handleClick} disabled={isFetching}>
+    <DeleteButtonStyle onClick={handleClick} disabled={isFetching || disabled}>
       {children}
     </DeleteButtonStyle>
   );
