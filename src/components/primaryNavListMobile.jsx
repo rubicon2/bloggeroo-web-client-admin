@@ -66,6 +66,15 @@ export default function PrimaryNavListMobile({ isLoggedIn }) {
               <li>
                 <NavButton
                   as={Link}
+                  to="/images"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Images
+                </NavButton>
+              </li>
+              <li>
+                <NavButton
+                  as={Link}
                   to="/comments"
                   onClick={() => setMenuOpen(false)}
                 >

@@ -9,6 +9,9 @@ import LogInPage from './components/logInPage';
 import UsersPage from './components/users/usersPage';
 import UserPage from './components/users/userPage';
 import NewUserPage from './components/users/newUserPage';
+import ImagesPage from './components/images/imagesPage';
+import ImagePage from './components/images/imagePage';
+import NewImagePage from './components/images/newImagePage';
 
 import blogsLoader from './loaders/blogsLoader';
 import blogLoader from './loaders/blogLoader';
@@ -16,6 +19,8 @@ import commentsLoader from './loaders/commentsLoader';
 import commentLoader from './loaders/commentLoader';
 import usersLoader from './loaders/usersLoader';
 import userLoader from './loaders/userLoader';
+import imagesLoader from './loaders/imagesLoader';
+import imageLoader from './loaders/imageLoader';
 
 import { AccessContext } from './contexts/AppContexts';
 
@@ -87,6 +92,20 @@ export default function AppRouter() {
                     path: 'users/:userId',
                     Component: UserPage,
                     loader: userLoader(accessRef),
+                  },
+                  {
+                    path: 'images',
+                    Component: ImagesPage,
+                    loader: imagesLoader(accessRef),
+                  },
+                  {
+                    path: 'images/new',
+                    Component: NewImagePage,
+                  },
+                  {
+                    path: 'images/:imageId',
+                    Component: ImagePage,
+                    loader: imageLoader(accessRef),
                   },
                 ],
               },
