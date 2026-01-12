@@ -18,11 +18,6 @@ const FormRow = styled.label`
   & input[type='checkbox'] {
     justify-self: right;
   }
-
-  @media ${devices.phone} {
-    grid-template-columns: 1fr 2fr;
-    gap: 1rem;
-  }
 `;
 
 const FormButtons = styled.div`
