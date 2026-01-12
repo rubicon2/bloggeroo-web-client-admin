@@ -25,6 +25,11 @@ export default function PrimaryNavListDesktop({ isLoggedIn }) {
             </NavButton>
           </li>
           <li>
+            <NavButton as={Link} to="/images">
+              Images
+            </NavButton>
+          </li>
+          <li>
             <NavButton as={Link} to="/comments">
               Comments
             </NavButton>

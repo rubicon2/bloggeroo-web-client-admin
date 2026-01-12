@@ -7,7 +7,7 @@ const Cols = styled.div`
   position: relative;
 
   @media ${devices.tablet} {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 2fr 1fr;
   }
 `;
 
