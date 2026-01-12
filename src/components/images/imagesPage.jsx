@@ -2,7 +2,7 @@ import Container from '../container';
 import PageTitleBar from '../pageTitleBar';
 import ImagesGrid from './imagesGrid';
 import PageNav from '../pageNav';
-import ImagesSearchForm from './ImagesSearchForm';
+import ImagesSearchForm from './imagesSearchForm';
 
 import { GeneralButton } from '../styles/buttons';
 import { MobileMarginContainer, Cols, Sticky } from '../styles/mainPage';
