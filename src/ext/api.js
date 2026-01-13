@@ -64,6 +64,54 @@ async function getUser(accessRef, userId) {
   return { response, fetchError };
 }
 
+async function postBlog(accessRef, requestBody) {
+  const { response, fetchError } = await authFetch(
+    `${import.meta.env.VITE_SERVER_URL}/admin/blogs`,
+    accessRef,
+    {
+      method: 'POST',
+      body: requestBody,
+    },
+  );
+  return { response, fetchError };
+}
+
+async function postComment(accessRef, blogId, requestBody) {
+  const { response, fetchError } = await authFetch(
+    `${import.meta.env.VITE_SERVER_URL}/admin/comments?blogId=${blogId}`,
+    accessRef,
+    {
+      method: 'POST',
+      body: requestBody,
+    },
+  );
+  return { response, fetchError };
+}
+
+async function postUser(accessRef, requestBody) {
+  const { response, fetchError } = await authFetch(
+    `${import.meta.env.VITE_SERVER_URL}/admin/users`,
+    accessRef,
+    {
+      method: 'POST',
+      body: requestBody,
+    },
+  );
+  return { response, fetchError };
+}
+
+async function postImage(accessRef, requestBody) {
+  const { response, fetchError } = await authFetch(
+    `${import.meta.env.VITE_SERVER_URL}/admin/images`,
+    accessRef,
+    {
+      method: 'POST',
+      body: requestBody,
+    },
+  );
+  return { response, fetchError };
+}
+
 export {
   getBlogs,
   getBlog,
@@ -73,4 +121,8 @@ export {
   getImage,
   getUsers,
   getUser,
+  postBlog,
+  postComment,
+  postUser,
+  postImage,
 };
