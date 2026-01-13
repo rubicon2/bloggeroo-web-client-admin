@@ -77,6 +77,7 @@ export default function BlogPage() {
     const { response, fetchError } = await api.postComment(
       accessRef,
       blog.id,
+      null,
       new URLSearchParams(new FormData(event.target)),
     );
     if (fetchError) setError(fetchError);

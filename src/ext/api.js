@@ -76,9 +76,9 @@ async function postBlog(accessRef, requestBody) {
   return { response, fetchError };
 }
 
-async function postComment(accessRef, blogId, requestBody) {
+async function postComment(accessRef, blogId, parentCommentId, requestBody) {
   const { response, fetchError } = await authFetch(
-    `${import.meta.env.VITE_SERVER_URL}/admin/comments?blogId=${blogId}`,
+    `${import.meta.env.VITE_SERVER_URL}/admin/comments?blogId=${blogId}&parentCommentId=${parentCommentId}`,
     accessRef,
     {
       method: 'POST',
