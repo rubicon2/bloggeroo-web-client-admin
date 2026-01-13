@@ -160,6 +160,50 @@ async function putUser(accessRef, userId, requestBody) {
   return { response, fetchError };
 }
 
+async function deleteBlog(accessRef, blogId) {
+  const { response, fetchError } = await authFetch(
+    `${import.meta.env.VITE_SERVER_URL}/admin/blogs/${blogId}`,
+    accessRef,
+    {
+      method: 'DELETE',
+    },
+  );
+  return { response, fetchError };
+}
+
+async function deleteComment(accessRef, commentId) {
+  const { response, fetchError } = await authFetch(
+    `${import.meta.env.VITE_SERVER_URL}/admin/comments/${commentId}`,
+    accessRef,
+    {
+      method: 'DELETE',
+    },
+  );
+  return { response, fetchError };
+}
+
+async function deleteImage(accessRef, imageId) {
+  const { response, fetchError } = await authFetch(
+    `${import.meta.env.VITE_SERVER_URL}/admin/images/${imageId}`,
+    accessRef,
+    {
+      method: 'DELETE',
+    },
+  );
+  return { response, fetchError };
+}
+
+async function deleteUser(accessRef, userId) {
+  const { response, fetchError } = await authFetch(
+    `${import.meta.env.VITE_SERVER_URL}/admin/users/${userId}`,
+    accessRef,
+    {
+      method: 'DELETE',
+    },
+  );
+  return { response, fetchError };
+}
+
 export {
   getBlogs,
   getBlog,
@@ -177,4 +221,8 @@ export {
   putComment,
   putImage,
   putUser,
+  deleteBlog,
+  deleteComment,
+  deleteImage,
+  deleteUser,
 };
