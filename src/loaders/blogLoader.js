@@ -1,4 +1,4 @@
-import authFetch from '../ext/authFetch';
+import * as api from '../ext/api';
 import responseToJsend from '../ext/responseToJsend';
 
 export default function blogLoader(accessRef) {
@@ -7,13 +7,10 @@ export default function blogLoader(accessRef) {
   // That seems to cause the entire app to re-initialise, and the reducer uses the initialValue of { accessToken: null }.
   // If I navigate to a bad link inside the app by making the Links incorrect, then it works as expected.
   return async ({ params }) => {
-    const blogPromise = authFetch(
-      `${import.meta.env.VITE_SERVER_URL}/admin/blogs/${params.blogId}`,
+    const blogPromise = api.getBlog(accessRef, params.blogId);
+    const commentsPromise = api.getComments(
       accessRef,
-    );
-    const commentsPromise = authFetch(
-      `${import.meta.env.VITE_SERVER_URL}/admin/comments?blogId=${params.blogId}&orderBy=createdAt&orderBy=id&sortOrder=desc`,
-      accessRef,
+      `blogId=${params.blogId}&orderBy=createdAt&orderBy=id&sortOrder=desc`,
     );
 
     const { response: blogResponse, fetchError: blogFetchError } =

@@ -1,11 +1,11 @@
-import authFetch from '../ext/authFetch';
+import * as api from '../ext/api';
 import responseToJsend from '../ext/responseToJsend';
 
 export default function imageLoader(accessRef) {
   return async ({ params }) => {
-    const { response, fetchError } = await authFetch(
-      `${import.meta.env.VITE_SERVER_URL}/admin/images/${params.imageId}`,
+    const { response, fetchError } = await api.getImage(
       accessRef,
+      params.imageId,
     );
     if (fetchError) throw fetchError;
     const { data, error } = await responseToJsend(response);
