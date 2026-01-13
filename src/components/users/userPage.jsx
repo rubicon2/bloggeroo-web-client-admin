@@ -7,9 +7,10 @@ import { Form, FormRow } from '../styles/searchForm';
 import { GeneralButton } from '../styles/buttons';
 import { MobileMarginContainer } from '../styles/mainPage';
 
-import { AccessContext } from '../../contexts/AppContexts';
-import authFetch from '../../ext/authFetch';
+import * as api from '../../ext/api';
 import responseToJsend from '../../ext/responseToJsend';
+
+import { AccessContext } from '../../contexts/AppContexts';
 
 import { useContext, useState } from 'react';
 import { useLoaderData, useNavigate, useRouteError } from 'react-router';
@@ -40,18 +41,11 @@ export default function UserPage() {
   async function saveChanges(event) {
     event.preventDefault();
     setIsFetching(true);
-    const { response, fetchError } = await authFetch(
-      `${import.meta.env.VITE_SERVER_URL}/admin/users/${user.id}`,
+    const { response, fetchError } = await api.putUser(
       accessRef,
-      {
-        method: 'put',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams(new FormData(event.target)),
-      },
+      user.id,
+      new URLSearchParams(new FormData(event.target)),
     );
-
     if (fetchError) setError(fetchError);
     else {
       const { status, data, error } = await responseToJsend(response);

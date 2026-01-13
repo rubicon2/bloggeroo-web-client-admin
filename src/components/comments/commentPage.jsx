@@ -4,10 +4,11 @@ import CommentForm from './commentForm';
 import DeleteButton from '../deleteButton';
 import { MobileMarginContainer } from '../styles/mainPage';
 
-import { AccessContext } from '../../contexts/AppContexts';
-import authFetch from '../../ext/authFetch';
+import * as api from '../../ext/api';
 import responseToJsend from '../../ext/responseToJsend';
 import dateTimeFormatter from '../../ext/dateTimeFormatter';
+
+import { AccessContext } from '../../contexts/AppContexts';
 
 import { useContext, useState } from 'react';
 import { useLoaderData, useRouteError, Link, useNavigate } from 'react-router';
@@ -25,16 +26,10 @@ export default function CommentPage() {
   async function updateComment(event) {
     event.preventDefault();
     setIsFetching(true);
-    const { response, fetchError } = await authFetch(
-      `${import.meta.env.VITE_SERVER_URL}/admin/comments/${comment.id}`,
+    const { response, fetchError } = await api.putComment(
       accessRef,
-      {
-        method: 'put',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams(new FormData(event.target)),
-      },
+      comment.id,
+      new URLSearchParams(new FormData(event.target)),
     );
     if (fetchError) setError(fetchError);
     else {

@@ -1,13 +1,12 @@
-import WideContainer from '../wideContainer';
-import GridTwoCol from '../styles/gridTwoCol';
 import BlogForm from './blogForm';
 import DeleteButton from '../deleteButton';
 import CommentsList from '../comments/commentsList';
 import CommentForm from '../comments/commentForm';
-import { GeneralButton } from '../styles/buttons';
 import MarkdownBlog from './markdownBlog';
+import WideContainer from '../wideContainer';
+import GridTwoCol from '../styles/gridTwoCol';
+import { GeneralButton } from '../styles/buttons';
 
-import authFetch from '../../ext/authFetch';
 import * as api from '../../ext/api';
 import responseToJsend from '../../ext/responseToJsend';
 
@@ -34,16 +33,10 @@ export default function BlogPage() {
   async function saveChanges(event) {
     event.preventDefault();
     setIsFetching(true);
-    const { response, fetchError } = await authFetch(
-      `${import.meta.env.VITE_SERVER_URL}/admin/blogs/${blog.id}`,
+    const { response, fetchError } = await api.putBlog(
       accessRef,
-      {
-        method: 'put',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams(new FormData(event.target)),
-      },
+      blog.id,
+      new URLSearchParams(new FormData(event.target)),
     );
     if (fetchError) setError(fetchError);
     else {

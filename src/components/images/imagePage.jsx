@@ -1,11 +1,12 @@
-import Container from '../container';
-import DeleteButton from '../deleteButton';
 import PageTitleBar from '../pageTitleBar';
+import DeleteButton from '../deleteButton';
 import ImageUpdateForm from './imageUpdateForm';
+import Container from '../container';
+
+import * as api from '../../ext/api';
+import responseToJsend from '../../ext/responseToJsend';
 
 import { AccessContext } from '../../contexts/AppContexts';
-import authFetch from '../../ext/authFetch';
-import responseToJsend from '../../ext/responseToJsend';
 import useRefresh from '../../hooks/useRefresh';
 
 import { useContext, useState } from 'react';
@@ -24,13 +25,10 @@ export default function ImagePage() {
   async function updateImage(event) {
     event.preventDefault();
     setIsFetching(true);
-    const { response, fetchError } = await authFetch(
-      `${import.meta.env.VITE_SERVER_URL}/admin/images/${image.id}`,
+    const { response, fetchError } = await api.putImage(
       accessRef,
-      {
-        method: 'PUT',
-        body: new FormData(event.target),
-      },
+      image.id,
+      new FormData(event.target),
     );
     if (fetchError) setError(fetchError);
     else {
