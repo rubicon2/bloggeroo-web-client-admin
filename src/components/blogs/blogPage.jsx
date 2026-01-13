@@ -7,10 +7,12 @@ import CommentForm from '../comments/commentForm';
 import { GeneralButton } from '../styles/buttons';
 import MarkdownBlog from './markdownBlog';
 
+import authFetch from '../../ext/authFetch';
+import * as api from '../../ext/api';
+import responseToJsend from '../../ext/responseToJsend';
+
 import { AccessContext } from '../../contexts/AppContexts';
 import useRefresh from '../../hooks/useRefresh';
-import authFetch from '../../ext/authFetch';
-import responseToJsend from '../../ext/responseToJsend';
 
 import { useContext, useState } from 'react';
 import { useLoaderData, useNavigate, useRouteError } from 'react-router';
@@ -61,16 +63,10 @@ export default function BlogPage() {
   async function createComment(event) {
     event.preventDefault();
     setIsFetching(true);
-    const { response, fetchError } = await authFetch(
-      `${import.meta.env.VITE_SERVER_URL}/admin/comments?blogId=${blog.id}`,
+    const { response, fetchError } = await api.postComment(
       accessRef,
-      {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams(new FormData(event.target)),
-      },
+      blog.id,
+      new URLSearchParams(new FormData(event.target)),
     );
     if (fetchError) setError(fetchError);
     else {

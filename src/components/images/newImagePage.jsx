@@ -1,11 +1,14 @@
 import Container from '../container';
 import PageTitleBar from '../pageTitleBar';
 import ImageForm from './imageForm';
+
+import * as api from '../../ext/api';
+import responseToJsend from '../../ext/responseToJsend';
+
 import { AccessContext } from '../../contexts/AppContexts';
+
 import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router';
-import authFetch from '../../ext/authFetch';
-import responseToJsend from '../../ext/responseToJsend';
 
 export default function NewImagePage() {
   const accessRef = useContext(AccessContext);
@@ -17,13 +20,9 @@ export default function NewImagePage() {
   async function createImage(event) {
     event.preventDefault();
     setIsFetching(true);
-    const { response, fetchError } = await authFetch(
-      `${import.meta.env.VITE_SERVER_URL}/admin/images`,
+    const { response, fetchError } = await api.postImage(
       accessRef,
-      {
-        method: 'POST',
-        body: new FormData(event.target),
-      },
+      new FormData(event.target),
     );
     if (fetchError) setError(fetchError);
     else {
