@@ -1,14 +1,15 @@
 import PageTitleBar from '../pageTitleBar';
 import Container from '../container';
 import CommentForm from './commentForm';
-import DeleteButton from '../deleteButton';
 import { MobileMarginContainer } from '../styles/mainPage';
+import { DeleteButton } from '../styles/buttons';
 
 import * as api from '../../ext/api';
 import responseToJsend from '../../ext/responseToJsend';
 import dateTimeFormatter from '../../ext/dateTimeFormatter';
 
 import { AccessContext } from '../../contexts/AppContexts';
+import useRefresh from '../../hooks/useRefresh';
 
 import { useContext, useState } from 'react';
 import { useLoaderData, useRouteError, Link, useNavigate } from 'react-router';
@@ -16,6 +17,7 @@ import { useLoaderData, useRouteError, Link, useNavigate } from 'react-router';
 export default function CommentPage() {
   const comment = useLoaderData();
   const navigate = useNavigate();
+  const refresh = useRefresh();
 
   const accessRef = useContext(AccessContext);
 
@@ -38,6 +40,27 @@ export default function CommentPage() {
       setValidationErrors(data?.validationErrors);
       switch (status) {
         case 'success': {
+          refresh();
+          break;
+        }
+      }
+    }
+    setIsFetching(false);
+  }
+
+  async function deleteComment(event) {
+    event.preventDefault();
+    setIsFetching(true);
+    const { response, fetchError } = await api.deleteComment(
+      accessRef,
+      comment.id,
+    );
+    if (fetchError) setError(fetchError);
+    else {
+      const { status, error } = await responseToJsend(response);
+      setError(error);
+      switch (status) {
+        case 'success': {
           navigate('/comments');
           break;
         }
@@ -52,11 +75,8 @@ export default function CommentPage() {
         <>
           <MobileMarginContainer>
             <PageTitleBar title={`Edit comment by ${comment.owner.name}`}>
-              <DeleteButton
-                url={`${import.meta.env.VITE_SERVER_URL}/admin/comments/${comment.id}`}
-                onDelete={() => navigate('/comments')}
-              >
-                Delete
+              <DeleteButton onClick={deleteComment} disabled={isFetching}>
+                Delete Comment
               </DeleteButton>
             </PageTitleBar>
           </MobileMarginContainer>

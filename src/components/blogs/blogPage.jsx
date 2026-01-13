@@ -1,11 +1,11 @@
 import BlogForm from './blogForm';
-import DeleteButton from '../deleteButton';
 import CommentsList from '../comments/commentsList';
 import CommentForm from '../comments/commentForm';
 import MarkdownBlog from './markdownBlog';
+
 import WideContainer from '../wideContainer';
 import GridTwoCol from '../styles/gridTwoCol';
-import { GeneralButton } from '../styles/buttons';
+import { GeneralButton, DeleteButton } from '../styles/buttons';
 
 import * as api from '../../ext/api';
 import responseToJsend from '../../ext/responseToJsend';
@@ -43,6 +43,24 @@ export default function BlogPage() {
       const { status, data, error } = await responseToJsend(response);
       setError(error);
       setBlogValidationErrors(data?.validationErrors);
+      switch (status) {
+        case 'success': {
+          refresh();
+          break;
+        }
+      }
+    }
+    setIsFetching(false);
+  }
+
+  async function deleteBlog(event) {
+    event.preventDefault();
+    setIsFetching(true);
+    const { response, fetchError } = await api.deleteBlog(accessRef, blog.id);
+    if (fetchError) setError(fetchError);
+    else {
+      const { status, error } = await responseToJsend(response);
+      setError(error);
       switch (status) {
         case 'success': {
           navigate('/blogs');
@@ -99,10 +117,7 @@ export default function BlogPage() {
                 <MarkdownBlog>{markdown}</MarkdownBlog>
               </div>
             </GridTwoCol>
-            <DeleteButton
-              url={`${import.meta.env.VITE_SERVER_URL}/admin/blogs/${blog.id}`}
-              onDelete={() => navigate('/blogs')}
-            >
+            <DeleteButton onClick={deleteBlog} disabled={isFetching}>
               Delete Blog
             </DeleteButton>
             <h3>

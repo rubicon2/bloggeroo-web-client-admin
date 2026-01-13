@@ -1,7 +1,7 @@
 import PageTitleBar from '../pageTitleBar';
-import DeleteButton from '../deleteButton';
 import ImageUpdateForm from './imageUpdateForm';
 import Container from '../container';
+import { DeleteButton } from '../styles/buttons';
 
 import * as api from '../../ext/api';
 import responseToJsend from '../../ext/responseToJsend';
@@ -44,17 +44,47 @@ export default function ImagePage() {
     setIsFetching(false);
   }
 
+  async function deleteImage(event) {
+    event.preventDefault();
+    if (image.blogs.length > 0) {
+      setError(
+        new Error(
+          'You cannot delete an image that has been used in blogs. Remove the links from the blogs, then try to delete this image again.',
+        ),
+      );
+      return;
+    }
+    setIsFetching(true);
+    const { response, fetchError } = await api.deleteImage(accessRef, image.id);
+    if (fetchError) setError(fetchError);
+    else {
+      const { status, error } = await responseToJsend(response);
+      setError(error);
+      switch (status) {
+        case 'success': {
+          navigate('/images');
+          break;
+        }
+      }
+    }
+    setIsFetching(false);
+  }
+
   const deleteDisabled = image.blogs.length > 0;
 
   return (
     <main>
       <PageTitleBar title={image.displayName}>
         <DeleteButton
-          url={`${import.meta.env.VITE_SERVER_URL}/admin/images/${image.id}`}
-          onDelete={() => navigate('/images')}
+          onClick={deleteImage}
           disabled={deleteDisabled}
+          title={
+            deleteDisabled
+              ? 'Cannot delete image while it is used in blogs'
+              : ''
+          }
         >
-          Delete
+          Delete Image
         </DeleteButton>
       </PageTitleBar>
       <Container>
@@ -66,7 +96,7 @@ export default function ImagePage() {
           validationErrors={validationErrors}
           onSubmit={updateImage}
         />
-        {error && <p>{error.message}</p>}
+        {error && <p aria-live="polite">{error.message}</p>}
       </Container>
     </main>
   );
