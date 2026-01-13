@@ -7,7 +7,6 @@ import { Cols, Sticky } from '../styles/mainPage';
 import { GeneralButton } from '../styles/buttons';
 import { MediaMobileOnly, MediaTabletAndLarger } from '../styles/mediaQueries';
 
-import useRefresh from '../../hooks/useRefresh';
 import useSearchParamsPageNumber from '../../hooks/useSearchParamsPageNumber';
 import { useLoaderData, useRouteError } from 'react-router';
 import { useState } from 'react';
@@ -15,7 +14,6 @@ import { useState } from 'react';
 export default function CommentsPage() {
   const { comments, atLastPage } = useLoaderData();
   const error = useRouteError();
-  const refresh = useRefresh();
   const [currentPageNumber, setCurrentPageNumber] = useSearchParamsPageNumber();
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
 
@@ -45,8 +43,6 @@ export default function CommentsPage() {
           <div>
             <CommentsList
               comments={comments}
-              onReply={refresh}
-              onDelete={refresh}
               createParentCommentLink={(comment) =>
                 `/comments?commentId=${comment.parentCommentId}`
               }
