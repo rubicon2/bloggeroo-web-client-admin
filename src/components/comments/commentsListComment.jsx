@@ -40,13 +40,11 @@ export default function CommentsListComment({
   async function createReply(event) {
     event.preventDefault();
     setIsFetching(true);
-    const { response, fetchError } = await authFetch(
-      `${import.meta.env.VITE_SERVER_URL}/comments?blogId=${comment.blogId}&parentCommentId=${comment.id}`,
+    const { response, fetchError } = await api.postComment(
       accessRef,
-      {
-        method: 'post',
-        body: new URLSearchParams(new FormData(event.target)),
-      },
+      comment.blogId,
+      comment.id,
+      new URLSearchParams(new FormData(event.target)),
     );
     if (fetchError) setError(fetchError);
     else {
