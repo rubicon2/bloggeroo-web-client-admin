@@ -1,16 +1,17 @@
-import WideContainer from '../wideContainer';
-import GridTwoCol from '../styles/gridTwoCol';
 import BlogForm from './blogForm';
-import DeleteButton from '../deleteButton';
 import CommentsList from '../comments/commentsList';
 import CommentForm from '../comments/commentForm';
-import { GeneralButton } from '../styles/buttons';
 import MarkdownBlog from './markdownBlog';
+
+import WideContainer from '../wideContainer';
+import GridTwoCol from '../styles/gridTwoCol';
+import { GeneralButton, DeleteButton } from '../styles/buttons';
+
+import * as api from '../../ext/api';
+import responseToJsend from '../../ext/responseToJsend';
 
 import { AccessContext } from '../../contexts/AppContexts';
 import useRefresh from '../../hooks/useRefresh';
-import authFetch from '../../ext/authFetch';
-import responseToJsend from '../../ext/responseToJsend';
 
 import { useContext, useState } from 'react';
 import { useLoaderData, useNavigate, useRouteError } from 'react-router';
@@ -32,22 +33,34 @@ export default function BlogPage() {
   async function saveChanges(event) {
     event.preventDefault();
     setIsFetching(true);
-    const { response, fetchError } = await authFetch(
-      `${import.meta.env.VITE_SERVER_URL}/admin/blogs/${blog.id}`,
+    const { response, fetchError } = await api.putBlog(
       accessRef,
-      {
-        method: 'put',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams(new FormData(event.target)),
-      },
+      blog.id,
+      new URLSearchParams(new FormData(event.target)),
     );
     if (fetchError) setError(fetchError);
     else {
       const { status, data, error } = await responseToJsend(response);
       setError(error);
       setBlogValidationErrors(data?.validationErrors);
+      switch (status) {
+        case 'success': {
+          refresh();
+          break;
+        }
+      }
+    }
+    setIsFetching(false);
+  }
+
+  async function deleteBlog(event) {
+    event.preventDefault();
+    setIsFetching(true);
+    const { response, fetchError } = await api.deleteBlog(accessRef, blog.id);
+    if (fetchError) setError(fetchError);
+    else {
+      const { status, error } = await responseToJsend(response);
+      setError(error);
       switch (status) {
         case 'success': {
           navigate('/blogs');
@@ -61,16 +74,11 @@ export default function BlogPage() {
   async function createComment(event) {
     event.preventDefault();
     setIsFetching(true);
-    const { response, fetchError } = await authFetch(
-      `${import.meta.env.VITE_SERVER_URL}/admin/comments?blogId=${blog.id}`,
+    const { response, fetchError } = await api.postComment(
       accessRef,
-      {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams(new FormData(event.target)),
-      },
+      blog.id,
+      null,
+      new URLSearchParams(new FormData(event.target)),
     );
     if (fetchError) setError(fetchError);
     else {
@@ -110,11 +118,8 @@ export default function BlogPage() {
                 <MarkdownBlog>{markdown}</MarkdownBlog>
               </div>
             </GridTwoCol>
-            <DeleteButton
-              url={`${import.meta.env.VITE_SERVER_URL}/admin/blogs/${blog.id}`}
-              onDelete={() => navigate('/blogs')}
-            >
-              Delete Blog
+            <DeleteButton onClick={deleteBlog} disabled={isFetching}>
+              Delete
             </DeleteButton>
             <h3>
               Comments {comments?.length > 0 ? `(${comments.length})` : ''}

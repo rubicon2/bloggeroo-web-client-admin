@@ -2,11 +2,13 @@ import Container from '../container';
 import PageTitleBar from '../pageTitleBar';
 import UserForm from './userForm';
 
-import { AccessContext } from '../../contexts/AppContexts';
-import authFetch from '../../ext/authFetch';
+import * as api from '../../ext/api';
 import responseToJsend from '../../ext/responseToJsend';
-import { useNavigate } from 'react-router';
+
+import { AccessContext } from '../../contexts/AppContexts';
+
 import { useContext, useState } from 'react';
+import { useNavigate } from 'react-router';
 
 export default function NewUserPage() {
   const accessRef = useContext(AccessContext);
@@ -18,16 +20,9 @@ export default function NewUserPage() {
   async function createUser(event) {
     event.preventDefault();
     setIsFetching(true);
-    const { response, fetchError } = await authFetch(
-      `${import.meta.env.VITE_SERVER_URL}/admin/users`,
+    const { response, fetchError } = await api.postUser(
       accessRef,
-      {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams(new FormData(event.target)),
-      },
+      new URLSearchParams(new FormData(event.target)),
     );
     if (fetchError) setError(fetchError);
     else {

@@ -1,13 +1,15 @@
+import WideContainer from '../wideContainer';
 import GridTwoCol from '../styles/gridTwoCol';
 import BlogForm from './blogForm';
 import MarkdownBlog from './markdownBlog';
 
-import { AccessContext } from '../../contexts/AppContexts';
-import authFetch from '../../ext/authFetch';
+import * as api from '../../ext/api';
 import responseToJsend from '../../ext/responseToJsend';
+
+import { AccessContext } from '../../contexts/AppContexts';
+
 import { useNavigate } from 'react-router';
 import { useState, useContext } from 'react';
-import WideContainer from '../wideContainer';
 
 export default function NewBlogPage() {
   const accessRef = useContext(AccessContext);
@@ -21,16 +23,9 @@ export default function NewBlogPage() {
     event.preventDefault();
     setIsFetching(true);
     // User id is decoded from jwt on server side that is sent as part of access code. Don't need to decode on here!!!
-    const { response, fetchError } = await authFetch(
-      `${import.meta.env.VITE_SERVER_URL}/admin/blogs`,
+    const { response, fetchError } = await api.postBlog(
       accessRef,
-      {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams(new FormData(event.target)),
-      },
+      new URLSearchParams(new FormData(event.target)),
     );
     if (fetchError) setError(fetchError);
     else {

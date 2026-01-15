@@ -1,15 +1,16 @@
 import PageTitleBar from '../pageTitleBar';
 import Container from '../container';
-import DeleteButton from '../deleteButton';
 import UserPageBlogs from './userPageBlogs';
 import UserPageComments from './userPageComments';
 import { Form, FormRow } from '../styles/searchForm';
-import { GeneralButton } from '../styles/buttons';
+import { GeneralButton, DeleteButton } from '../styles/buttons';
 import { MobileMarginContainer } from '../styles/mainPage';
 
-import { AccessContext } from '../../contexts/AppContexts';
-import authFetch from '../../ext/authFetch';
+import * as api from '../../ext/api';
 import responseToJsend from '../../ext/responseToJsend';
+
+import { AccessContext } from '../../contexts/AppContexts';
+import useRefresh from '../../hooks/useRefresh';
 
 import { useContext, useState } from 'react';
 import { useLoaderData, useNavigate, useRouteError } from 'react-router';
@@ -17,6 +18,7 @@ import { useLoaderData, useNavigate, useRouteError } from 'react-router';
 export default function UserPage() {
   const user = useLoaderData();
   const navigate = useNavigate();
+  const refresh = useRefresh();
 
   const accessRef = useContext(AccessContext);
 
@@ -40,23 +42,34 @@ export default function UserPage() {
   async function saveChanges(event) {
     event.preventDefault();
     setIsFetching(true);
-    const { response, fetchError } = await authFetch(
-      `${import.meta.env.VITE_SERVER_URL}/admin/users/${user.id}`,
+    const { response, fetchError } = await api.putUser(
       accessRef,
-      {
-        method: 'put',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams(new FormData(event.target)),
-      },
+      user.id,
+      new URLSearchParams(new FormData(event.target)),
     );
-
     if (fetchError) setError(fetchError);
     else {
       const { status, data, error } = await responseToJsend(response);
       setError(error);
       setValidationErrors(data.validationErrors);
+      switch (status) {
+        case 'success': {
+          refresh();
+          break;
+        }
+      }
+    }
+    setIsFetching(false);
+  }
+
+  async function deleteUser(event) {
+    event.preventDefault();
+    setIsFetching(true);
+    const { response, fetchError } = await api.deleteUser(accessRef, user.id);
+    if (fetchError) setError(fetchError);
+    else {
+      const { status, error } = await responseToJsend(response);
+      setError(error);
       switch (status) {
         case 'success': {
           navigate('/users');
@@ -73,10 +86,7 @@ export default function UserPage() {
         <>
           <MobileMarginContainer>
             <PageTitleBar title={user.email}>
-              <DeleteButton
-                url={`${import.meta.env.VITE_SERVER_URL}/admin/users/${user.id}`}
-                onDelete={() => navigate('/users')}
-              >
+              <DeleteButton onClick={deleteUser} disabled={isFetching}>
                 Delete
               </DeleteButton>
             </PageTitleBar>

@@ -1,14 +1,16 @@
 import CommentForm from './commentForm';
-import DeleteButton from '../deleteButton';
-import { GeneralButton } from '../styles/buttons';
+import { GeneralButton, DeleteButton } from '../styles/buttons';
 import ListItemButtonsContainer from '../listItemButtonsContainer';
 
-import { AccessContext } from '../../contexts/AppContexts';
-import authFetch from '../../ext/authFetch';
+import * as api from '../../ext/api';
 import responseToJsend from '../../ext/responseToJsend';
 import dateTimeFormatter from '../../ext/dateTimeFormatter';
-import { Link } from 'react-router';
+
+import { AccessContext } from '../../contexts/AppContexts';
+import useRefresh from '../../hooks/useRefresh';
+
 import { useContext, useState } from 'react';
+import { Link } from 'react-router';
 import styled from 'styled-components';
 
 const CommentHeading = styled.h3`
@@ -26,10 +28,11 @@ export default function CommentsListComment({
   }),
   isActiveComment,
   setActiveComment,
-  onReply,
-  onDelete,
 }) {
+  const refresh = useRefresh();
+
   const accessRef = useContext(AccessContext);
+
   const [error, setError] = useState(null);
   const [validationErrors, setValidationErrors] = useState(null);
   const [isFetching, setIsFetching] = useState(false);
@@ -37,13 +40,11 @@ export default function CommentsListComment({
   async function createReply(event) {
     event.preventDefault();
     setIsFetching(true);
-    const { response, fetchError } = await authFetch(
-      `${import.meta.env.VITE_SERVER_URL}/comments?blogId=${comment.blogId}&parentCommentId=${comment.id}`,
+    const { response, fetchError } = await api.postComment(
       accessRef,
-      {
-        method: 'post',
-        body: new URLSearchParams(new FormData(event.target)),
-      },
+      comment.blogId,
+      comment.id,
+      new URLSearchParams(new FormData(event.target)),
     );
     if (fetchError) setError(fetchError);
     else {
@@ -54,8 +55,29 @@ export default function CommentsListComment({
         case 'success': {
           // Close form.
           setActiveComment(null);
-          // Let parent components know that reply happened, i.e. stuff needs to be fetched again.
-          if (onReply) onReply();
+          // Refresh otherwise new comment won't appear.
+          refresh();
+          break;
+        }
+      }
+    }
+    setIsFetching(false);
+  }
+
+  async function deleteComment(event) {
+    event.preventDefault();
+    setIsFetching(true);
+    const { response, fetchError } = await api.deleteComment(
+      accessRef,
+      comment.id,
+    );
+    if (fetchError) setError(fetchError);
+    else {
+      const { status, error } = await responseToJsend(response);
+      setError(error);
+      switch (status) {
+        case 'success': {
+          refresh();
           break;
         }
       }
@@ -105,10 +127,7 @@ export default function CommentsListComment({
             >
               Reply
             </GeneralButton>
-            <DeleteButton
-              url={`${import.meta.env.VITE_SERVER_URL}/admin/comments/${comment.id}`}
-              onDelete={onDelete}
-            >
+            <DeleteButton onClick={deleteComment} disabled={isFetching}>
               Delete
             </DeleteButton>
           </ListItemButtonsContainer>

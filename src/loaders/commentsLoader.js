@@ -1,4 +1,4 @@
-import authFetch from '../ext/authFetch';
+import * as api from '../ext/api';
 import objToSearchStr from '../ext/objToSearchStr';
 import requestToSearchObj from '../ext/requestToSearchObj';
 import requestToSkipTake from '../ext/requestToSkipTake';
@@ -27,9 +27,9 @@ export default function commentsLoader(accessRef) {
       orderBy: 'id',
     });
     const searchParamsStr = objToSearchStr(searchParamsObj);
-    const { response, fetchError } = await authFetch(
-      `${import.meta.env.VITE_SERVER_URL}/admin/comments?${searchParamsStr}`,
+    const { response, fetchError } = await api.getComments(
       accessRef,
+      searchParamsStr,
     );
     if (fetchError) throw fetchError;
     const { data, error } = await responseToJsend(response);

@@ -1,9 +1,9 @@
+import * as api from '../ext/api';
+import responseToJsend from '../ext/responseToJsend';
 import requestToSkipTake from '../ext/requestToSkipTake';
 import requestToSearchObj from '../ext/requestToSearchObj';
-import authFetch from '../ext/authFetch';
-import responseToJsend from '../ext/responseToJsend';
-import deepMerge from '@rubicon2/deep-merge';
 import objToSearchStr from '../ext/objToSearchStr';
+import deepMerge from '@rubicon2/deep-merge';
 
 const defaultSettings = {
   orderBy: 'displayName',
@@ -30,9 +30,9 @@ export default function imagesLoader(accessRef) {
     });
     const searchParamsStr = objToSearchStr(searchParamsObj);
 
-    const { response, fetchError } = await authFetch(
-      `${import.meta.env.VITE_SERVER_URL}/admin/images?${searchParamsStr}`,
+    const { response, fetchError } = await api.getImages(
       accessRef,
+      searchParamsStr,
     );
     if (fetchError) throw fetchError;
 

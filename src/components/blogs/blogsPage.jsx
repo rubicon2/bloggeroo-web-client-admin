@@ -1,22 +1,22 @@
-import Container from '../container';
 import PageNav from '../pageNav';
 import BlogsSearchForm from './blogsSearchForm';
 import BlogsList from './blogsList';
 import PageTitleBar from '../pageTitleBar';
+
+import Container from '../container';
 import { Cols, Sticky } from '../styles/mainPage';
 import { GeneralButton } from '../styles/buttons';
 import { MediaMobileOnly, MediaTabletAndLarger } from '../styles/mediaQueries';
 
 import useSearchParamsPageNumber from '../../hooks/useSearchParamsPageNumber';
-import useRefresh from '../../hooks/useRefresh';
-import { Link, useLoaderData, useRouteError } from 'react-router';
+
 import { useState } from 'react';
+import { Link, useLoaderData, useRouteError } from 'react-router';
 
 export default function BlogsPage() {
   const { blogs, atLastPage } = useLoaderData();
   const error = useRouteError();
   const [currentPageNumber, setCurrentPageNumber] = useSearchParamsPageNumber();
-  const refresh = useRefresh();
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
 
   return (
@@ -46,7 +46,7 @@ export default function BlogsPage() {
         )}
         <Cols>
           <div>
-            <BlogsList blogs={blogs} onDelete={refresh} />
+            <BlogsList blogs={blogs} />
             {error && <p>{error.message}</p>}
             <PageNav
               currentPageNumber={currentPageNumber}

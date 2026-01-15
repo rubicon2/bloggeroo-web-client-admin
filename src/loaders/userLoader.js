@@ -1,11 +1,11 @@
-import authFetch from '../ext/authFetch';
+import * as api from '../ext/api';
 import responseToJsend from '../ext/responseToJsend';
 
 export default function userLoader(accessRef) {
   return async ({ params }) => {
-    const { response, fetchError } = await authFetch(
-      `${import.meta.env.VITE_SERVER_URL}/admin/users/${params.userId}`,
+    const { response, fetchError } = await api.getUser(
       accessRef,
+      params.userId,
     );
     if (fetchError) throw fetchError;
     const { data, error } = await responseToJsend(response);

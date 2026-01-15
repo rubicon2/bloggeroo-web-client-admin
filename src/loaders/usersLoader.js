@@ -1,4 +1,4 @@
-import authFetch from '../ext/authFetch';
+import * as api from '../ext/api';
 import requestToSkipTake from '../ext/requestToSkipTake';
 import responseToJsend from '../ext/responseToJsend';
 import requestToSearchObj from '../ext/requestToSearchObj';
@@ -27,11 +27,13 @@ export default function usersLoader(accessRef) {
       orderBy: 'id',
     });
     const searchParamsStr = objToSearchStr(searchParamsObj);
-    const { response, fetchError } = await authFetch(
-      `${import.meta.env.VITE_SERVER_URL}/admin/users?${searchParamsStr}`,
+
+    const { response, fetchError } = await api.getUsers(
       accessRef,
+      searchParamsStr,
     );
     if (fetchError) throw fetchError;
+
     const { data, error } = await responseToJsend(response);
     if (error) throw error;
     const atLastPage = data.users.length <= take;

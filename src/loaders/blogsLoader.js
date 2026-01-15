@@ -1,4 +1,4 @@
-import authFetch from '../ext/authFetch';
+import * as api from '../ext/api';
 import responseToJsend from '../ext/responseToJsend';
 import requestToSkipTake from '../ext/requestToSkipTake';
 import requestToSearchObj from '../ext/requestToSearchObj';
@@ -29,9 +29,9 @@ export default function blogsLoader(accessRef) {
       orderBy: 'id',
     });
     const searchParamsStr = objToSearchStr(searchParamsObj);
-    const { response, fetchError } = await authFetch(
-      `${import.meta.env.VITE_SERVER_URL}/admin/blogs?${searchParamsStr}`,
+    const { response, fetchError } = await api.getBlogs(
       accessRef,
+      searchParamsStr,
     );
     if (fetchError) throw fetchError;
     const { data, error } = await responseToJsend(response);
