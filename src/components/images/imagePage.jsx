@@ -84,7 +84,7 @@ export default function ImagePage() {
               : ''
           }
         >
-          Delete Image
+          Delete
         </DeleteButton>
       </PageTitleBar>
       <Container>

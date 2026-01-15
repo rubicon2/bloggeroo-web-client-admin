@@ -76,7 +76,7 @@ export default function CommentPage() {
           <MobileMarginContainer>
             <PageTitleBar title={`Edit comment by ${comment.owner.name}`}>
               <DeleteButton onClick={deleteComment} disabled={isFetching}>
-                Delete Comment
+                Delete
               </DeleteButton>
             </PageTitleBar>
           </MobileMarginContainer>

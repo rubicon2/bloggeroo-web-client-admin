@@ -119,7 +119,7 @@ export default function BlogPage() {
               </div>
             </GridTwoCol>
             <DeleteButton onClick={deleteBlog} disabled={isFetching}>
-              Delete Blog
+              Delete
             </DeleteButton>
             <h3>
               Comments {comments?.length > 0 ? `(${comments.length})` : ''}
