@@ -23,12 +23,17 @@ export default function BlogPage() {
 
   const accessRef = useContext(AccessContext);
 
+  const [error, setError] = useState(useRouteError());
+  const [isCreatingComment, setIsCreatingComment] = useState(false);
+
+  const [editedBlog, setEditedBlog] = useState({
+    title: blog.title,
+    body: blog.body,
+    publishedAt: blog.publishedAt,
+  });
   const [isFetching, setIsFetching] = useState(false);
   const [blogValidationErrors, setBlogValidationErrors] = useState(null);
   const [commentValidationErrors, setCommentValidationErrors] = useState(null);
-  const [error, setError] = useState(useRouteError());
-  const [isCreatingComment, setIsCreatingComment] = useState(false);
-  const [markdown, setMarkdown] = useState(`# No markdown to preview yet!`);
 
   async function saveChanges(event) {
     event.preventDefault();
@@ -36,6 +41,7 @@ export default function BlogPage() {
     const { response, fetchError } = await api.putBlog(
       accessRef,
       blog.id,
+      // This could now be changed just to use editedBlog state??
       new URLSearchParams(new FormData(event.target)),
     );
     if (fetchError) setError(fetchError);
@@ -96,6 +102,13 @@ export default function BlogPage() {
     setIsFetching(false);
   }
 
+  const anyBlogFieldsChanged =
+    blog.title !== editedBlog.title ||
+    blog.body !== editedBlog.body ||
+    // Avoid problems with db and input formatting dates differently.
+    new Date(blog.publishedAt).getTime() !=
+      new Date(editedBlog.publishedAt).getTime();
+
   return (
     <main>
       {blog && (
@@ -106,16 +119,18 @@ export default function BlogPage() {
                 <h2>Edit</h2>
                 <BlogForm
                   buttonText={'Save changes'}
-                  initialValues={blog}
-                  isFetching={isFetching}
+                  blog={editedBlog}
                   validationErrors={blogValidationErrors}
+                  buttonDisabled={isFetching || !anyBlogFieldsChanged}
                   onSubmit={saveChanges}
-                  onChange={({ body }) => setMarkdown(body)}
+                  onChange={(updatedBlog) =>
+                    setEditedBlog({ ...editedBlog, ...updatedBlog })
+                  }
                 />
               </div>
               <div>
                 <h2>Preview</h2>
-                <MarkdownBlog>{markdown}</MarkdownBlog>
+                <MarkdownBlog>{editedBlog.body}</MarkdownBlog>
               </div>
             </GridTwoCol>
             <DeleteButton onClick={deleteBlog} disabled={isFetching}>

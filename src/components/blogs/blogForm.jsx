@@ -1,6 +1,6 @@
 import { GeneralButton } from '../styles/buttons';
 import { Form, FormRow } from '../styles/blogForm';
-import { useState, useEffect } from 'react';
+import fixInputDate from '../../ext/fixInputDate';
 import styled from 'styled-components';
 
 const BlogTextArea = styled.textarea`
@@ -8,41 +8,15 @@ const BlogTextArea = styled.textarea`
 `;
 
 export default function BlogForm({
-  buttonText,
-  initialValues,
-  isFetching,
+  blog,
   validationErrors,
+  buttonText,
+  buttonDisabled,
   // All fields are handled within this form component, but for markdown preview
   // to get the value of body, we need to report any changes to the field values.
   onChange = () => {},
   onSubmit = () => {},
 }) {
-  const [title, setTitle] = useState(initialValues.title);
-  const [body, setBody] = useState(initialValues.body);
-
-  // Cut off the .00Z at the end of a date string if it appears.
-  // That stops the datetime-local from correctly displaying the existing date.
-  // What an annoying quirk. Why does it not work with the .00Z, if that is part
-  // of the standardised date format? The server returns the datetime as stored
-  // by prisma. In fact if the Z appears at all even without the .00, it fails to show.
-  const publishedAtInitialValue = initialValues.publishedAt
-    ? initialValues.publishedAt.split('.')[0]
-    : '';
-
-  const [publishedAt, setPublishedAt] = useState(publishedAtInitialValue);
-
-  useEffect(() => {
-    onChange({
-      title,
-      body,
-      publishedAt,
-    });
-  }, [onChange, title, body, publishedAt]);
-
-  const haveFieldsChanged =
-    initialValues.title !== title ||
-    initialValues.body !== body ||
-    publishedAtInitialValue !== publishedAt;
   return (
     <Form onSubmit={onSubmit}>
       <FormRow>
@@ -50,8 +24,8 @@ export default function BlogForm({
         <input
           type="text"
           name="title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          value={blog.title}
+          onChange={(e) => onChange({ ...blog, title: e.target.value })}
           required={true}
         />
         <small>{validationErrors?.title}</small>
@@ -61,8 +35,8 @@ export default function BlogForm({
         <input
           type="datetime-local"
           name="publishedAt"
-          value={publishedAt}
-          onChange={(e) => setPublishedAt(e.target.value)}
+          value={fixInputDate(blog.publishedAt)}
+          onChange={(e) => onChange({ ...blog, publishedAt: e.target.value })}
         />
         <small>{validationErrors?.publishedAt}</small>
       </FormRow>
@@ -71,12 +45,12 @@ export default function BlogForm({
         <BlogTextArea
           name="body"
           rows="80"
-          value={body}
-          onChange={(e) => setBody(e.target.value)}
+          value={blog.body}
+          onChange={(e) => onChange({ ...blog, body: e.target.value })}
         />
         <small>{validationErrors?.body}</small>
       </FormRow>
-      <GeneralButton type="submit" disabled={isFetching || !haveFieldsChanged}>
+      <GeneralButton type="submit" disabled={buttonDisabled}>
         {buttonText}
       </GeneralButton>
     </Form>
