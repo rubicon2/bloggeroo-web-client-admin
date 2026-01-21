@@ -5,7 +5,6 @@ import styled from 'styled-components';
 const HeaderBackground = styled.header`
   position: relative;
   z-index: 2;
-  background-color: white;
 `;
 
 const HeaderContainer = styled(Container)`
