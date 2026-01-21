@@ -5,6 +5,7 @@ import styled from 'styled-components';
 const Header = styled.header`
   display: grid;
   grid-template-columns: 1fr;
+  margin-bottom: 1rem;
 
   @media ${devices.tablet} {
     display: flex;

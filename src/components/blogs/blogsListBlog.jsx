@@ -1,3 +1,4 @@
+import BlogHeader from './blogHeader';
 import MarkdownBlog from './markdownBlog';
 import ListItemButtonsContainer from '../listItemButtonsContainer';
 import { GeneralButton, DeleteButton } from '../styles/buttons';
@@ -12,11 +13,6 @@ import useRefresh from '../../hooks/useRefresh';
 
 import { useContext, useState } from 'react';
 import { Link } from 'react-router';
-import styled from 'styled-components';
-
-const BlogHeader = styled.h3`
-  margin-bottom: 0;
-`;
 
 export default function BlogsListBlog({ blog }) {
   const refresh = useRefresh();

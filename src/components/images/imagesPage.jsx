@@ -19,24 +19,22 @@ export default function ImagesPage() {
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   return (
     <main>
-      <MobileMarginContainer>
-        <PageTitleBar title="Images">
-          <MediaMobileOnly>
-            <GeneralButton
-              type="button"
-              onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
-              aria-label={
-                isMobileSearchOpen ? 'Close search form' : 'Show search form'
-              }
-            >
-              {isMobileSearchOpen ? 'Close' : 'Search'}
-            </GeneralButton>
-          </MediaMobileOnly>
-          <Link to="/images/new">
-            <GeneralButton type="button">New</GeneralButton>
-          </Link>
-        </PageTitleBar>
-      </MobileMarginContainer>
+      <PageTitleBar title="Images">
+        <MediaMobileOnly>
+          <GeneralButton
+            type="button"
+            onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
+            aria-label={
+              isMobileSearchOpen ? 'Close search form' : 'Show search form'
+            }
+          >
+            {isMobileSearchOpen ? 'Close' : 'Search'}
+          </GeneralButton>
+        </MediaMobileOnly>
+        <Link to="/images/new">
+          <GeneralButton type="button">New</GeneralButton>
+        </Link>
+      </PageTitleBar>
       <Container>
         {isMobileSearchOpen && (
           // Form seemed sluggish on Firefox but only when touch simulation was turned on?
