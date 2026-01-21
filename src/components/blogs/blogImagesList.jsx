@@ -13,6 +13,10 @@ import styled from 'styled-components';
 const RelativeContainer = styled(WideContainer)`
   position: relative;
   // max-width: 100%;
+  background-color: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+
+  // color: var(--theme-text-color);
 `;
 
 const SideScrollList = styled(UnstyledList)`
@@ -88,32 +92,27 @@ export default function BlogImagesList({ onClick, onUpload }) {
 
   return (
     <>
-      <RelativeContainer>
-        {isUploadingImage ? (
-          <ImageForm
-            buttonText="Submit"
-            isFetching={isFetching}
-            validationErrors={[]}
-            onSubmit={postImage}
-          />
-        ) : (
-          <>
-            <SideScrollList>
-              {imagesDisplayNameOrder.map((image) => (
-                <SideScrollListItem
-                  key={image.id}
-                  onClick={() => onClick(image)}
-                >
-                  <h3>{image.displayName}</h3>
-                  <img src={image.url} alt={image.altText} />
-                  <button type="button">Insert</button>
-                </SideScrollListItem>
-              ))}
-            </SideScrollList>
-          </>
-        )}
-        {error && <p>{error}</p>}
-      </RelativeContainer>
+      {isUploadingImage ? (
+        <ImageForm
+          buttonText="Submit"
+          isFetching={isFetching}
+          validationErrors={[]}
+          onSubmit={postImage}
+        />
+      ) : (
+        <>
+          <SideScrollList>
+            {imagesDisplayNameOrder.map((image) => (
+              <SideScrollListItem key={image.id} onClick={() => onClick(image)}>
+                <h3>{image.displayName}</h3>
+                <img src={image.url} alt={image.altText} />
+                <button type="button">Insert</button>
+              </SideScrollListItem>
+            ))}
+          </SideScrollList>
+        </>
+      )}
+      {error && <p>{error}</p>}
       <MaxWidthNavButton onClick={() => setIsUploadingImage(!isUploadingImage)}>
         Upload
       </MaxWidthNavButton>
