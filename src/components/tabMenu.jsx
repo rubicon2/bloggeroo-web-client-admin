@@ -14,48 +14,43 @@ const TabButton = styled(NavButton)`
   font-size: 1.2rem;
   font-weight: 700;
 
-  :hover {
-    color: black;
-    background-color: pink;
-  }
-
-  * {
-    :hover {
-      color: black;
-    }
-    margin: 0;
+  &:hover {
+    color: var(--theme-text-color);
+    filter: brightness(0.5);
   }
 
   filter: brightness(0.8);
-`;
 
-const SelectedTabButton = styled(TabButton)`
-  background-color: var(--theme-bg-color);
-  color: var(--theme-text-color);
-  filter: none;
+  &.selected {
+    background-color: var(--theme-bg-color);
+    filter: none;
+  }
 `;
 
 export default function TabMenu({ selectedId, tabListItems, onClick }) {
+  const ariaOptions = new Intl.ListFormat('en', {
+    style: 'long',
+    type: 'disjunction',
+  })
+    .format(tabListItems.map((t) => t.innerText))
+    .toLowerCase();
+
   return (
-    <TabContainer aria-label="secondary navigation">
+    <TabContainer
+      role="tablist"
+      aria-label={`Select an option: ${ariaOptions}`}
+    >
       {tabListItems.map((tabListItem) => (
         <li>
-          {tabListItem.id === selectedId ? (
-            <SelectedTabButton
-              key={tabListItem.id}
-              onClick={() => onClick(tabListItem.id)}
-              aria-selected="true"
-            >
-              {tabListItem.innerText}
-            </SelectedTabButton>
-          ) : (
-            <TabButton
-              key={tabListItem.id}
-              onClick={() => onClick(tabListItem.id)}
-            >
-              {tabListItem.innerText}
-            </TabButton>
-          )}
+          <TabButton
+            key={tabListItem.id}
+            onClick={() => onClick(tabListItem.id)}
+            role="tab"
+            aria-selected={tabListItem.id === selectedId}
+            className={tabListItem.id === selectedId ? 'selected' : ''}
+          >
+            {tabListItem.innerText}
+          </TabButton>
         </li>
       ))}
     </TabContainer>
