@@ -35,6 +35,7 @@ const H6 = styled.h6`
 
 const PreserveWhitespaceP = styled.p`
   white-space-collapse: preserve;
+  overflow-wrap: anywhere;
   max-width: 50ch;
 
   &:last-child {
