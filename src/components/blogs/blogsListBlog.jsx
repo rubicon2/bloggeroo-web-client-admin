@@ -42,13 +42,7 @@ export default function BlogsListBlog({ blog }) {
 
   return (
     <div>
-      <BlogHeader>{blog.title}</BlogHeader>
-      <small>
-        By {blog.owner.name} at{' '}
-        {blog.publishedAt
-          ? dateTimeFormatter.format(new Date(blog.publishedAt))
-          : 'never'}
-      </small>
+      <BlogHeader blog={blog} />
       <MarkdownBlog>{blogPreview}</MarkdownBlog>
       <ListItemButtonsContainer>
         <Link to={`/blogs/${blog.id}`}>

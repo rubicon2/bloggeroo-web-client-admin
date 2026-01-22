@@ -5,22 +5,10 @@ import {
   FormButtons,
 } from '../styles/searchForm';
 import { GeneralButton } from '../styles/buttons';
-import formToFields from '../../ext/formToFields';
-import { useSearchParams } from 'react-router';
 
-export default function ImagesSearchForm() {
-  const [, setSearchParams] = useSearchParams();
-
-  function handleForm(event) {
-    event.preventDefault();
-    const formFields = formToFields(event.target);
-    // Make sure we land on the first page of results, otherwise
-    // could end up on a non-existent second page with no results.
-    setSearchParams({ ...formFields, page: 1 });
-  }
-
+export default function ImagesSearchForm({ onSubmit = () => {} }) {
   return (
-    <Form onSubmit={handleForm}>
+    <Form onSubmit={onSubmit}>
       <FormFieldsetGrid>
         <legend>Search</legend>
         <FormRow>

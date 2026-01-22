@@ -17,7 +17,12 @@ export default function NewBlogPage() {
   const [isFetching, setIsFetching] = useState(false);
   const [validationErrors, setValidationErrors] = useState(null);
   const [error, setError] = useState(null);
-  const [markdown, setMarkdown] = useState(`# No markdown to preview yet!`);
+
+  const [blog, setBlog] = useState({
+    title: '',
+    body: '',
+    publishedAt: null,
+  });
 
   async function createBlog(event) {
     event.preventDefault();
@@ -25,6 +30,7 @@ export default function NewBlogPage() {
     // User id is decoded from jwt on server side that is sent as part of access code. Don't need to decode on here!!!
     const { response, fetchError } = await api.postBlog(
       accessRef,
+      // This could be changed just to use the blog state??
       new URLSearchParams(new FormData(event.target)),
     );
     if (fetchError) setError(fetchError);
@@ -50,16 +56,16 @@ export default function NewBlogPage() {
             <h2>Edit</h2>
             <BlogForm
               buttonText={'Create Blog'}
-              initialValues={{ title: '', body: '' }}
-              isFetching={isFetching}
+              blog={blog}
               validationErrors={validationErrors}
+              buttonDisabled={isFetching}
               onSubmit={createBlog}
-              onChange={({ body }) => setMarkdown(body)}
+              onChange={(updatedBlog) => setBlog({ ...blog, ...updatedBlog })}
             />
           </div>
           <div>
             <h2>Preview</h2>
-            <MarkdownBlog>{markdown}</MarkdownBlog>
+            <MarkdownBlog>{blog.body}</MarkdownBlog>
           </div>
         </GridTwoCol>
         {error && <p>{error.message}</p>}

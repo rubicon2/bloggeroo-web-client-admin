@@ -1,4 +1,3 @@
-import { Link } from 'react-router';
 import styled from 'styled-components';
 
 const Grid = styled.div`
@@ -6,7 +5,6 @@ const Grid = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   grid-auto-rows: min-content;
   gap: 1rem;
-  place-items: center;
 
   & img {
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
@@ -14,14 +12,6 @@ const Grid = styled.div`
   }
 `;
 
-export default function ImagesGrid({ images }) {
-  return (
-    <Grid>
-      {images.map((image) => (
-        <Link to={`/images/${image.id}`}>
-          <img key={image.id} src={image.url} alt={image.altText} />
-        </Link>
-      ))}
-    </Grid>
-  );
+export default function ImagesGrid({ children }) {
+  return <Grid>{children}</Grid>;
 }
