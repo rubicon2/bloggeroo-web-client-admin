@@ -93,7 +93,7 @@ export default function BlogPage() {
     else {
       const { status, data, error } = await responseToJsend(response);
       setError(error);
-      setCommentValidationErrors(data.validationErrors);
+      setCommentValidationErrors(data?.validationErrors);
       switch (status) {
         case 'success': {
           setIsCreatingComment(false);
@@ -132,6 +132,11 @@ export default function BlogPage() {
           </PageTitleBar>
           <Container>
             <TabbedContainer
+              onTabChange={() => {
+                setError(null);
+                setBlogValidationErrors(null);
+                setCommentValidationErrors(null);
+              }}
               tabs={[
                 {
                   id: 'edit',
@@ -156,13 +161,19 @@ export default function BlogPage() {
                     <>
                       <BlogHeader blog={blog} />
                       <MarkdownBlog>{editedBlog.body}</MarkdownBlog>
+                      {error && <p>{error.message}</p>}
                     </>
                   ),
                 },
                 {
                   id: 'images',
                   labelText: 'Add Images',
-                  content: <BlogImagesList onClick={insertImageLink} />,
+                  content: (
+                    <>
+                      <BlogImagesList onClick={insertImageLink} />
+                      {error && <p>{error.message}</p>}
+                    </>
+                  ),
                 },
                 {
                   id: 'comments',
@@ -185,6 +196,7 @@ export default function BlogPage() {
                               Cancel
                             </GeneralButton>
                           </CommentForm>
+                          {error && <p>{error.message}</p>}
                         </>
                       ) : (
                         <GeneralButton
@@ -205,7 +217,6 @@ export default function BlogPage() {
               ]}
             />
           </Container>
-          <Container>{error && <p>{error.message}</p>}</Container>
         </>
       )}
     </main>
