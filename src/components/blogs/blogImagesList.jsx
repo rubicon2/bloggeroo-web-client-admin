@@ -1,37 +1,33 @@
 import TabbedContainer from '../tabbedContainer';
+import ImagesGrid from '../images/imagesGrid';
+import BlogImagesListImage from './blogImagesListImage';
 import ImageForm from '../images/imageForm';
-import { NavButton } from '../styles/buttons';
-import UnstyledList from '../unstyledList';
+import ImagesSearchForm from '../images/imagesSearchForm';
+import { Cols, Sticky } from '../styles/mainPage';
+import { GeneralButton } from '../styles/buttons';
+import { MediaMobileOnly, MediaTabletAndLarger } from '../styles/mediaQueries';
 
 import * as api from '../../ext/api';
 import responseToJsend from '../../ext/responseToJsend';
+import formToFields from '../../ext/formToFields';
+import objToSearchStr from '../../ext/objToSearchStr';
 import { AccessContext } from '../../contexts/AppContexts';
 
 import { useCallback, useContext, useEffect, useState } from 'react';
-import styled from 'styled-components';
 
-const SideScrollList = styled(UnstyledList)`
-  overflow-x: scroll;
-  display: flex;
-  gap: 1rem;
-  padding: 0;
-
-  * {
-    width: 250px;
-  }
-`;
-
-const SideScrollListItem = styled.li``;
-
-export default function BlogImagesList({ onClick, onUpload }) {
+export default function BlogImagesList({ onClick }) {
   const accessRef = useContext(AccessContext);
   const [images, setImages] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
-  const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [error, setError] = useState(null);
+  const [searchParamsStr, setSearchParamsStr] = useState('orderBy=displayName');
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
 
   const getImages = useCallback(async () => {
-    const { response, fetchError } = await api.getImages(accessRef);
+    const { response, fetchError } = await api.getImages(
+      accessRef,
+      searchParamsStr,
+    );
     if (fetchError) setError(fetchError);
     else {
       const { status, data, error } = await responseToJsend(response);
@@ -42,7 +38,7 @@ export default function BlogImagesList({ onClick, onUpload }) {
           break;
       }
     }
-  }, [accessRef]);
+  }, [accessRef, searchParamsStr]);
 
   async function postImage(event) {
     setIsFetching(true);
@@ -53,66 +49,88 @@ export default function BlogImagesList({ onClick, onUpload }) {
     );
     if (fetchError) setError(fetchError);
     else {
-      const { status, data, error } = await responseToJsend(response);
+      const { status, error } = await responseToJsend(response);
       setError(error);
       switch (status) {
         case 'success': {
-          setIsUploadingImage(false);
           // Update list.
           getImages();
-          // Add image to blog as if it has been clicked on.
-          // onClick(data.image);
-          // Or maybe, store uploaded image and scroll to it?
         }
       }
     }
     setIsFetching(false);
   }
 
+  function handleSearchForm(event) {
+    event.preventDefault();
+    const formFields = formToFields(event.target);
+    const searchParamsStr = objToSearchStr(formFields);
+    setSearchParamsStr(searchParamsStr);
+  }
+
   useEffect(() => {
     getImages();
   }, [getImages]);
 
-  const imagesDisplayNameOrder = images.sort((a, b) =>
-    a.displayName.localeCompare(b.displayName),
-  );
-
   return (
-    <TabbedContainer
-      tabs={[
-        {
-          id: 'browse',
-          labelText: 'Browse',
-          content: (
-            <>
-              <SideScrollList>
-                {imagesDisplayNameOrder.map((image) => (
-                  <SideScrollListItem
-                    key={image.id}
-                    onClick={() => onClick(image)}
+    <>
+      <TabbedContainer
+        tabs={[
+          {
+            id: 'browse',
+            labelText: 'Browse',
+            content: (
+              <>
+                <MediaMobileOnly>
+                  <GeneralButton
+                    style={{ width: '100%', marginBottom: '1rem' }}
+                    type="button"
+                    onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
+                    aria-label={
+                      isMobileSearchOpen
+                        ? 'Close search form'
+                        : 'Show search form'
+                    }
                   >
-                    <h3>{image.displayName}</h3>
-                    <img src={image.url} alt={image.altText} />
-                    <button type="button">Insert</button>
-                  </SideScrollListItem>
-                ))}
-              </SideScrollList>
-            </>
-          ),
-        },
-        {
-          id: 'upload',
-          labelText: 'Upload',
-          content: (
-            <ImageForm
-              buttonText="Submit"
-              isFetching={isFetching}
-              validationErrors={[]}
-              onSubmit={postImage}
-            />
-          ),
-        },
-      ]}
-    />
+                    {isMobileSearchOpen ? 'Close' : 'Search'}
+                  </GeneralButton>
+                  {isMobileSearchOpen && (
+                    <ImagesSearchForm onSubmit={handleSearchForm} />
+                  )}
+                </MediaMobileOnly>
+                <Cols>
+                  <ImagesGrid>
+                    {images.map((image) => (
+                      <BlogImagesListImage
+                        image={image}
+                        onClick={() => onClick(image)}
+                      />
+                    ))}
+                  </ImagesGrid>
+                  <MediaTabletAndLarger>
+                    <Sticky>
+                      <ImagesSearchForm onSubmit={handleSearchForm} />
+                    </Sticky>
+                  </MediaTabletAndLarger>
+                </Cols>
+              </>
+            ),
+          },
+          {
+            id: 'upload',
+            labelText: 'Upload',
+            content: (
+              <ImageForm
+                buttonText="Submit"
+                isFetching={isFetching}
+                validationErrors={[]}
+                onSubmit={postImage}
+              />
+            ),
+          },
+        ]}
+      />
+      {error && <p>{error.message}</p>}
+    </>
   );
 }
