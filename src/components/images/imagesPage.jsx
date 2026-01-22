@@ -1,22 +1,32 @@
 import Container from '../container';
 import PageTitleBar from '../pageTitleBar';
 import ImagesGrid from './imagesGrid';
-import PageNav from '../pageNav';
 import ImagesSearchForm from './imagesSearchForm';
+import PageNav from '../pageNav';
 
 import { GeneralButton } from '../styles/buttons';
-import { MobileMarginContainer, Cols, Sticky } from '../styles/mainPage';
+import { Cols, Sticky } from '../styles/mainPage';
 import { MediaMobileOnly, MediaTabletAndLarger } from '../styles/mediaQueries';
 
+import formToFields from '../../ext/formToFields';
 import useSearchParamsPageNumber from '../../hooks/useSearchParamsPageNumber';
 
 import { useState } from 'react';
-import { useLoaderData, Link } from 'react-router';
+import { useLoaderData, useSearchParams, Link } from 'react-router';
 
 export default function ImagesPage() {
   const { images, atLastPage } = useLoaderData();
   const [currentPageNumber, setCurrentPageNumber] = useSearchParamsPageNumber();
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
+  const [, setSearchParams] = useSearchParams();
+
+  function handleForm(event) {
+    event.preventDefault();
+    const formFields = formToFields(event.target);
+    // Make sure we land on the first page of results, otherwise
+    // could end up on a non-existent second page with no results.
+    setSearchParams({ ...formFields, page: 1 });
+  }
   return (
     <main>
       <PageTitleBar title="Images">
@@ -39,7 +49,7 @@ export default function ImagesPage() {
         {isMobileSearchOpen && (
           // Form seemed sluggish on Firefox but only when touch simulation was turned on?
           <MediaMobileOnly>
-            <ImagesSearchForm />
+            <ImagesSearchForm onSubmit={handleForm} />
           </MediaMobileOnly>
         )}
         <Cols>
@@ -53,7 +63,7 @@ export default function ImagesPage() {
           </div>
           <MediaTabletAndLarger>
             <Sticky>
-              <ImagesSearchForm />
+              <ImagesSearchForm onSubmit={handleForm} />
             </Sticky>
           </MediaTabletAndLarger>
         </Cols>
