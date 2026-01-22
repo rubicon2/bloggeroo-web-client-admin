@@ -1,4 +1,3 @@
-import { Link } from 'react-router';
 import styled from 'styled-components';
 
 const Grid = styled.div`
@@ -14,14 +13,6 @@ const Grid = styled.div`
   }
 `;
 
-export default function ImagesGrid({ images }) {
-  return (
-    <Grid>
-      {images.map((image) => (
-        <Link to={`/images/${image.id}`}>
-          <img key={image.id} src={image.url} alt={image.altText} />
-        </Link>
-      ))}
-    </Grid>
-  );
+export default function ImagesGrid({ children }) {
+  return <Grid>{children}</Grid>;
 }

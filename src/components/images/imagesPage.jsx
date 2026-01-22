@@ -54,7 +54,13 @@ export default function ImagesPage() {
         )}
         <Cols>
           <div>
-            <ImagesGrid images={images} />
+            <ImagesGrid>
+              {images.map((image) => (
+                <Link to={`/images/${image.id}`}>
+                  <img key={image.id} src={image.url} alt={image.altText} />
+                </Link>
+              ))}
+            </ImagesGrid>
             <PageNav
               currentPageNumber={currentPageNumber}
               onPageChange={setCurrentPageNumber}
