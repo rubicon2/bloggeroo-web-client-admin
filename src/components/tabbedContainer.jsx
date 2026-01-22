@@ -1,10 +1,8 @@
-import UnstyledList from './unstyledList';
 import { NavButton } from './styles/buttons';
-
 import { useState } from 'react';
 import styled from 'styled-components';
 
-const TabButtonContainer = styled(UnstyledList)`
+const TabButtonContainer = styled.div`
   display: flex;
   border-bottom: 2px solid var(--theme-soft-outline-color);
   margin-bottom: 1rem;
@@ -79,17 +77,15 @@ export default function TabbedContainer({ tabs, onTabChange = () => {} }) {
   for (const tab of tabs) {
     const className = tab.id === selectedTabId ? 'selected' : '';
     tabButtons.push(
-      <li>
-        <TabButton
-          className={className}
-          onClick={() => {
-            setSelectedTabId(tab.id);
-            onTabChange(tab.id);
-          }}
-        >
-          {tab.labelText}
-        </TabButton>
-      </li>,
+      <TabButton
+        className={className}
+        onClick={() => {
+          setSelectedTabId(tab.id);
+          onTabChange(tab.id);
+        }}
+      >
+        {tab.labelText}
+      </TabButton>,
     );
     tabPanels.push(<TabPanel className={className}>{tab.content}</TabPanel>);
   }
