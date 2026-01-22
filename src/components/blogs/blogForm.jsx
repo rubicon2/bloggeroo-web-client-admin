@@ -4,7 +4,7 @@ import fixInputDate from '../../ext/fixInputDate';
 import styled from 'styled-components';
 
 const BlogTextArea = styled.textarea`
-  resize: vertical;
+  overflow-y: scroll;
 `;
 
 export default function BlogForm({
@@ -44,7 +44,7 @@ export default function BlogForm({
         Body:
         <BlogTextArea
           name="body"
-          rows="80"
+          rows="30"
           value={blog.body}
           onChange={(e) => onChange({ ...blog, body: e.target.value })}
         />
