@@ -1,16 +1,23 @@
 import { NavButton } from './styles/buttons';
+import { devices } from '../mediaQueries';
 import { useState } from 'react';
 import styled from 'styled-components';
 
 const TabButtonContainer = styled.div`
-  display: flex;
   border-bottom: 2px solid var(--theme-soft-outline-color);
   margin-bottom: 1rem;
+
+  @media ${devices.tablet} {
+    display: flex;
+  }
 `;
 
 const TabPanelContainer = styled.div``;
 
 const TabButton = styled(NavButton)`
+  display: block;
+  width: 100%;
+
   background-color: var(--theme-bg-color);
   color: var(--theme-text-color);
 
