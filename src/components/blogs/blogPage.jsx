@@ -1,12 +1,14 @@
+import PageTitleBar from '../pageTitleBar';
+import TabbedContainer from '../tabbedContainer';
 import BlogForm from './blogForm';
+import BlogHeader from './blogHeader';
+import MarkdownBlog from './markdownBlog';
+import BlogImagesList from './blogImagesList';
 import CommentsList from '../comments/commentsList';
 import CommentForm from '../comments/commentForm';
-import MarkdownBlog from './markdownBlog';
-import PageTitleBar from '../pageTitleBar';
-import { GeneralButton, DeleteButton } from '../styles/buttons';
 
-import TabMenu from '../tabMenu';
 import Container from '../container';
+import { GeneralButton, DeleteButton } from '../styles/buttons';
 
 import * as api from '../../ext/api';
 import responseToJsend from '../../ext/responseToJsend';
@@ -16,7 +18,6 @@ import useRefresh from '../../hooks/useRefresh';
 
 import { useContext, useState } from 'react';
 import { useLoaderData, useNavigate, useRouteError } from 'react-router';
-import BlogImagesList from './blogImagesList';
 
 export default function BlogPage() {
   const { blog, comments } = useLoaderData();
@@ -36,8 +37,6 @@ export default function BlogPage() {
   const [isFetching, setIsFetching] = useState(false);
   const [blogValidationErrors, setBlogValidationErrors] = useState(null);
   const [commentValidationErrors, setCommentValidationErrors] = useState(null);
-
-  const [activeTabId, setActiveTabId] = useState('edit');
 
   async function saveChanges(event) {
     event.preventDefault();
@@ -132,81 +131,81 @@ export default function BlogPage() {
             </DeleteButton>
           </PageTitleBar>
           <Container>
-            <TabMenu
-              selectedId={activeTabId}
-              tabListItems={[
-                { id: 'edit', innerText: 'Edit' },
-                { id: 'add_images', innerText: 'Add Images' },
-                { id: 'preview', innerText: 'Preview' },
+            <TabbedContainer
+              tabs={[
+                {
+                  id: 'edit',
+                  labelText: 'Edit',
+                  content: (
+                    <BlogForm
+                      buttonText={'Save changes'}
+                      blog={editedBlog}
+                      validationErrors={blogValidationErrors}
+                      buttonDisabled={isFetching || !anyBlogFieldsChanged}
+                      onSubmit={saveChanges}
+                      onChange={(updatedBlog) =>
+                        setEditedBlog({ ...editedBlog, ...updatedBlog })
+                      }
+                    />
+                  ),
+                },
+                {
+                  id: 'preview',
+                  labelText: 'Preview',
+                  content: (
+                    <>
+                      <BlogHeader blog={blog} />
+                      <MarkdownBlog>{editedBlog.body}</MarkdownBlog>
+                    </>
+                  ),
+                },
+                {
+                  id: 'images',
+                  labelText: 'Add Images',
+                  content: <BlogImagesList onClick={insertImageLink} />,
+                },
+                {
+                  id: 'comments',
+                  labelText: `Comments (${comments?.length})`,
+                  content: (
+                    <>
+                      {isCreatingComment ? (
+                        <>
+                          <CommentForm
+                            buttonText="Submit"
+                            initialValues={{ text: '' }}
+                            isFetching={isFetching}
+                            validationErrors={commentValidationErrors}
+                            onSubmit={createComment}
+                          >
+                            <GeneralButton
+                              type="button"
+                              onClick={() => setIsCreatingComment(false)}
+                            >
+                              Cancel
+                            </GeneralButton>
+                          </CommentForm>
+                        </>
+                      ) : (
+                        <GeneralButton
+                          type="button"
+                          onClick={() => setIsCreatingComment(true)}
+                        >
+                          Add comment
+                        </GeneralButton>
+                      )}
+                      <CommentsList
+                        comments={comments}
+                        onReply={refresh}
+                        onDelete={refresh}
+                      />
+                    </>
+                  ),
+                },
               ]}
-              onClick={(id) => setActiveTabId(id)}
             />
-            <div>
-              {activeTabId === 'edit' && (
-                <>
-                  <h2>Edit</h2>
-                  <BlogForm
-                    buttonText={'Save changes'}
-                    blog={editedBlog}
-                    validationErrors={blogValidationErrors}
-                    buttonDisabled={isFetching || !anyBlogFieldsChanged}
-                    onSubmit={saveChanges}
-                    onChange={(updatedBlog) =>
-                      setEditedBlog({ ...editedBlog, ...updatedBlog })
-                    }
-                  />
-                </>
-              )}
-              {activeTabId === 'preview' && (
-                <>
-                  <h2>Preview</h2>
-                  <MarkdownBlog>{editedBlog.body}</MarkdownBlog>
-                </>
-              )}
-              {activeTabId === 'add_images' && (
-                <>
-                  <h2>Add Images</h2>
-                  <BlogImagesList onClick={insertImageLink} />
-                </>
-              )}
-            </div>
           </Container>
-          <Container>
-            <h3>
-              Comments {comments?.length > 0 ? `(${comments.length})` : ''}
-            </h3>
-            {isCreatingComment ? (
-              <>
-                <CommentForm
-                  buttonText="Submit"
-                  initialValues={{ text: '' }}
-                  isFetching={isFetching}
-                  validationErrors={commentValidationErrors}
-                  onSubmit={createComment}
-                >
-                  <GeneralButton
-                    type="button"
-                    onClick={() => setIsCreatingComment(false)}
-                  >
-                    Cancel
-                  </GeneralButton>
-                </CommentForm>
-              </>
-            ) : (
-              <GeneralButton
-                type="button"
-                onClick={() => setIsCreatingComment(true)}
-              >
-                Add comment
-              </GeneralButton>
-            )}
-            <CommentsList
-              comments={comments}
-              onReply={refresh}
-              onDelete={refresh}
-            />
-            {error && <p>{error.message}</p>}
-          </Container>
+          <Container>{error && <p>{error.message}</p>}</Container>
         </>
       )}
     </main>
