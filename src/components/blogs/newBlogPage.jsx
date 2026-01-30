@@ -1,7 +1,10 @@
-import WideContainer from '../wideContainer';
-import GridTwoCol from '../styles/gridTwoCol';
+import PageTitleBar from '../pageTitleBar';
+import TabbedContainer from '../tabbedContainer';
 import BlogForm from './blogForm';
+import BlogHeader from './blogHeader';
 import MarkdownBlog from './markdownBlog';
+import BlogImagesList from './blogImagesList';
+import Container from '../container';
 
 import * as api from '../../ext/api';
 import responseToJsend from '../../ext/responseToJsend';
@@ -20,6 +23,9 @@ export default function NewBlogPage() {
 
   const [blog, setBlog] = useState({
     title: '',
+    owner: {
+      name: 'Author Name',
+    },
     body: '',
     publishedAt: null,
   });
@@ -48,28 +54,65 @@ export default function NewBlogPage() {
     setIsFetching(false);
   }
 
+  function insertImageLink(image) {
+    setBlog({
+      ...blog,
+      body:
+        blog.body +
+        `![${image.altText}](${image.url} "${image.displayName}")\n\n`,
+    });
+  }
+
   return (
     <main>
-      <WideContainer>
-        <GridTwoCol>
-          <div>
-            <h2>Edit</h2>
-            <BlogForm
-              buttonText={'Create Blog'}
-              blog={blog}
-              validationErrors={validationErrors}
-              buttonDisabled={isFetching}
-              onSubmit={createBlog}
-              onChange={(updatedBlog) => setBlog({ ...blog, ...updatedBlog })}
-            />
-          </div>
-          <div>
-            <h2>Preview</h2>
-            <MarkdownBlog>{blog.body}</MarkdownBlog>
-          </div>
-        </GridTwoCol>
-        {error && <p>{error.message}</p>}
-      </WideContainer>
+      <PageTitleBar title="New Blog" />
+      <Container>
+        <TabbedContainer
+          onTabChange={() => {
+            setError(null);
+            setValidationErrors(null);
+          }}
+          tabs={[
+            {
+              id: 'edit',
+              labelText: 'Edit',
+              content: (
+                <BlogForm
+                  buttonText={'Save changes'}
+                  blog={blog}
+                  validationErrors={validationErrors}
+                  buttonDisabled={isFetching}
+                  onSubmit={createBlog}
+                  onChange={(updatedBlog) =>
+                    setBlog({ ...blog, ...updatedBlog })
+                  }
+                />
+              ),
+            },
+            {
+              id: 'preview',
+              labelText: 'Preview',
+              content: (
+                <>
+                  <BlogHeader blog={blog} />
+                  <MarkdownBlog>{blog.body}</MarkdownBlog>
+                  {error && <p>{error.message}</p>}
+                </>
+              ),
+            },
+            {
+              id: 'images',
+              labelText: 'Add Images',
+              content: (
+                <>
+                  <BlogImagesList onClick={insertImageLink} />
+                  {error && <p>{error.message}</p>}
+                </>
+              ),
+            },
+          ]}
+        />
+      </Container>
     </main>
   );
 }
