@@ -216,6 +216,7 @@ export default function BlogPage() {
                 },
               ]}
             />
+            {error && <p>{error.message}</p>}
           </Container>
         </>
       )}

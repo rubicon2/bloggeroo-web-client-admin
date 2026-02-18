@@ -10,13 +10,13 @@ import * as api from '../../ext/api';
 import responseToJsend from '../../ext/responseToJsend';
 
 import { AccessContext } from '../../contexts/AppContexts';
+import useRefresh from '../../hooks/useRefresh';
 
-import { useNavigate } from 'react-router';
 import { useState, useContext } from 'react';
 
 export default function NewBlogPage() {
   const accessRef = useContext(AccessContext);
-  const navigate = useNavigate();
+  const refresh = useRefresh();
   const [isFetching, setIsFetching] = useState(false);
   const [validationErrors, setValidationErrors] = useState(null);
   const [error, setError] = useState(null);
@@ -46,7 +46,7 @@ export default function NewBlogPage() {
       setValidationErrors(data?.validationErrors);
       switch (status) {
         case 'success': {
-          navigate('/blogs');
+          refresh();
           break;
         }
       }
@@ -112,6 +112,7 @@ export default function NewBlogPage() {
             },
           ]}
         />
+        {error && <p>{error.message}</p>}
       </Container>
     </main>
   );
