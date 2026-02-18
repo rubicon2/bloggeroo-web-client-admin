@@ -112,6 +112,7 @@ export default function NewBlogPage() {
             },
           ]}
         />
+        {error && <p>{error.message}</p>}
       </Container>
     </main>
   );
